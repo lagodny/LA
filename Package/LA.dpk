@@ -28,6 +28,13 @@ package LA;
 {$IMPLICITBUILD ON}
 
 requires
-  rtl;
+  rtl,
+  IndySystem,
+  IndyCore;
+
+contains
+  LA.DC.CustomConnector in '..\Source\LA.DC.CustomConnector.pas',
+  LA.DC.TCPConnector in '..\Source\LA.DC.TCPConnector.pas',
+  LA.DC.TCPIntercept in '..\Source\LA.DC.TCPIntercept.pas';
 
 end.
