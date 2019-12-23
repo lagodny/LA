@@ -138,6 +138,7 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_Description>LA DC non visual components</DCC_Description>
+        <DllSuffix>260</DllSuffix>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -154,18 +155,18 @@
         <DCCReference Include="IndyCore.dcp"/>
         <DCCReference Include="IndyProtocols.dcp"/>
         <DCCReference Include="DCPcrypt.dcp"/>
-        <DCCReference Include="..\Source\LA.DC.CustomConnector.pas"/>
-        <DCCReference Include="..\Source\LA.DC.TCPConnector.pas"/>
-        <DCCReference Include="..\Source\LA.DC.TCPIntercept.pas"/>
-        <DCCReference Include="..\Source\LA.DC.Log.pas"/>
-        <DCCReference Include="..\Source\LA.DC.StrUtils.pas"/>
-        <DCCReference Include="..\..\..\Lib\Fundamentals\Source\Utils\flcSysUtils.pas"/>
-        <DCCReference Include="..\..\..\Lib\Fundamentals\Source\Utils\flcHash.pas"/>
-        <DCCReference Include="..\..\..\Lib\Fundamentals\Source\Utils\flcHugeInt.pas"/>
-        <DCCReference Include="..\..\..\Lib\Fundamentals\Source\Utils\flcUtils.pas"/>
-        <DCCReference Include="..\..\..\Lib\Fundamentals\Source\Cipher\flcCipherRSA.pas"/>
-        <DCCReference Include="..\..\..\Lib\Fundamentals\Source\Utils\flcRandom.pas"/>
-        <DCCReference Include="..\..\..\Lib\Fundamentals\Source\Utils\flcStdTypes.pas"/>
+        <DCCReference Include="..\..\Source\LA.DC.CustomConnector.pas"/>
+        <DCCReference Include="..\..\Source\LA.DC.TCPConnector.pas"/>
+        <DCCReference Include="..\..\Source\LA.DC.TCPIntercept.pas"/>
+        <DCCReference Include="..\..\Source\LA.DC.Log.pas"/>
+        <DCCReference Include="..\..\Source\LA.DC.StrUtils.pas"/>
+        <DCCReference Include="..\..\..\..\Lib\Fundamentals\Source\Utils\flcSysUtils.pas"/>
+        <DCCReference Include="..\..\..\..\Lib\Fundamentals\Source\Utils\flcHash.pas"/>
+        <DCCReference Include="..\..\..\..\Lib\Fundamentals\Source\Utils\flcHugeInt.pas"/>
+        <DCCReference Include="..\..\..\..\Lib\Fundamentals\Source\Utils\flcUtils.pas"/>
+        <DCCReference Include="..\..\..\..\Lib\Fundamentals\Source\Cipher\flcCipherRSA.pas"/>
+        <DCCReference Include="..\..\..\..\Lib\Fundamentals\Source\Utils\flcRandom.pas"/>
+        <DCCReference Include="..\..\..\..\Lib\Fundamentals\Source\Utils\flcStdTypes.pas"/>
         <None Include="..\Doc\Design.html"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

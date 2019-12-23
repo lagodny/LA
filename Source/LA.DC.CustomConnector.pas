@@ -39,6 +39,8 @@ type
     FDescription: string;
     FReadTimeOut: Integer;
     FConnectTimeOut: Integer;
+    FOnConnect: TNotifyEvent;
+    FOnDisconnect: TNotifyEvent;
     procedure SetAddress(const Value: string);
     procedure SetPassword(const Value: string);
     procedure SetUserName(const Value: string);
@@ -56,8 +58,12 @@ type
 
     function GetConnected: Boolean; virtual; abstract;
     procedure SetConnected(const Value: Boolean); virtual;
+
     // вызывается при изменении параметров
     procedure DoChangeProp; virtual;
+
+    procedure DoConnect; virtual; abstract;
+    procedure DoDisconnect; virtual; abstract;
   public
     procedure Connect; virtual; abstract;
     procedure Disconnect; virtual; abstract;
@@ -66,12 +72,12 @@ type
     ///  через точку с запятой (;) можно добавить альтернативые адреса: host1:port1;host2:port2;host3:port3
     property Address: string read FAddress write SetAddress;
 
-    // ожидание подключения
+    // ожидание подключения, мс
     property ConnectTimeOut: Integer read GetConnectTimeOut write SetConnectTimeOut default cDefConnectTimeout;
-    // ожидание отклика на команду
+    // ожидание отклика на команду, мс
     property ReadTimeOut: Integer read GetReadTimeOut write SetReadTimeOut default cDefReadTimeout;
 
-    // уровень сжатия
+    // уровень сжатия (0 - без сжатия ... 9 - максимальное сжатие)
     property CompressionLevel: Integer read GetCompressionLevel write SetCompressionLevel default cDefCompressionLevel;
     // шифрование
     property Encrypt: boolean read GetEncrypt write SetEncrypt default cDefEncrypt;
@@ -86,6 +92,10 @@ type
 
     /// как представиться серверу
     property Description: string read FDescription write SetDescription;
+
+    /// события
+    property OnConnect: TNotifyEvent read FOnConnect write FOnConnect;
+    property OnDisconnect: TNotifyEvent read FOnDisconnect write FOnDisconnect;
   end;
 
 implementation

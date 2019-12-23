@@ -37,6 +37,10 @@ type
     procedure DoCommandFmt(aCommand: string; const Args: array of TVarRec);
     procedure CheckCommandResult;
 
+    // обработка ошибок TCP
+    function ProcessTCPException(e: EIdException): Boolean;
+
+
   protected
     function GetEncrypt: boolean; override;
     function GetCompressionLevel: Integer; override;
@@ -47,6 +51,9 @@ type
     procedure SetCompressionLevel(const Value: Integer); override;
     procedure SetReadTimeOut(const Value: Integer); override;
     procedure SetConnectTimeOut(const Value: Integer); override;
+
+    procedure Authorize(const aUser, aPassword: string);
+
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -56,7 +63,9 @@ implementation
 
 uses
   System.SysUtils,
-  flcStdTypes, flcCipherRSA;
+  flcStdTypes, flcCipherRSA,
+  LA.DC.StrUtils,
+  LA.DC.Log;
 
 const
   sOk = 'ok';       // not localize
@@ -69,6 +78,12 @@ const
 
 
 { TDCTCPConnector }
+
+procedure TDCTCPConnector.Authorize(const aUser, aPassword: string);
+begin
+  DoCommandFmt('Login %s;%s;1', [aUser, TDCStrUtils.StrToHex(aPassword, '')]);
+  ReadLn; // вычитываем приветствие
+end;
 
 procedure TDCTCPConnector.CheckCommandResult;
 var
@@ -165,6 +180,13 @@ begin
   //OPCLog.WriteToLogFmt('%d: LockClient OK. %s', [GetCurrentThreadId, aMessage]);
 end;
 
+function TDCTCPConnector.ProcessTCPException(e: EIdException): Boolean;
+begin
+  Result := True;
+  TDCLog.WriteToLog(e.Message);
+  DoDisconnect;
+end;
+
 function TDCTCPConnector.ReadLn: string;
 begin
   Result := FClient.IOHandler.ReadLn;
@@ -253,56 +275,40 @@ var
   aModulus, aExponent: string;
   aPub: TRSAPublicKey;
 begin
-//  if Encrypt then
-//    aCryptKey := GenerateCryptKey(16)
-//  else
-//    aCryptKey := '';
-//
-//  if Connected then
-//  begin
-//    if aLock then
-//      LockClient('UpdateEncrypted');
-//
-//    try
-//      try
-//        if FServerVer >= 4 then
-//        begin
-//          // новая версия RSA
-//          DoCommand('GetPublicKey2');
-//          aModulus := ReadLn;
-//          aExponent := ReadLn;
-//
-//          RSAPublicKeyInit(aPub);
-//          RSAPublicKeyAssignHex(aPub, 256, aModulus, aExponent);
-//          aCode := RSAEncryptStr(rsaetPKCS1, aPub, aCryptKey);
-//          RSAPublicKeyFinalise(aPub);
-//
-//          DoCommandFmt('SetCryptKey2 %s', [StrToHex(aCode, '')]);
-//        end
-//        else
-//        begin
-//          // для старых серверов шифрование будет ОТКЛЮЧЕНО
-//          aCryptKey := '';
-//
-////          DoCommand('GetPublicKey');
-////          Base10StringToFGInt(ReadLn, aRSA_e);
-////          Base10StringToFGInt(ReadLn, aRSA_n);
-////
-////          FGIntRSA.RSAEncrypt(aCryptKey, aRSA_e, aRSA_n, aCode);
-////
-////  	      DoCommandFmt('SetCryptKey %s', [StrToHex(aCode, '')]);
-//        end;
-//      except
-//        on e: EIdException do
-//          if ProcessTCPException(e) then
-//            raise;
-//      end;
-//    finally
-//      if aLock then
-//        UnLock('UpdateEncrypted');
-//    end;
-//  end;
-//  Intercept.CryptKey := aCryptKey;
+  if Encrypt then
+    aCryptKey := GenerateCryptKey(16)
+  else
+    aCryptKey := '';
+
+  if Connected then
+  begin
+    if aLock then
+      LockClient('UpdateEncrypted');
+
+    try
+      try
+        // новая версия RSA
+        DoCommand('GetPublicKey2');
+        aModulus := ReadLn;
+        aExponent := ReadLn;
+
+        RSAPublicKeyInit(aPub);
+        RSAPublicKeyAssignHex(aPub, 256, aModulus, aExponent);
+        aCode := RSAEncryptStr(rsaetPKCS1, aPub, aCryptKey);
+        RSAPublicKeyFinalise(aPub);
+
+        DoCommandFmt('SetCryptKey2 %s', [TDCStrUtils.StrToHex(aCode, '')]);
+      except
+        on e: EIdException do
+          if ProcessTCPException(e) then
+            raise;
+      end;
+    finally
+      if aLock then
+        UnLockClient('UpdateEncrypted');
+    end;
+  end;
+  FIntercept.CryptKey := aCryptKey;
 end;
 
 end.

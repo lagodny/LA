@@ -165,7 +165,7 @@ begin
     Exit;
 
   FCrypter := TDCP_blowfish.Create(nil);
-  FCrypter.InitRawByteStr(FCryptKey, TDCP_sha1);
+  FCrypter.InitStr(FCryptKey, TDCP_sha1);
 
   FBlockCipherIntercept := TDCTCPBlockCipherIntercept.Create(nil);
   FBlockCipherIntercept.BlockSize := (FCrypter.BlockSize div 8) + 1;

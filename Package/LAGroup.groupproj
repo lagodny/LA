@@ -3,7 +3,7 @@
         <ProjectGuid>{A441B2F5-5F30-4A5E-B8D8-A4EC62AFC0CC}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="LA.dproj">
+        <Projects Include="Delphi Rio\LA.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -15,13 +15,13 @@
         </BorlandProject>
     </ProjectExtensions>
     <Target Name="LA">
-        <MSBuild Projects="LA.dproj"/>
+        <MSBuild Projects="Delphi Rio\LA.dproj"/>
     </Target>
     <Target Name="LA:Clean">
-        <MSBuild Projects="LA.dproj" Targets="Clean"/>
+        <MSBuild Projects="Delphi Rio\LA.dproj" Targets="Clean"/>
     </Target>
     <Target Name="LA:Make">
-        <MSBuild Projects="LA.dproj" Targets="Make"/>
+        <MSBuild Projects="Delphi Rio\LA.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
         <CallTarget Targets="LA"/>

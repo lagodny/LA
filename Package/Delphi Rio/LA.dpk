@@ -1,0 +1,54 @@
+package LA;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'LA DC non visual components'}
+{$LIBSUFFIX '260'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  IndySystem,
+  IndyCore,
+  IndyProtocols,
+  DCPcrypt;
+
+contains
+  LA.DC.CustomConnector in '..\..\Source\LA.DC.CustomConnector.pas',
+  LA.DC.TCPConnector in '..\..\Source\LA.DC.TCPConnector.pas',
+  LA.DC.TCPIntercept in '..\..\Source\LA.DC.TCPIntercept.pas',
+  LA.DC.Log in '..\..\Source\LA.DC.Log.pas',
+  LA.DC.StrUtils in '..\..\Source\LA.DC.StrUtils.pas',
+  flcSysUtils in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcSysUtils.pas',
+  flcHash in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcHash.pas',
+  flcHugeInt in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcHugeInt.pas',
+  flcUtils in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcUtils.pas',
+  flcCipherRSA in '..\..\..\..\Lib\Fundamentals\Source\Cipher\flcCipherRSA.pas',
+  flcRandom in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcRandom.pas',
+  flcStdTypes in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcStdTypes.pas';
+
+end.
+
