@@ -48,7 +48,8 @@ contains
   flcUtils in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcUtils.pas',
   flcCipherRSA in '..\..\..\..\Lib\Fundamentals\Source\Cipher\flcCipherRSA.pas',
   flcRandom in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcRandom.pas',
-  flcStdTypes in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcStdTypes.pas';
+  flcStdTypes in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcStdTypes.pas',
+  LA.DC.SystemUtils in '..\..\Source\LA.DC.SystemUtils.pas';
 
 end.
 

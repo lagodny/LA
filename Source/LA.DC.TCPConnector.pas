@@ -3,8 +3,8 @@ unit LA.DC.TCPConnector;
 interface
 
 uses
-  System.Classes, System.SyncObjs,
-  IdTCPClient, IdException,
+  System.Classes, System.SyncObjs, System.SysUtils,
+  IdGlobal, IdTCPClient, IdException,
   LA.DC.CustomConnector, LA.DC.TCPIntercept;
 
 type
@@ -16,6 +16,21 @@ type
 
     FEncrypt: boolean;
     FCompressionLevel: Integer;
+
+    FServerFS: TFormatSettings;
+
+    FServerVer: Integer;
+    FServerEnableMessage: Boolean;
+    FServerSupportingProtocols: string;
+    FServerOffsetFromUTC: TDateTime;
+
+    FServerSettingsIsLoaded: Boolean;
+
+    FLanguage: string;
+    FProtocolVersion: Integer;
+    FEnableMessage: Boolean;
+    FClientOffsetFromUTC: TDateTime;
+
 
     function LockClient(const aMessage: string = ''): TIdTCPClient;
     procedure UnLockClient(const aMessage: string = '');
@@ -43,6 +58,10 @@ type
     procedure GetServerSettings;
     procedure SetConnectionParams;
 
+    procedure SetEnableMessage(const Value: Boolean);
+    procedure SetLanguage(const Value: string);
+    procedure SetProtocolVersion(const Value: Integer);
+
   protected
     function GetEncrypt: boolean; override;
     function GetCompressionLevel: Integer; override;
@@ -61,14 +80,27 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
+    property ServerFS: TFormatSettings read FServerFS;
+    property ServerVer: Integer read FServerVer;
+    property ServerOffsetFromUTC: TDateTime read FServerOffsetFromUTC;
+    property ClientOffsetFromUTC: TDateTime read FClientOffsetFromUTC;
+
+  published
+    /// версия протокола
+    property ProtocolVersion: Integer read FProtocolVersion write SetProtocolVersion default 30;
+    /// сервер может отправлять сообщения через это подключение
+    property EnableMessage: Boolean read FEnableMessage write SetEnableMessage default True;
+    /// язык, на котором сервер будет слать информационные сообщения (ошибки и т.д.)
+    property Language: string read FLanguage write SetLanguage;
+
   end;
 
 implementation
 
 uses
-  System.SysUtils,
   flcStdTypes, flcCipherRSA,
-  LA.DC.StrUtils,
+  LA.DC.StrUtils, LA.DC.SystemUtils,
   LA.DC.Log;
 
 const
@@ -177,8 +209,53 @@ begin
 end;
 
 procedure TDCTCPConnector.GetServerSettings;
+var
+  aCount: Integer;
+  s: TStrings;
+  i: Integer;
 begin
+  try
+	  DoCommand('GetServerSettings');
+	  aCount := StrToInt(ReadLn);
 
+	  s := TStringList.Create;
+	  try
+	    for i := 1 to aCount do
+        s.Add(ReadLn);
+
+      with FServerFS do
+      begin
+        ThousandSeparator := s.Values['ThousandSeparator'][low(string)];
+        DecimalSeparator := s.Values['DecimalSeparator'][low(string)];
+        TimeSeparator := s.Values['TimeSeparator'][low(string)];
+        ListSeparator := s.Values['ListSeparator'][low(string)];
+
+        CurrencyString := s.Values['CurrencyString'];
+        ShortDateFormat := s.Values['ShortDateFormat'];
+        LongDateFormat := s.Values['LongDateFormat'];
+        TimeAMString := s.Values['TimeAMString'];
+        TimePMString := s.Values['TimePMString'];
+        ShortTimeFormat := s.Values['ShortTimeFormat'];
+        LongTimeFormat := s.Values['LongTimeFormat'];
+
+        DateSeparator := s.Values['DateSeparator'][low(string)];
+      end;
+
+      FServerSettingsIsLoaded := True;
+
+	    FServerVer := StrToInt(s.Values['ServerVer']);
+	    FServerEnableMessage := StrToBool(s.Values['EnableMessage']);
+	    FServerSupportingProtocols := s.Values['SupportingProtocols'];
+      FServerOffsetFromUTC := StrToTimeDef(s.Values['OffsetFromUTC'], ClientOffsetFromUTC);
+	  finally
+	    s.Free;
+	  end;
+
+  except
+    on e: EIdException do
+      if ProcessTCPException(e) then
+        raise;
+  end;
 end;
 
 function TDCTCPConnector.LockClient(const aMessage: string): TIdTCPClient;
@@ -223,8 +300,41 @@ begin
 end;
 
 procedure TDCTCPConnector.SetConnectionParams;
+const
+  cStringEncoding = '';  //'UTF8';
+  { TODO : проверить, почему не работает передача списка пользователей, если задан UTF8 }
+  //cStringEncoding = 'UTF8';
 begin
+  try
+	  DoCommandFmt('SetConnectionParams '+
+	    'ProtocolVersion=%d;'+
+	    //'CompressionLevel=%d;'+
+	    'EnableMessage=%d;'+
+	    'Description=%s;'+
+	    'SystemLogin=%s;'+
+	    'HostName=%s;'+
+	    'MaxLineLength=%d;'+
+      'Language=%s;'+
+      'StringEncoding=%s',
+	    [ ProtocolVersion,
+	      //CompressionLevel,
+	      Ord(EnableMessage),
+	      Description,
+	      TDCSystemUtils.GetLocalUserName,
+	      TDCSystemUtils.GetComputerName,
+	      FClient.IOHandler.MaxLineLength,
+        Language,
+        cStringEncoding
+	      ]
+	    );
 
+      if (ServerVer >= 3) and (cStringEncoding = 'UTF8') then
+        FClient.IOHandler.DefStringEncoding := IndyTextEncoding_UTF8;
+  except
+    on e: EIdException do
+      if ProcessTCPException(e) then
+        raise;
+  end;
 end;
 
 procedure TDCTCPConnector.SetConnectTimeOut(const Value: Integer);
@@ -232,6 +342,15 @@ begin
   if ConnectTimeOut <> Value then
   begin
     FClient.ConnectTimeout := Value;
+    DoPropChanged;
+  end;
+end;
+
+procedure TDCTCPConnector.SetEnableMessage(const Value: Boolean);
+begin
+  if EnableMessage <> Value then
+  begin
+    FEnableMessage := Value;
     DoPropChanged;
   end;
 end;
@@ -246,6 +365,24 @@ begin
   end;
 end;
 
+
+procedure TDCTCPConnector.SetLanguage(const Value: string);
+begin
+  if Language <> Value then
+  begin
+    FLanguage := Value;
+    DoPropChanged;
+  end;
+end;
+
+procedure TDCTCPConnector.SetProtocolVersion(const Value: Integer);
+begin
+  if ProtocolVersion <> Value then
+  begin
+    FProtocolVersion := Value;
+    DoPropChanged;
+  end;
+end;
 
 procedure TDCTCPConnector.SetReadTimeOut(const Value: Integer);
 begin

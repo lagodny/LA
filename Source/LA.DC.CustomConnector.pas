@@ -37,8 +37,6 @@ type
     FUserName: string;
     FPassword: string;
     FDescription: string;
-    FReadTimeOut: Integer;
-    FConnectTimeOut: Integer;
     FOnConnect: TNotifyEvent;
     FOnDisconnect: TNotifyEvent;
     procedure SetAddress(const Value: string);

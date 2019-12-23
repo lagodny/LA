@@ -6,6 +6,9 @@
         <Projects Include="Delphi Rio\LA.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\..\..\Lib\dcpcrypt\Packages\Delphi Rio\DCPcrypt.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -23,14 +26,23 @@
     <Target Name="LA:Make">
         <MSBuild Projects="Delphi Rio\LA.dproj" Targets="Make"/>
     </Target>
+    <Target Name="DCPcrypt">
+        <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\Delphi Rio\DCPcrypt.dproj"/>
+    </Target>
+    <Target Name="DCPcrypt:Clean">
+        <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\Delphi Rio\DCPcrypt.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DCPcrypt:Make">
+        <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\Delphi Rio\DCPcrypt.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="LA"/>
+        <CallTarget Targets="LA;DCPcrypt"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="LA:Clean"/>
+        <CallTarget Targets="LA:Clean;DCPcrypt:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="LA:Make"/>
+        <CallTarget Targets="LA:Make;DCPcrypt:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
