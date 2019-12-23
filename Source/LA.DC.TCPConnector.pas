@@ -40,6 +40,8 @@ type
     // обработка ошибок TCP
     function ProcessTCPException(e: EIdException): Boolean;
 
+    procedure GetServerSettings;
+    procedure SetConnectionParams;
 
   protected
     function GetEncrypt: boolean; override;
@@ -52,8 +54,10 @@ type
     procedure SetReadTimeOut(const Value: Integer); override;
     procedure SetConnectTimeOut(const Value: Integer); override;
 
-    procedure Authorize(const aUser, aPassword: string);
+    procedure TryConnect; virtual;
+    procedure Authorize(const aUser, aPassword: string); virtual;
 
+    property Intercept: TDCTCPIntercept read FIntercept;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -172,6 +176,11 @@ begin
   Result := FClient.ReadTimeout;
 end;
 
+procedure TDCTCPConnector.GetServerSettings;
+begin
+
+end;
+
 function TDCTCPConnector.LockClient(const aMessage: string): TIdTCPClient;
 begin
   //OPCLog.WriteToLogFmt('%d: LockClient %s', [GetCurrentThreadId, aMessage]);
@@ -205,7 +214,16 @@ end;
 
 procedure TDCTCPConnector.SetCompressionLevel(const Value: Integer);
 begin
-  inherited;
+  if CompressionLevel <> Value then
+  begin
+    FCompressionLevel := Value;
+    DoPropChanged;
+    //UpdateComressionLevel(True);
+  end;
+end;
+
+procedure TDCTCPConnector.SetConnectionParams;
+begin
 
 end;
 
@@ -213,8 +231,8 @@ procedure TDCTCPConnector.SetConnectTimeOut(const Value: Integer);
 begin
   if ConnectTimeOut <> Value then
   begin
-    inherited;
     FClient.ConnectTimeout := Value;
+    DoPropChanged;
   end;
 end;
 
@@ -223,7 +241,8 @@ begin
   if Encrypt <> Value then
   begin
     FEncrypt := Value;
-    UpdateEncrypted(True);
+    DoPropChanged;
+    //UpdateEncrypted(True);
   end;
 end;
 
@@ -232,10 +251,39 @@ procedure TDCTCPConnector.SetReadTimeOut(const Value: Integer);
 begin
   if ReadTimeOut <> Value then
   begin
-    inherited;
     FClient.ReadTimeOut := Value;
+    DoPropChanged;
   end;
 
+end;
+
+procedure TDCTCPConnector.TryConnect;
+begin
+  Intercept.CryptKey := '';
+  Intercept.CompressionLevel := 0;
+
+//  inherited TryConnect;
+
+  GetServerSettings;
+  SetConnectionParams;
+
+  if Encrypt then
+    UpdateEncrypted(False);
+  if CompressionLevel > 0 then
+    UpdateComressionLevel(False);
+
+  if UserName <> '' then
+  begin
+    try
+      Authorize(UserName, Password);
+    except
+      on e: EIdException do
+        if ProcessTCPException(e) then
+          raise;
+      on e: Exception do
+        ;
+    end;
+  end;
 end;
 
 procedure TDCTCPConnector.UnLockClient(const aMessage: string);

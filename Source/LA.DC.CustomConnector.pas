@@ -60,7 +60,7 @@ type
     procedure SetConnected(const Value: Boolean); virtual;
 
     // вызывается при изменении параметров
-    procedure DoChangeProp; virtual;
+    procedure DoPropChanged; virtual;
 
     procedure DoConnect; virtual; abstract;
     procedure DoDisconnect; virtual; abstract;
@@ -104,7 +104,7 @@ implementation
 
 
 
-procedure TDCCustomConnector.DoChangeProp;
+procedure TDCCustomConnector.DoPropChanged;
 begin
   if Connected then
     Disconnect;
@@ -115,7 +115,7 @@ begin
   if Address <> Value then
   begin
     FAddress := Value;
-    DoChangeProp;
+    DoPropChanged;
   end;
 end;
 
@@ -132,7 +132,11 @@ end;
 
 procedure TDCCustomConnector.SetDescription(const Value: string);
 begin
-  FDescription := Value;
+  if Description <> Value then
+  begin
+    FDescription := Value;
+    DoPropChanged;
+  end;
 end;
 
 procedure TDCCustomConnector.SetPassword(const Value: string);
@@ -140,7 +144,7 @@ begin
   if Password <> Value then
   begin
     FPassword := Value;
-    DoChangeProp;
+    DoPropChanged;
   end;
 end;
 
@@ -149,7 +153,7 @@ begin
   if UserName <> Value then
   begin
     FUserName := Value;
-    DoChangeProp;
+    DoPropChanged;
   end;
 end;
 
