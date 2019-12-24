@@ -1,12 +1,12 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{A441B2F5-5F30-4A5E-B8D8-A4EC62AFC0CC}</ProjectGuid>
+        <ProjectGuid>{1DA37D6E-D526-4C96-824A-AA500E1D1B8C}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
         <Projects Include="Delphi Rio\LA.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\..\..\Lib\dcpcrypt\Packages\Delphi Rio\DCPcrypt.dproj">
+        <Projects Include="..\Test\TestTCPConnector\TestTCPConnector.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -26,23 +26,23 @@
     <Target Name="LA:Make">
         <MSBuild Projects="Delphi Rio\LA.dproj" Targets="Make"/>
     </Target>
-    <Target Name="DCPcrypt">
-        <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\Delphi Rio\DCPcrypt.dproj"/>
+    <Target Name="TestTCPConnector">
+        <MSBuild Projects="..\Test\TestTCPConnector\TestTCPConnector.dproj"/>
     </Target>
-    <Target Name="DCPcrypt:Clean">
-        <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\Delphi Rio\DCPcrypt.dproj" Targets="Clean"/>
+    <Target Name="TestTCPConnector:Clean">
+        <MSBuild Projects="..\Test\TestTCPConnector\TestTCPConnector.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="DCPcrypt:Make">
-        <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\Delphi Rio\DCPcrypt.dproj" Targets="Make"/>
+    <Target Name="TestTCPConnector:Make">
+        <MSBuild Projects="..\Test\TestTCPConnector\TestTCPConnector.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="LA;DCPcrypt"/>
+        <CallTarget Targets="LA;TestTCPConnector"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="LA:Clean;DCPcrypt:Clean"/>
+        <CallTarget Targets="LA:Clean;TestTCPConnector:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="LA:Make;DCPcrypt:Make"/>
+        <CallTarget Targets="LA:Make;TestTCPConnector:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

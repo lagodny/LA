@@ -94,6 +94,10 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
+    /// методы потокобезопасны (используют критическую секцию)
+    procedure Connect; override;
+    procedure Disconnect; override;
+
     property ServerFS: TFormatSettings read FServerFS;
     property ServerVer: Integer read FServerVer;
     property ServerOffsetFromUTC: TDateTime read FServerOffsetFromUTC;
@@ -108,6 +112,10 @@ type
     property Language: string read FLanguage write SetLanguage;
 
   end;
+
+resourcestring
+  sResAddressIsEmpty = 'Address is empty. The format of Address should be: host1:port1;host2:port2 etc';
+  sResAddressIsBadFmt = 'Check Address (%s). The format of Address should be: host1:port1;host2:port2 etc';
 
 implementation
 
@@ -154,6 +162,16 @@ begin
   end;
 end;
 
+procedure TDCTCPConnector.Connect;
+begin
+  LockClient('Connect');
+  try
+    DoConnect;
+  finally
+    UnLockClient('Connect');
+  end;
+end;
+
 constructor TDCTCPConnector.Create(AOwner: TComponent);
 begin
   inherited;
@@ -168,6 +186,10 @@ begin
   FClient.Port := cDefPort;
 
   FClient.Intercept := FIntercept;
+
+  FProtocolVersion := 30;
+  FEnableMessage := True;
+  FLanguage := 'ru';
 end;
 
 destructor TDCTCPConnector.Destroy;
@@ -176,6 +198,16 @@ begin
   FIntercept.Free;
   FLock.Free;
   inherited;
+end;
+
+procedure TDCTCPConnector.Disconnect;
+begin
+  LockClient('Connect');
+  try
+    DoDisconnect;
+  finally
+    UnLockClient('Connect');
+  end;
 end;
 
 procedure TDCTCPConnector.DoCommand(aCommand: string);
@@ -444,6 +476,9 @@ var
   aAddressList, aParams: TStringList;
   i: Integer;
 begin
+  if Address = '' then
+    raise EDCConnectorBadAddress.Create(sResAddressIsEmpty);
+
   aAddressList := TStringList.Create;
   aParams := TStringList.Create;
   try
@@ -475,8 +510,12 @@ begin
               raise
           end;
         end;
-      end;
+      end
+      else
+        raise EDCConnectorBadAddress.CreateFmt(sResAddressIsBadFmt, [Address]);
     end;
+
+
   finally
     aParams.Free;
     aAddressList.Free;

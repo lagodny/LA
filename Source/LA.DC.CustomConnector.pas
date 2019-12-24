@@ -25,6 +25,7 @@ type
   EDCNotInhibitException = class(Exception);
 
   EDCConnectorException = class(EDCNotInhibitException);
+  EDCConnectorBadAddress = class(EDCConnectorException);
   EDCConnectorCommandException = class(EDCConnectorException);
   EDCConnectorUnknownAnswerException = class(EDCConnectorException);
   EDCConnectorOperationCanceledException = class(EDCConnectorException);
