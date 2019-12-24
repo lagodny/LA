@@ -33,7 +33,6 @@ type
   ///  его наследники реализуют различные протоколы взаимодейтвия с сервером
   TDCCustomConnector = class(TComponent)
   private
-    FAddress: string;
     FUserName: string;
     FPassword: string;
     FDescription: string;
@@ -44,6 +43,7 @@ type
     procedure SetUserName(const Value: string);
     procedure SetDescription(const Value: string);
   protected
+    FAddress: string;
     function GetEncrypt: boolean; virtual; abstract;
     function GetCompressionLevel: Integer; virtual; abstract;
     function GetConnectTimeOut: Integer; virtual; abstract;

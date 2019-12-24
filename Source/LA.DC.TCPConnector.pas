@@ -58,8 +58,8 @@ type
     procedure GetServerSettings;
     procedure SetConnectionParams;
 
-    procedure SetEnableMessage(const Value: Boolean);
     procedure SetLanguage(const Value: string);
+    procedure SetEnableMessage(const Value: Boolean);
     procedure SetProtocolVersion(const Value: Integer);
 
   protected
@@ -73,8 +73,17 @@ type
     procedure SetReadTimeOut(const Value: Integer); override;
     procedure SetConnectTimeOut(const Value: Integer); override;
 
-    procedure TryConnect; virtual;
+    function GetConnected: Boolean; override;
+
     procedure Authorize(const aUser, aPassword: string); virtual;
+
+    /// пытаемся подключиться по указанному адресу
+    ///  если подключение невозможно вызываем исключение
+    procedure TryConnectTo(const aHost: string; const aPort: Integer); virtual;
+
+    /// перебираем все возможные варианты
+    ///  если подключение невозможно вызываем исключение (из последнего варианта)
+    procedure TryConnect;
 
     property Intercept: TDCTCPIntercept read FIntercept;
   public
@@ -191,6 +200,11 @@ end;
 function TDCTCPConnector.GetCompressionLevel: Integer;
 begin
   Result := FCompressionLevel;
+end;
+
+function TDCTCPConnector.GetConnected: Boolean;
+begin
+  Result := FClient.Connected;
 end;
 
 function TDCTCPConnector.GetConnectTimeOut: Integer;
@@ -395,20 +409,81 @@ begin
 end;
 
 procedure TDCTCPConnector.TryConnect;
+var
+  aAddressList, aParams: TStringList;
+  i: Integer;
 begin
+  aAddressList := TStringList.Create;
+  aParams := TStringList.Create;
+  try
+    aAddressList.LineBreak := ';';
+    aParams.LineBreak := ':';
+    aAddressList.Text := Address;
+    for i := 0 to aAddressList.Count - 1 do
+    begin
+      aParams.Text := aAddressList[i];
+      if aParams.Count = 2 then
+      begin
+        try
+          TryConnectTo(aParams[0], StrToInt(aParams[1]));
+          /// подключение прошло успешно
+          ///  передвинем успешные параметры подключения в начало списка для более быстрого переподключения
+          if i <> 0 then
+          begin
+            aAddressList.Move(i, 0);
+            FAddress := aAddressList.Text;
+          end;
+          /// уходим
+          Exit;
+        except
+          on Exception do
+          begin
+            /// если мы долши до последнего варианта и так и не смогли подключиться,
+            ///  то поднимаем последнее исключение, иначе продолжаем перебор
+            if i = aAddressList.Count - 1 then
+              raise
+          end;
+        end;
+      end;
+    end;
+  finally
+    aParams.Free;
+    aAddressList.Free;
+  end;
+end;
+
+procedure TDCTCPConnector.TryConnectTo(const aHost: string; const aPort: Integer);
+begin
+  // отключаем шифрование и сжатие
   Intercept.CryptKey := '';
   Intercept.CompressionLevel := 0;
 
-//  inherited TryConnect;
+  // устанавливаем соединение
+  FClient.Disconnect;
+  FClient.Host := aHost;
+  FClient.Port := aPort;
+  FClient.Connect;
+  // проверяем наличие соединения
+  FClient.CheckForGracefulDisconnect(true);
+  // устанавливаем параметры кодирования строк и максимальную длину строки
+  if Assigned(FClient.IOHandler) then
+  begin
+    FClient.IOHandler.DefStringEncoding := IndyTextEncoding_OSDefault;
+    FClient.IOHandler.MaxLineLength := 100 * (16 * 1024);
+  end;
 
+  // получаем параметры сервера
   GetServerSettings;
+  // передаем на сервер информацию о подключении
   SetConnectionParams;
 
+  // устанавливаем шифрование и сжатие
   if Encrypt then
     UpdateEncrypted(False);
   if CompressionLevel > 0 then
     UpdateComressionLevel(False);
 
+  // авторизуемся
   if UserName <> '' then
   begin
     try
