@@ -85,6 +85,10 @@ type
     ///  если подключение невозможно вызываем исключение (из последнего варианта)
     procedure TryConnect;
 
+    procedure DoConnect; override;
+    procedure DoDisconnect; override;
+
+
     property Intercept: TDCTCPIntercept read FIntercept;
   public
     constructor Create(AOwner: TComponent); override;
@@ -184,6 +188,33 @@ procedure TDCTCPConnector.DoCommandFmt(aCommand: string; const Args: array of TV
 begin
   SendCommandFmt(aCommand, Args);
   CheckCommandResult;
+end;
+
+procedure TDCTCPConnector.DoConnect;
+begin
+  if not FClient.Connected then
+    TryConnect
+  else
+  begin
+    try
+      // проверим насколько хорош этот коннект
+      FClient.CheckForGracefulDisconnect(True);
+    except
+      // подключаемся по новой, если подключения нет
+      TryConnect;
+    end;
+  end;
+end;
+
+procedure TDCTCPConnector.DoDisconnect;
+begin
+  FClient.Disconnect;
+  if not (csDestroying in ComponentState) then
+  begin
+    if Assigned(OnDisconnect) then
+      OnDisconnect(Self);
+  end;
+
 end;
 
 function TDCTCPConnector.GenerateCryptKey(const aCharCount: Integer): RawByteString;
