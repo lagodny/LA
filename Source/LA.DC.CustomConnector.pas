@@ -9,8 +9,8 @@ unit LA.DC.CustomConnector;
 interface
 
 uses
-  System.Classes, System.SysUtils;
-
+  System.Classes, System.SysUtils,
+  SynCrossPlatformJSON;
 const
   cDefConnectTimeout = 2000;
   cDefReadTimeout = 60000;
@@ -21,6 +21,12 @@ const
   cDefPort = 5555;
 
 type
+  /// интерфейс доступа к серверу
+  IDCConnector = interface
+    procedure Connect;
+    procedure Disconnect;
+  end;
+
   // эти исключения не нарушают работы программы
   EDCNotInhibitException = class(Exception);
 
@@ -32,7 +38,7 @@ type
 
   /// класс подключения к серверу Мониторинга
   ///  его наследники реализуют различные протоколы взаимодейтвия с сервером
-  TDCCustomConnector = class(TComponent)
+  TDCCustomConnector = class(TComponent, IDCConnector)
   private
     FUserName: string;
     FPassword: string;
@@ -66,6 +72,8 @@ type
   public
     procedure Connect; virtual; abstract;
     procedure Disconnect; virtual; abstract;
+
+
   published
     /// параметры подключения в формате Host:Port
     ///  через точку с запятой (;) можно добавить альтернативые адреса: host1:port1;host2:port2;host3:port3

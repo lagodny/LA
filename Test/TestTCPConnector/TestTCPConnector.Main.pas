@@ -57,6 +57,7 @@ begin
   FConnector.Address := 'test:5555;tdc.org.ua:5152';
   FConnector.UserName := 'Lagodny';
   FConnector.Password := '314';
+  FConnector.Description := 'Test TDCTCPConnector';
   FConnector.Encrypt := True;
   FConnector.CompressionLevel := 9;
 end;

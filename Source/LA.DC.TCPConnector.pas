@@ -42,18 +42,27 @@ type
 
     procedure ClearIncomingData;
 
-    procedure SendCommand(aCommand: string);
-    procedure SendCommandFmt(aCommand: string; const Args: array of TVarRec);
+    procedure SendCommand(const aCommand: string);
+    procedure SendCommandFmt(const aCommand: string; const Args: array of TVarRec);
 
     function ReadLn: string;
 
 
-    procedure DoCommand(aCommand: string);
-    procedure DoCommandFmt(aCommand: string; const Args: array of TVarRec);
+    procedure DoCommand(const aCommand: string);
+    procedure DoCommandFmt(const aCommand: string; const Args: array of TVarRec);
     procedure CheckCommandResult;
 
     // обработка ошибок TCP
-    function ProcessTCPException(e: EIdException): Boolean;
+    function ProcessTCPException(const e: EIdException): Boolean;
+
+    procedure LockAndDoCommand(const aCommand: string);
+    procedure LockAndDoCommandFmt(const aCommand: string; const Args: array of TVarRec);
+
+    function LockDoCommandReadLn(const aCommand: string): string;
+    function LockDoCommandReadLnFmt(const aCommand: string; const Args: array of TVarRec): string;
+
+    function LockAndGetStringsCommand(const aCommand: string): string;
+
 
     procedure GetServerSettings;
     procedure SetConnectionParams;
@@ -88,7 +97,6 @@ type
     procedure DoConnect; override;
     procedure DoDisconnect; override;
 
-
     property Intercept: TDCTCPIntercept read FIntercept;
   public
     constructor Create(AOwner: TComponent); override;
@@ -97,6 +105,9 @@ type
     /// методы потокобезопасны (используют критическую секцию)
     procedure Connect; override;
     procedure Disconnect; override;
+
+    /// методы работы с сервером
+
 
     property ServerFS: TFormatSettings read FServerFS;
     property ServerVer: Integer read FServerVer;
@@ -210,13 +221,13 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.DoCommand(aCommand: string);
+procedure TDCTCPConnector.DoCommand(const aCommand: string);
 begin
   SendCommand(aCommand);
   CheckCommandResult;
 end;
 
-procedure TDCTCPConnector.DoCommandFmt(aCommand: string; const Args: array of TVarRec);
+procedure TDCTCPConnector.DoCommandFmt(const aCommand: string; const Args: array of TVarRec);
 begin
   SendCommandFmt(aCommand, Args);
   CheckCommandResult;
@@ -335,6 +346,64 @@ begin
   end;
 end;
 
+procedure TDCTCPConnector.LockAndDoCommand(const aCommand: string);
+begin
+  LockClient('LockAndDoCommand: ' + aCommand);
+  try
+    try
+	    DoConnect;
+	    DoCommand(aCommand);
+    except
+      on e: EIdException do
+        if ProcessTCPException(e) then
+          raise;
+    end;
+  finally
+    UnLockClient('LockAndDoCommand: ' + aCommand);
+  end;
+end;
+
+procedure TDCTCPConnector.LockAndDoCommandFmt(const aCommand: string; const Args: array of TVarRec);
+begin
+  LockAndDoCommand(Format(aCommand, Args));
+end;
+
+function TDCTCPConnector.LockAndGetStringsCommand(const aCommand: string): string;
+var
+  aByteCount: integer;
+begin
+  // в протоколе V30 многие команды получают в ответ список строк
+  // строки разделены симовлом EOL = CR+LF
+  // формат ответа на такие команды:
+  // ok<EOL>
+  // <LineCount><EOL> - количество строк
+  // <ByteCount><EOL> - количество байт начиная с первого символа первой строки и заканчивая LF последней
+  // Строка 1<EOL>
+  // Строка 2<EOL>
+  // ...
+  // Строка N<EOL>
+
+  Result := '';
+  LockClient('LockAndGetStringsCommand: ' + aCommand);
+  try
+    try
+      DoConnect;
+      DoCommand(aCommand);
+      ReadLn;                           // количество строк данных
+      aByteCount := StrToInt(ReadLn);   // количество байт данных
+
+      // читаем данные
+      Result := FClient.IOHandler.ReadString(aByteCount);
+    except
+      on e: EIdException do
+        if ProcessTCPException(e) then
+          raise;
+    end;
+  finally
+    UnLockClient('LockAndGetStringsCommand: ' + aCommand);
+  end;
+end;
+
 function TDCTCPConnector.LockClient(const aMessage: string): TIdTCPClient;
 begin
   //OPCLog.WriteToLogFmt('%d: LockClient %s', [GetCurrentThreadId, aMessage]);
@@ -343,7 +412,43 @@ begin
   //OPCLog.WriteToLogFmt('%d: LockClient OK. %s', [GetCurrentThreadId, aMessage]);
 end;
 
-function TDCTCPConnector.ProcessTCPException(e: EIdException): Boolean;
+function TDCTCPConnector.LockDoCommandReadLn(const aCommand: string): string;
+begin
+  LockClient('LockDoCommandReadLn');
+  try
+    try
+	    DoConnect;
+	    DoCommand(aCommand);
+      Result := ReadLn;
+    except
+      on e: EIdException do
+        if ProcessTCPException(e) then
+          raise;
+    end;
+  finally
+    UnLockClient('LockDoCommandReadLn');
+  end;
+end;
+
+function TDCTCPConnector.LockDoCommandReadLnFmt(const aCommand: string; const Args: array of TVarRec): string;
+begin
+  LockClient('LockDoCommandReadLnFmt');
+  try
+    try
+	    DoConnect;
+	    DoCommandFmt(aCommand, Args);
+      Result := ReadLn;
+    except
+      on e: EIdException do
+        if ProcessTCPException(e) then
+          raise;
+    end;
+  finally
+    UnLockClient('LockDoCommandReadLnFmt');
+  end;
+end;
+
+function TDCTCPConnector.ProcessTCPException(const e: EIdException): Boolean;
 begin
   Result := True;
   TDCLog.WriteToLog(e.Message);
@@ -355,13 +460,13 @@ begin
   Result := FClient.IOHandler.ReadLn;
 end;
 
-procedure TDCTCPConnector.SendCommand(aCommand: string);
+procedure TDCTCPConnector.SendCommand(const aCommand: string);
 begin
   ClearIncomingData;
   FClient.IOHandler.WriteLn(aCommand);
 end;
 
-procedure TDCTCPConnector.SendCommandFmt(aCommand: string; const Args: array of TVarRec);
+procedure TDCTCPConnector.SendCommandFmt(const aCommand: string; const Args: array of TVarRec);
 begin
   SendCommand(Format(aCommand, Args));
 end;
