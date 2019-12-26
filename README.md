@@ -1,2 +1,2 @@
 # LA
-Delphi components and utils for Monitoring
+Delphi CrossPlatform components and utils for Monitoring
