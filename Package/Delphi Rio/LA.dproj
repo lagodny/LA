@@ -168,6 +168,7 @@
         <DCCReference Include="..\..\..\..\Lib\Fundamentals\Source\Utils\flcRandom.pas"/>
         <DCCReference Include="..\..\..\..\Lib\Fundamentals\Source\Utils\flcStdTypes.pas"/>
         <DCCReference Include="..\..\Source\LA.DC.SystemUtils.pas"/>
+        <DCCReference Include="..\..\Source\LA.DC.HTTPConnector.pas"/>
         <None Include="..\Doc\Design.html"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
