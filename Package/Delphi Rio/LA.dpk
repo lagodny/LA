@@ -50,7 +50,8 @@ contains
   flcRandom in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcRandom.pas',
   flcStdTypes in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcStdTypes.pas',
   LA.DC.SystemUtils in '..\..\Source\LA.DC.SystemUtils.pas',
-  LA.DC.HTTPConnector in '..\..\Source\LA.DC.HTTPConnector.pas';
+  LA.DC.HTTPConnector in '..\..\Source\LA.DC.HTTPConnector.pas',
+  LA.DC.mORMotClient in '..\..\Source\Extra\LA.DC.mORMotClient.pas';
 
 end.
 

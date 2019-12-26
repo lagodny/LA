@@ -88,11 +88,7 @@ type
 
     /// пытаемся подключиться по указанному адресу
     ///  если подключение невозможно вызываем исключение
-    procedure TryConnectTo(const aHost: string; const aPort: Integer); virtual;
-
-    /// перебираем все возможные варианты
-    ///  если подключение невозможно вызываем исключение (из последнего варианта)
-    procedure TryConnect;
+    procedure TryConnectTo(const aHost: string; const aPort: Integer); override;
 
     procedure DoConnect; override;
     procedure DoDisconnect; override;
@@ -123,10 +119,6 @@ type
     property Language: string read FLanguage write SetLanguage;
 
   end;
-
-resourcestring
-  sResAddressIsEmpty = 'Address is empty. The format of Address should be: host1:port1;host2:port2 etc';
-  sResAddressIsBadFmt = 'Check Address (%s). The format of Address should be: host1:port1;host2:port2 etc';
 
 implementation
 
@@ -574,57 +566,6 @@ begin
     DoPropChanged;
   end;
 
-end;
-
-procedure TDCTCPConnector.TryConnect;
-var
-  aAddressList, aParams: TStringList;
-  i: Integer;
-begin
-  if Address = '' then
-    raise EDCConnectorBadAddress.Create(sResAddressIsEmpty);
-
-  aAddressList := TStringList.Create;
-  aParams := TStringList.Create;
-  try
-    aAddressList.LineBreak := ';';
-    aParams.LineBreak := ':';
-    aAddressList.Text := Address;
-    for i := 0 to aAddressList.Count - 1 do
-    begin
-      aParams.Text := aAddressList[i];
-      if aParams.Count = 2 then
-      begin
-        try
-          TryConnectTo(aParams[0], StrToInt(aParams[1]));
-          /// подключение прошло успешно
-          ///  передвинем успешные параметры подключения в начало списка для более быстрого переподключения
-          if i <> 0 then
-          begin
-            aAddressList.Move(i, 0);
-            FAddress := aAddressList.Text;
-          end;
-          /// уходим
-          Exit;
-        except
-          on Exception do
-          begin
-            /// если мы долши до последнего варианта и так и не смогли подключиться,
-            ///  то поднимаем последнее исключение, иначе продолжаем перебор
-            if i = aAddressList.Count - 1 then
-              raise
-          end;
-        end;
-      end
-      else
-        raise EDCConnectorBadAddress.CreateFmt(sResAddressIsBadFmt, [Address]);
-    end;
-
-
-  finally
-    aParams.Free;
-    aAddressList.Free;
-  end;
 end;
 
 procedure TDCTCPConnector.TryConnectTo(const aHost: string; const aPort: Integer);

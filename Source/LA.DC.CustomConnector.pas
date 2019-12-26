@@ -23,8 +23,12 @@ const
 type
   /// интерфейс доступа к серверу
   IDCConnector = interface
+  ['{54ABD7AB-27A5-42A0-AE14-506242BB01F8}']
     procedure Connect;
     procedure Disconnect;
+
+    function SensorValue(const SID: String): String;
+
   end;
 
   // эти исключения не нарушают работы программы
@@ -40,6 +44,7 @@ type
   ///  его наследники реализуют различные протоколы взаимодейтвия с сервером
   TDCCustomConnector = class(TComponent, IDCConnector)
   private
+    FAddress: string;
     FUserName: string;
     FPassword: string;
     FDescription: string;
@@ -50,7 +55,6 @@ type
     procedure SetUserName(const Value: string);
     procedure SetDescription(const Value: string);
   protected
-    FAddress: string;
     function GetEncrypt: boolean; virtual; abstract;
     function GetCompressionLevel: Integer; virtual; abstract;
     function GetConnectTimeOut: Integer; virtual; abstract;
@@ -67,11 +71,27 @@ type
     // вызывается при изменении параметров
     procedure DoPropChanged; virtual;
 
+    /// пытаемся подключиться по указанному адресу
+    ///  если подключение невозможно вызываем исключение
+    procedure TryConnectTo(const aHost: string; const aPort: Integer); virtual; abstract;
+
+    /// перебираем все возможные варианты
+    ///  если подключение невозможно вызываем исключение (из последнего варианта)
+    procedure TryConnect; virtual;
+
+    /// проверяем подключение перед вызовом методов сервера
+    ///  если подключения нет, то пытаемся подключиться
+    procedure CheckConnection; virtual;
+
+
     procedure DoConnect; virtual; abstract;
     procedure DoDisconnect; virtual; abstract;
   public
     procedure Connect; virtual; abstract;
     procedure Disconnect; virtual; abstract;
+
+    function SensorValue(const SID: String): String; virtual; abstract;
+//    function GroupSensorValueByID(const IDs: TIDArr): TValArr;
 
 
   published
@@ -107,9 +127,17 @@ type
 
 implementation
 
+resourcestring
+  sResAddressIsEmpty = 'Address is empty. The format of Address should be: host1:port1;host2:port2 etc';
+  sResAddressIsBadFmt = 'Check Address (%s). The format of Address should be: host1:port1;host2:port2 etc';
+
+
 { TDCCustomConnector }
-
-
+procedure TDCCustomConnector.CheckConnection;
+begin
+  if not Connected then
+    DoConnect;
+end;
 
 procedure TDCCustomConnector.DoPropChanged;
 begin
@@ -161,6 +189,57 @@ begin
   begin
     FUserName := Value;
     DoPropChanged;
+  end;
+end;
+
+procedure TDCCustomConnector.TryConnect;
+var
+  aAddressList, aParams: TStringList;
+  i: Integer;
+begin
+  if Address = '' then
+    raise EDCConnectorBadAddress.Create(sResAddressIsEmpty);
+
+  aAddressList := TStringList.Create;
+  aParams := TStringList.Create;
+  try
+    aAddressList.LineBreak := ';';
+    aParams.LineBreak := ':';
+    aAddressList.Text := Address;
+    for i := 0 to aAddressList.Count - 1 do
+    begin
+      aParams.Text := aAddressList[i];
+      if aParams.Count = 2 then
+      begin
+        try
+          TryConnectTo(aParams[0], StrToInt(aParams[1]));
+          /// подключение прошло успешно
+          ///  передвинем успешные параметры подключения в начало списка для более быстрого переподключения
+          if i <> 0 then
+          begin
+            aAddressList.Move(i, 0);
+            FAddress := aAddressList.Text;
+          end;
+          /// уходим
+          Exit;
+        except
+          on Exception do
+          begin
+            /// если мы долши до последнего варианта и так и не смогли подключиться,
+            ///  то поднимаем последнее исключение, иначе продолжаем перебор
+            if i = aAddressList.Count - 1 then
+              raise
+          end;
+        end;
+      end
+      else
+        raise EDCConnectorBadAddress.CreateFmt(sResAddressIsBadFmt, [Address]);
+    end;
+
+
+  finally
+    aParams.Free;
+    aAddressList.Free;
   end;
 end;
 

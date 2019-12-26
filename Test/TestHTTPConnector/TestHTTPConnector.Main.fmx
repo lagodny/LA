@@ -1,0 +1,103 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'Test HTTPConnector'
+  ClientHeight = 243
+  ClientWidth = 591
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object mLog: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Client
+    Size.Width = 591.000000000000000000
+    Size.Height = 146.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 587.000000000000000000
+    Viewport.Height = 142.000000000000000000
+  end
+  object Layout1: TLayout
+    Align = Top
+    Size.Width = 591.000000000000000000
+    Size.Height = 97.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object bRun: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      TabOrder = 0
+      Text = 'Run'
+    end
+    object bCreate: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 32.000000000000000000
+      TabOrder = 1
+      Text = 'Create'
+      OnClick = bCreateClick
+    end
+    object bConnect: TButton
+      Position.X = 96.000000000000000000
+      Position.Y = 32.000000000000000000
+      TabOrder = 2
+      Text = 'Connect'
+      OnClick = bConnectClick
+    end
+    object bDisconnect: TButton
+      Position.X = 408.000000000000000000
+      Position.Y = 32.000000000000000000
+      TabOrder = 3
+      Text = 'Disconnect'
+      OnClick = bDisconnectClick
+    end
+    object bDestroy: TButton
+      Position.X = 496.000000000000000000
+      Position.Y = 32.000000000000000000
+      TabOrder = 4
+      Text = 'Destroy'
+      OnClick = bDestroyClick
+    end
+    object Edit1: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 5
+      Text = '1'
+      Position.X = 184.000000000000000000
+      Position.Y = 32.000000000000000000
+      Size.Width = 65.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object bSensorValue: TButton
+      Position.X = 256.000000000000000000
+      Position.Y = 32.000000000000000000
+      Size.Width = 113.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      Text = 'Sensor value'
+      OnClick = bSensorValueClick
+    end
+    object Edit2: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 7
+      Text = '1;2;3;4'
+      Position.X = 184.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 65.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object bGroupSensorValue: TButton
+      Position.X = 256.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 113.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 8
+      Text = 'Group sesnor value'
+      OnClick = bGroupSensorValueClick
+    end
+  end
+end

@@ -9,6 +9,9 @@
         <Projects Include="..\Test\TestTCPConnector\TestTCPConnector.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Test\TestHTTPConnector\TestHTTPConnector.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="TestTCPConnector:Make">
         <MSBuild Projects="..\Test\TestTCPConnector\TestTCPConnector.dproj" Targets="Make"/>
     </Target>
+    <Target Name="TestHTTPConnector">
+        <MSBuild Projects="..\Test\TestHTTPConnector\TestHTTPConnector.dproj"/>
+    </Target>
+    <Target Name="TestHTTPConnector:Clean">
+        <MSBuild Projects="..\Test\TestHTTPConnector\TestHTTPConnector.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestHTTPConnector:Make">
+        <MSBuild Projects="..\Test\TestHTTPConnector\TestHTTPConnector.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="LA;TestTCPConnector"/>
+        <CallTarget Targets="LA;TestTCPConnector;TestHTTPConnector"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="LA:Clean;TestTCPConnector:Clean"/>
+        <CallTarget Targets="LA:Clean;TestTCPConnector:Clean;TestHTTPConnector:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="LA:Make;TestTCPConnector:Make"/>
+        <CallTarget Targets="LA:Make;TestTCPConnector:Make;TestHTTPConnector:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
