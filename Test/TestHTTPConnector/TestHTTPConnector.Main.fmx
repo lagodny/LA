@@ -7,7 +7,7 @@ object MainForm: TMainForm
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
-  DesignerMasterStyle = 0
+  DesignerMasterStyle = 3
   object mLog: TMemo
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
     DataDetectorTypes = []
@@ -16,8 +16,8 @@ object MainForm: TMainForm
     Size.Height = 146.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    Viewport.Width = 587.000000000000000000
-    Viewport.Height = 142.000000000000000000
+    Viewport.Width = 583.000000000000000000
+    Viewport.Height = 138.000000000000000000
   end
   object Layout1: TLayout
     Align = Top
@@ -66,7 +66,7 @@ object MainForm: TMainForm
       Position.X = 184.000000000000000000
       Position.Y = 32.000000000000000000
       Size.Width = 65.000000000000000000
-      Size.Height = 22.000000000000000000
+      Size.Height = 32.000000000000000000
       Size.PlatformDefault = False
     end
     object bSensorValue: TButton
@@ -86,7 +86,7 @@ object MainForm: TMainForm
       Position.X = 184.000000000000000000
       Position.Y = 56.000000000000000000
       Size.Width = 65.000000000000000000
-      Size.Height = 22.000000000000000000
+      Size.Height = 32.000000000000000000
       Size.PlatformDefault = False
     end
     object bGroupSensorValue: TButton
