@@ -17,6 +17,7 @@
         android:icon="%icon%"
         android:theme="%theme%"
         android:hardwareAccelerated="%hardwareAccelerated%"
+				android:usesCleartextTraffic="True"
         android:resizeableActivity="false">
 
         <%provider%>

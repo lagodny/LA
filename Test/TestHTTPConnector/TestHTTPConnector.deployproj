@@ -5,7 +5,10 @@
     </ProjectExtensions>
     <PropertyGroup>
         <DeviceId Condition="'$(Platform)'=='Android'">RF8M82DBQTR</DeviceId>
+<<<<<<< HEAD
         <DeviceId Condition="'$(Platform)'=='Android64'">RF8M82DBQTR</DeviceId>
+=======
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
         <DeviceId Condition="'$(Platform)'=='iOSDevice32'"/>
         <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
         <DeviceId Condition="'$(Platform)'=='iOSSimulator'">iPhone5</DeviceId>
@@ -37,8 +40,21 @@
             <Overwrite>True</Overwrite>
         </DeployFile>
     </ItemGroup>
+<<<<<<< HEAD
     <ItemGroup Condition="'$(Platform)'=='OSX64'"/>
     <ItemGroup Condition="'$(Platform)'=='Android'">
+=======
+    <ItemGroup Condition="'$(Platform)'=='Android'">
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon72</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
         <DeployFile Include="Android\Debug\libTestHTTPConnector.so" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\library\lib\armeabi-v7a\</RemoteDir>
             <RemoteName>libTestHTTPConnector.so</RemoteName>
@@ -67,6 +83,7 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-small\</RemoteDir>
             <RemoteName>splash_image.png</RemoteName>
@@ -80,29 +97,50 @@
             <RemoteDir>TestHTTPConnector\res\drawable-hdpi\</RemoteDir>
             <RemoteName>ic_notification.png</RemoteName>
             <DeployClass>Android_NotificationIcon36</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_640x480.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-large\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage640</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\lib\android\debug\mips\libnative-activity.so" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\library\lib\mips\</RemoteDir>
             <RemoteName>libTestHTTPConnector.so</RemoteName>
             <DeployClass>AndroidLibnativeMipsFile</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_960x720.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-xlarge\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage960</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="Android\Debug\splash_image_def.xml" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable\</RemoteDir>
             <RemoteName>splash_image_def.xml</RemoteName>
             <DeployClass>AndroidSplashImageDef</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-small\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage426</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_96x96.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-xxxhdpi\</RemoteDir>
             <RemoteName>ic_notification.png</RemoteName>
@@ -134,11 +172,18 @@
             <RemoteDir>TestHTTPConnector\library\lib\armeabi\</RemoteDir>
             <RemoteName>libTestHTTPConnector.so</RemoteName>
             <DeployClass>AndroidLibnativeArmeabiFile</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_36x36.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-hdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon36</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_24x24.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-mdpi\</RemoteDir>
             <RemoteName>ic_notification.png</RemoteName>
@@ -197,24 +242,44 @@
             <RemoteDir>TestHTTPConnector\res\drawable-large\</RemoteDir>
             <RemoteName>splash_image.png</RemoteName>
             <DeployClass>Android_SplashImage640</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_960x720.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>TestHTTPConnector\res\drawable-xlarge\</RemoteDir>
-            <RemoteName>splash_image.png</RemoteName>
-            <DeployClass>Android_SplashImage960</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
+=======
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-mdpi\</RemoteDir>
             <RemoteName>ic_launcher.png</RemoteName>
             <DeployClass>Android_LauncherIcon48</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+<<<<<<< HEAD
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_960x720.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-xlarge\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage960</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\lib\android\debug\mips\libnative-activity.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\library\lib\mips\</RemoteDir>
+            <RemoteName>libTestHTTPConnector.so</RemoteName>
+            <DeployClass>AndroidLibnativeMipsFile</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+<<<<<<< HEAD
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-mdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon48</DeployClass>
+=======
+        <DeployFile Include="Android\Debug\classes.dex" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\classes\</RemoteDir>
+            <RemoteName>classes.dex</RemoteName>
+            <DeployClass>AndroidClassesDexFile</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -229,10 +294,17 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="Android\Debug\classes.dex" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\classes\</RemoteDir>
             <RemoteName>classes.dex</RemoteName>
             <DeployClass>AndroidClassesDexFile</DeployClass>
+=======
+        <DeployFile Include="Android\Debug\splash_image_def.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable\</RemoteDir>
+            <RemoteName>splash_image_def.xml</RemoteName>
+            <DeployClass>AndroidSplashImageDef</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -247,6 +319,7 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_470x320.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-normal\</RemoteDir>
             <RemoteName>splash_image.png</RemoteName>
@@ -296,6 +369,8 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+=======
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_96x96.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-xxxhdpi\</RemoteDir>
             <RemoteName>ic_notification.png</RemoteName>
@@ -305,6 +380,7 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-ldpi\</RemoteDir>
             <RemoteName>ic_launcher.png</RemoteName>
@@ -381,24 +457,44 @@
             <RemoteDir>TestHTTPConnector\res\drawable-hdpi\</RemoteDir>
             <RemoteName>ic_launcher.png</RemoteName>
             <DeployClass>Android_LauncherIcon72</DeployClass>
+=======
+        <DeployFile Include="Android\Debug\AndroidManifest.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\</RemoteDir>
+            <RemoteName>AndroidManifest.xml</RemoteName>
+            <DeployClass>ProjectAndroidManifest</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_640x480.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-large\</RemoteDir>
             <RemoteName>splash_image.png</RemoteName>
             <DeployClass>Android_SplashImage640</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\lib\android\debug\armeabi\libnative-activity.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\library\lib\armeabi\</RemoteDir>
+            <RemoteName>libTestHTTPConnector.so</RemoteName>
+            <DeployClass>AndroidLibnativeArmeabiFile</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-xxhdpi\</RemoteDir>
             <RemoteName>ic_notification.png</RemoteName>
             <DeployClass>Android_NotificationIcon72</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon144</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -413,17 +509,29 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="Android64\Debug\libTestHTTPConnector.so" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\library\lib\arm64-v8a\</RemoteDir>
             <RemoteName>libTestHTTPConnector.so</RemoteName>
             <DeployClass>ProjectOutput</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_24x24.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-mdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon24</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
+<<<<<<< HEAD
             <Required>True</Required>
         </DeployFile>
         <DeployFile Include="Android64\Debug\colors.xml" Condition="'$(Config)'=='Debug'">
+=======
+        </DeployFile>
+        <DeployFile Include="Android\Debug\colors.xml" Condition="'$(Config)'=='Debug'">
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <RemoteDir>TestHTTPConnector\res\values\</RemoteDir>
             <RemoteName>colors.xml</RemoteName>
             <DeployClass>Android_Colors</DeployClass>
@@ -432,55 +540,100 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="Android64\Debug\AndroidManifest.xml" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\</RemoteDir>
             <RemoteName>AndroidManifest.xml</RemoteName>
             <DeployClass>ProjectAndroidManifest</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_96x96.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-xhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon96</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="Android64\Debug\splash_image_def.xml" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable\</RemoteDir>
             <RemoteName>splash_image_def.xml</RemoteName>
             <DeployClass>AndroidSplashImageDef</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_48x48.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\drawable-xhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon48</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-mdpi\</RemoteDir>
             <RemoteName>ic_launcher.png</RemoteName>
             <DeployClass>Android_LauncherIcon48</DeployClass>
+=======
+        <DeployFile Include="Android\Debug\styles-v21.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\values-v21\</RemoteDir>
+            <RemoteName>styles.xml</RemoteName>
+            <DeployClass>AndroidSplashStylesV21</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\drawable-small\</RemoteDir>
             <RemoteName>splash_image.png</RemoteName>
             <DeployClass>Android_SplashImage426</DeployClass>
+=======
+        <DeployFile Include="Android\Debug\strings.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestHTTPConnector\res\values\</RemoteDir>
+            <RemoteName>strings.xml</RemoteName>
+            <DeployClass>Android_Strings</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="Android64\Debug\styles-v21.xml" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\values-v21\</RemoteDir>
             <RemoteName>styles.xml</RemoteName>
             <DeployClass>AndroidSplashStylesV21</DeployClass>
+=======
+    </ItemGroup>
+    <ItemGroup Condition="'$(Platform)'=='OSX64'"/>
+    <ItemGroup Condition="'$(Platform)'=='iOSSimulator'">
+        <DeployFile Include="$(BDS)\Redist\iossimulator\libcgunwind.1.0.dylib">
+            <RemoteDir>TestHTTPConnector.app\</RemoteDir>
+            <RemoteName>libcgunwind.1.0.dylib</RemoteName>
+            <DeployClass>DependencyModule</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+<<<<<<< HEAD
         <DeployFile Include="Android64\Debug\strings.xml" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestHTTPConnector\res\values\</RemoteDir>
             <RemoteName>strings.xml</RemoteName>
             <DeployClass>Android_Strings</DeployClass>
+=======
+        <DeployFile Include="$(BDS)\Redist\iossimulator\libpcre.dylib">
+            <RemoteDir>TestHTTPConnector.app\</RemoteDir>
+            <RemoteName>libpcre.dylib</RemoteName>
+            <DeployClass>DependencyModule</DeployClass>
+>>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
