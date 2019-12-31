@@ -135,7 +135,17 @@ function TDCHTTPConnector.SensorValue(const SID: String): String;
 begin
   if not Connected then
     Connect;
-  Result := FMonitoring.SensorValue(SID);
+  try
+    Result := FMonitoring.SensorValue(SID);
+  except
+    on e: EServiceException do
+    begin
+      DoDisconnect;
+      DoConnect;
+//      FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
+      Result := FMonitoring.SensorValue(SID);
+    end;
+  end;
 end;
 
 procedure TDCHTTPConnector.SetCompressionLevel(const Value: Integer);
@@ -212,6 +222,9 @@ end;
 
 procedure TDCHTTPConnector.TryConnectTo(const aHost: string; const aPort: Integer);
 begin
+  FMonitoring := nil;
+  FClient.Free;
+
   FClient := GetClient(aHost, UserName, Password, aPort, SERVER_ROOT, HTTPs,
     ProxyName, ProxyByPass,
     SendTimeOut, ReadTimeout, ConnectTimeout);
