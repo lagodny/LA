@@ -6,13 +6,8 @@
         <MainSource>TestTCPConnector.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-<<<<<<< HEAD
         <Platform Condition="'$(Platform)'==''">Android</Platform>
         <TargetedPlatforms>37983</TargetedPlatforms>
-=======
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
-        <TargetedPlatforms>5215</TargetedPlatforms>
->>>>>>> 1592a5a593b5a47a6e4a4781fbcbff61789580b7
         <AppType>Application</AppType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">

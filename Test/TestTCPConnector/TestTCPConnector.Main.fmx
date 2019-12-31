@@ -17,8 +17,8 @@ object MainForm: TMainForm
     Size.Height = 169.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    Viewport.Width = 582.000000000000000000
-    Viewport.Height = 165.000000000000000000
+    Viewport.Width = 586.000000000000000000
+    Viewport.Height = 169.000000000000000000
   end
   object Layout1: TLayout
     Align = Top
@@ -48,18 +48,37 @@ object MainForm: TMainForm
       OnClick = bConnectClick
     end
     object bDisconnect: TButton
-      Position.X = 184.000000000000000000
+      Position.X = 384.000000000000000000
       Position.Y = 32.000000000000000000
       TabOrder = 3
       Text = 'Disconnect'
       OnClick = bDisconnectClick
     end
     object bDestroy: TButton
-      Position.X = 272.000000000000000000
+      Position.X = 472.000000000000000000
       Position.Y = 32.000000000000000000
       TabOrder = 4
       Text = 'Destroy'
       OnClick = bDestroyClick
+    end
+    object bSensorValue: TButton
+      Position.X = 264.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 113.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      Text = 'Sensor value'
+      OnClick = bSensorValueClick
+    end
+    object bGroupSensorValue: TButton
+      Position.X = 264.000000000000000000
+      Position.Y = 43.000000000000000000
+      Size.Width = 113.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 8
+      Text = 'Group sesnor value'
     end
   end
 end

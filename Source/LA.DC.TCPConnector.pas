@@ -47,6 +47,9 @@ type
 
     function ReadLn: string;
 
+    function ExtractValue(var aValues: string; var aValue: string; var aErrorCode: integer; var aErrorStr: string; var aMoment: TDateTime): Boolean;
+
+
 
     procedure DoCommand(const aCommand: string);
     procedure DoCommandFmt(const aCommand: string; const Args: array of TVarRec);
@@ -110,6 +113,10 @@ type
     property ServerOffsetFromUTC: TDateTime read FServerOffsetFromUTC;
     property ClientOffsetFromUTC: TDateTime read FClientOffsetFromUTC;
 
+    /// реализация интерфейса IMonitoring
+    function SensorValue(const SID: String): String; override;
+
+
   published
     /// версия протокола
     property ProtocolVersion: Integer read FProtocolVersion write SetProtocolVersion default 30;
@@ -123,6 +130,7 @@ type
 implementation
 
 uses
+  System.Character,
   flcStdTypes, flcCipherRSA,
   LA.DC.StrUtils, LA.DC.SystemUtils,
   LA.DC.Log;
@@ -249,6 +257,66 @@ begin
     if Assigned(OnDisconnect) then
       OnDisconnect(Self);
   end;
+
+end;
+
+function TDCTCPConnector.ExtractValue(var aValues, aValue: string; var aErrorCode: integer; var aErrorStr: string;
+  var aMoment: TDateTime): Boolean;
+var
+  i, p1: integer;
+  s: string;
+  aState: (sValue, sErrorCode, sErrorStr, sMoment, sEOL);
+  aStrLength: integer;
+begin
+  // разбираем текст вида:
+  //
+  // Value;ErrorCode;ErrorStr;Moment<EOL>
+  // Value;ErrorCode;ErrorStr;Moment<EOL>
+  // <EOL>
+  // ...
+  // Value;ErrorCode;ErrorStr;Moment<EOL>
+  //
+  // удаляем из испходного текста разобранную строку
+
+  i := 1;
+  aStrLength := Length(aValues);
+
+  Assert(aStrLength > 0, 'Получена пустая строка');
+
+  Result := aValues[i] <> #13;
+  if Result then
+  begin
+    p1 := 1;
+    aState := sValue;
+
+    while aState <> sEOL do
+    begin
+      // EOL = CR + LF  (#13 + #10)
+
+      if (i > aStrLength) or aValues[i].IsInArray([';', #13]) then
+      //(CharInSet(aValues[i], [';', #13])) then
+      begin
+        s := Copy(aValues, p1, i - p1);
+        p1 := i + 1;
+        case aState of
+          sValue:       // значение
+            aValue := s;
+          sErrorCode:   // код ошибки
+            aErrorCode := StrToIntDef(s, 0);
+          sErrorStr:    // ошибка
+            aErrorStr := s;
+          sMoment:      // момент времени
+            aMoment := StrToDateTimeDef(s, aMoment); // DateToClient(aMoment), OpcFS);
+        end;
+        Inc(aState);
+      end;
+      Inc(i);
+    end;
+    aValues := Copy(aValues, i + 1 {LF}, aStrLength);
+  end
+  else
+    aValues := Copy(aValues, i + 2 {CRLF}, aStrLength);
+
 
 end;
 
@@ -461,6 +529,31 @@ end;
 procedure TDCTCPConnector.SendCommandFmt(const aCommand: string; const Args: array of TVarRec);
 begin
   SendCommand(Format(aCommand, Args));
+end;
+
+function TDCTCPConnector.SensorValue(const SID: String): String;
+var
+  aStr: String;
+  aErrorCode: integer;
+  aErrorStr: string;
+  aMoment: TDateTime;
+begin
+  LockClient('SensorValue');
+  try
+    try
+      DoConnect;
+      DoCommandFmt('GetValue %s', [SID]);
+      aStr := ReadLn;
+      ExtractValue(aStr, Result, aErrorCode, aErrorStr, aMoment);
+      //Moment := DateToClient(Moment);
+    except
+      on e: EIdException do
+        if ProcessTCPException(e) then
+          raise;
+    end;
+  finally
+    UnLockClient('SensorValue');
+  end;
 end;
 
 procedure TDCTCPConnector.SetCompressionLevel(const Value: Integer);

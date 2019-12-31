@@ -16,12 +16,15 @@ type
     bConnect: TButton;
     bDisconnect: TButton;
     bDestroy: TButton;
+    bSensorValue: TButton;
+    bGroupSensorValue: TButton;
     procedure bRunClick(Sender: TObject);
     procedure bCreateClick(Sender: TObject);
     procedure bConnectClick(Sender: TObject);
     procedure bDisconnectClick(Sender: TObject);
     procedure bDestroyClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure bSensorValueClick(Sender: TObject);
   private
     FConnector: TDCTCPConnector;
   public
@@ -75,6 +78,15 @@ end;
 procedure TMainForm.bRunClick(Sender: TObject);
 begin
   RunTest;
+end;
+
+procedure TMainForm.bSensorValueClick(Sender: TObject);
+var
+  i: Integer;
+begin
+  for i := 1 to 10 do
+    AddToLog(FConnector.SensorValue('1'));
+
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
