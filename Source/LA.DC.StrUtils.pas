@@ -28,8 +28,12 @@ var
 begin
   Result := '';
   b := TEncoding.ANSI.GetBytes(aStr);
-  for I := 0 to Length(b) - 1 do
-    Result := Result + IntToHex(b[i], 2) + aDelimiter;
+  if Length(b) > 0 then
+  begin
+    Result := IntToHex(b[0], 2);
+    for i := 1 to Length(b) - 1 do
+      Result := Result + aDelimiter + IntToHex(b[i], 2);
+  end;
 end;
 
 class function TDCStrUtils.StrToHex(const Str: RawByteString; const aDelimiter: string): string;
@@ -39,8 +43,12 @@ var
 begin
   Result := '';
   b := BytesOf(Str);
-  for I := 0 to Length(b) - 1 do
-    Result := Result + IntToHex(b[i], 2) + aDelimiter;
+  if Length(b) > 0 then
+  begin
+    Result := IntToHex(b[0], 2);
+    for i := 1 to Length(b) - 1 do
+      Result := Result + aDelimiter + IntToHex(b[i], 2);
+  end;
 end;
 
 end.

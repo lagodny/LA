@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, System.SyncObjs, System.SysUtils,
-  IdGlobal, IdTCPClient, IdException,
+  //IdGlobal, IdTCPClient, IdException,
   SynCrossPlatformREST,
   LA.DC.CustomConnector,
   LA.DC.mORMotClient;
@@ -222,8 +222,9 @@ end;
 
 procedure TDCHTTPConnector.TryConnectTo(const aHost: string; const aPort: Integer);
 begin
-  FMonitoring := nil;
-  FClient.Free;
+//  FMonitoring := nil;
+//  FClient.Free;
+  DoDisconnect;
 
   FClient := GetClient(aHost, UserName, Password, aPort, SERVER_ROOT, HTTPs,
     ProxyName, ProxyByPass,
