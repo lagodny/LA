@@ -1,0 +1,52 @@
+package LA;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'LA'}
+{$LIBSUFFIX '270'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  IndySystem,
+  IndyProtocols,
+  IndyCore,
+  DCPcrypt,
+  LA.Fundamentals.Utils,
+  LA.Fundamentals.Crypto,
+  LA.mORMot.Crossplatform;
+
+contains
+  LA.DC.CustomConnector in '..\..\Source\LA.DC.CustomConnector.pas',
+  LA.DC.HTTPConnector in '..\..\Source\LA.DC.HTTPConnector.pas',
+  LA.DC.mORMotClient in '..\..\Source\Extra\LA.DC.mORMotClient.pas',
+  LA.DC.TCPConnector in '..\..\Source\LA.DC.TCPConnector.pas',
+  LA.DC.TCPIntercept in '..\..\Source\LA.DC.TCPIntercept.pas',
+  LA.DC.Log in '..\..\Source\LA.DC.Log.pas',
+  LA.DC.StrUtils in '..\..\Source\LA.DC.StrUtils.pas',
+  LA.DC.SystemUtils in '..\..\Source\LA.DC.SystemUtils.pas';
+
+end.

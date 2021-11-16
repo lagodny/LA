@@ -1,0 +1,44 @@
+﻿package LA.mORMot.Crossplatform;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'LA mORMot Crossplatform'}
+{$LIBSUFFIX '270'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl;
+
+contains
+  SynCrossPlatformCrypto in '..\..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformCrypto.pas',
+  SynCrossPlatformJSON in '..\..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformJSON.pas',
+  SynCrossPlatformREST in '..\..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformREST.pas',
+  SynCrossPlatformSpecific in '..\..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformSpecific.pas',
+  SynCrossPlatformSynLZ in '..\..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformSynLZ.pas',
+  SynCrtSock in '..\..\..\..\Lib\mORMot\SynCrtSock.pas',
+  SynWinSock in '..\..\..\..\Lib\mORMot\SynWinSock.pas';
+
+end.

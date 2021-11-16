@@ -1,0 +1,55 @@
+﻿package LA.Fundamentals.Crypto;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'LA Fundamentals Crypto package'}
+{$LIBSUFFIX '260'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  LA.Fundamentals.Utils;
+
+contains
+  flcCertificatePEM in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCertificatePEM.pas',
+  flcCertificateX509 in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCertificateX509.pas',
+  flcCipher in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipher.pas',
+  flcCipherAES in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherAES.pas',
+  flcCipherDES in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherDES.pas',
+  flcCipherDH in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherDH.pas',
+  flcCipherEllipticCurve in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherEllipticCurve.pas',
+  flcCipherRandom in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherRandom.pas',
+  flcCipherRC2 in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherRC2.pas',
+  flcCipherRC4 in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherRC4.pas',
+  flcCipherRSA in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherRSA.pas',
+  flcCipherTest in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherTest.pas',
+  flcCipherUtils in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCipherUtils.pas',
+  flcCryptoHash in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCryptoHash.pas',
+  flcCryptoRandom in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCryptoRandom.pas',
+  flcCryptoUtils in '..\..\..\Lib\Fundamentals\Source\Crypto\flcCryptoUtils.pas',
+  flcEncodingASN1 in '..\..\..\Lib\Fundamentals\Source\Crypto\flcEncodingASN1.pas';
+
+end.

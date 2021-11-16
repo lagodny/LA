@@ -763,7 +763,7 @@ begin
 
         RSAPublicKeyInit(aPub);
         RSAPublicKeyAssignHex(aPub, 256, aModulus, aExponent);
-        aCode := RSAEncryptStr(rsaetPKCS1, aPub, aCryptKey);
+        aCode := RSAEncryptStr(rsaetRSAES_PKCS1, aPub, aCryptKey);
         RSAPublicKeyFinalise(aPub);
 
         DoCommandFmt('SetCryptKey2 %s', [TDCStrUtils.StrToHex(aCode, '')]);

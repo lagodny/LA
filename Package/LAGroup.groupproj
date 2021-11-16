@@ -1,18 +1,21 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{1DA37D6E-D526-4C96-824A-AA500E1D1B8C}</ProjectGuid>
+        <ProjectGuid>{DFA1A7A8-6D03-4780-A053-175866C55F9D}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Delphi Rio\LA.dproj">
+        <Projects Include="..\..\..\Lib\dcpcrypt\Packages\Delphi Sydney\DCPcrypt.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\Test\TestTCPConnector\TestTCPConnector.dproj">
+        <Projects Include="270\LA.Fundamentals.Utils.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\Test\TestHTTPConnector\TestHTTPConnector.dproj">
+        <Projects Include="270\LA.Fundamentals.Crypto.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\Test\LATest\LATest.dproj">
+        <Projects Include="270\LA.mORMot.Crossplatform.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="270\LA.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -23,50 +26,59 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
+    <Target Name="DCPcrypt">
+        <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\Delphi Sydney\DCPcrypt.dproj"/>
+    </Target>
+    <Target Name="DCPcrypt:Clean">
+        <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\Delphi Sydney\DCPcrypt.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DCPcrypt:Make">
+        <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\Delphi Sydney\DCPcrypt.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="LA_Fundamentals_Utils">
+        <MSBuild Projects="270\LA.Fundamentals.Utils.dproj"/>
+    </Target>
+    <Target Name="LA_Fundamentals_Utils:Clean">
+        <MSBuild Projects="270\LA.Fundamentals.Utils.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LA_Fundamentals_Utils:Make">
+        <MSBuild Projects="270\LA.Fundamentals.Utils.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="LA_Fundamentals_Crypto">
+        <MSBuild Projects="270\LA.Fundamentals.Crypto.dproj"/>
+    </Target>
+    <Target Name="LA_Fundamentals_Crypto:Clean">
+        <MSBuild Projects="270\LA.Fundamentals.Crypto.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LA_Fundamentals_Crypto:Make">
+        <MSBuild Projects="270\LA.Fundamentals.Crypto.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="LA_mORMot_Crossplatform">
+        <MSBuild Projects="270\LA.mORMot.Crossplatform.dproj"/>
+    </Target>
+    <Target Name="LA_mORMot_Crossplatform:Clean">
+        <MSBuild Projects="270\LA.mORMot.Crossplatform.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LA_mORMot_Crossplatform:Make">
+        <MSBuild Projects="270\LA.mORMot.Crossplatform.dproj" Targets="Make"/>
+    </Target>
     <Target Name="LA">
-        <MSBuild Projects="Delphi Rio\LA.dproj"/>
+        <MSBuild Projects="270\LA.dproj"/>
     </Target>
     <Target Name="LA:Clean">
-        <MSBuild Projects="Delphi Rio\LA.dproj" Targets="Clean"/>
+        <MSBuild Projects="270\LA.dproj" Targets="Clean"/>
     </Target>
     <Target Name="LA:Make">
-        <MSBuild Projects="Delphi Rio\LA.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestTCPConnector">
-        <MSBuild Projects="..\Test\TestTCPConnector\TestTCPConnector.dproj"/>
-    </Target>
-    <Target Name="TestTCPConnector:Clean">
-        <MSBuild Projects="..\Test\TestTCPConnector\TestTCPConnector.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestTCPConnector:Make">
-        <MSBuild Projects="..\Test\TestTCPConnector\TestTCPConnector.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestHTTPConnector">
-        <MSBuild Projects="..\Test\TestHTTPConnector\TestHTTPConnector.dproj"/>
-    </Target>
-    <Target Name="TestHTTPConnector:Clean">
-        <MSBuild Projects="..\Test\TestHTTPConnector\TestHTTPConnector.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestHTTPConnector:Make">
-        <MSBuild Projects="..\Test\TestHTTPConnector\TestHTTPConnector.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="LATest">
-        <MSBuild Projects="..\Test\LATest\LATest.dproj"/>
-    </Target>
-    <Target Name="LATest:Clean">
-        <MSBuild Projects="..\Test\LATest\LATest.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="LATest:Make">
-        <MSBuild Projects="..\Test\LATest\LATest.dproj" Targets="Make"/>
+        <MSBuild Projects="270\LA.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="LA;TestTCPConnector;TestHTTPConnector;LATest"/>
+        <CallTarget Targets="DCPcrypt;LA_Fundamentals_Utils;LA_Fundamentals_Crypto;LA_mORMot_Crossplatform;LA"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="LA:Clean;TestTCPConnector:Clean;TestHTTPConnector:Clean;LATest:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;LA_Fundamentals_Utils:Clean;LA_Fundamentals_Crypto:Clean;LA_mORMot_Crossplatform:Clean;LA:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="LA:Make;TestTCPConnector:Make;TestHTTPConnector:Make;LATest:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;LA_Fundamentals_Utils:Make;LA_Fundamentals_Crypto:Make;LA_mORMot_Crossplatform:Make;LA:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

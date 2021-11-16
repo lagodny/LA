@@ -1,16 +1,18 @@
-unit LA.DC.CustomConnector;
 {*******************************************************}
 {                                                       }
-{     Copyright (c) 2019-2020 by Alex A. Lagodny        }
+{       LA DC Components                                }
+{                                                       }
+{       Copyright (C) 2021 LA                           }
 {                                                       }
 {*******************************************************}
 
+unit LA.DC.CustomConnector;
 
 interface
 
 uses
-  System.Classes, System.SysUtils,
-  SynCrossPlatformJSON;
+  System.Classes, System.SysUtils;
+  //SynCrossPlatformJSON;
 const
   cDefConnectTimeout = 2000;
   cDefReadTimeout = 60000;

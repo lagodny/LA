@@ -1,0 +1,47 @@
+﻿package LA.Fundamentals.Utils;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'LA Fundamentals Utils package'}
+{$LIBSUFFIX '270'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl;
+
+contains
+  flcHash in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcHash.pas',
+  flcHugeInt in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcHugeInt.pas',
+  flcRandom in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcRandom.pas',
+  flcStdTypes in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcStdTypes.pas',
+  flcUnicodeCodecs in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcUnicodeCodecs.pas',
+  flcUTF in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcUTF.pas',
+  flcUtils in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcUtils.pas',
+  flcSysUtils in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcSysUtils.pas',
+  flcBase64 in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcBase64.pas',
+  flcStrings in '..\..\..\..\Lib\Fundamentals\Source\Utils\flcStrings.pas';
+
+end.

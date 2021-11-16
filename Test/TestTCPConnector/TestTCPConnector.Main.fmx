@@ -17,8 +17,8 @@ object MainForm: TMainForm
     Size.Height = 169.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    Viewport.Width = 586.000000000000000000
-    Viewport.Height = 169.000000000000000000
+    Viewport.Width = 582.000000000000000000
+    Viewport.Height = 165.000000000000000000
   end
   object Layout1: TLayout
     Align = Top
