@@ -1,4 +1,4 @@
-package LA;
+package LA.DC;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -47,6 +47,8 @@ contains
   LA.DC.TCPIntercept in '..\Source\LA.DC.TCPIntercept.pas',
   LA.DC.Log in '..\Source\LA.DC.Log.pas',
   LA.DC.StrUtils in '..\Source\LA.DC.StrUtils.pas',
-  LA.DC.SystemUtils in '..\Source\LA.DC.SystemUtils.pas';
+  LA.DC.SystemUtils in '..\Source\LA.DC.SystemUtils.pas',
+  LA.Data.Monitor in '..\Source\LA.Data.Monitor.pas',
+  LA.Data.Classes in '..\Source\LA.Data.Classes.pas';
 
 end.

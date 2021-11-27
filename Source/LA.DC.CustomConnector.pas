@@ -12,7 +12,6 @@ interface
 
 uses
   System.Classes, System.SysUtils;
-  //SynCrossPlatformJSON;
 const
   cDefConnectTimeout = 2000;
   cDefReadTimeout = 60000;
@@ -93,9 +92,6 @@ type
     procedure Disconnect; virtual; abstract;
 
     function SensorValue(const SID: String): String; virtual; abstract;
-//    function GroupSensorValueByID(const IDs: TIDArr): TValArr;
-
-
   published
     /// параметры подключени€ в формате Host:Port
     ///  через точку с зап€той (;) можно добавить альтернативые адреса: host1:port1;host2:port2;host3:port3
