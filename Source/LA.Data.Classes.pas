@@ -21,28 +21,57 @@ uses
   LA.DC.CustomConnector;
 
 type
-  // наблюдатель (датчик, трекер, маркер...)
-  IDCObserver = interface(IInvokable)
-    // получить идентификатор, например адрес датчика или трекера
+//  // наблюдатель (датчик, трекер, маркер...)
+//  IDCObserver = interface(IInvokable)
+//    // получить идентификатор, например адрес датчика или трекера
+//    function GetID: string;
+//    // установить новые данные
+//    procedure SetData(const aData: string);
+//  end;
+
+  /// <summary>
+  ///  Линк (адаптер) к наблюдателю
+  ///  может возвращать ID - адрес наблюдателя, необходимый для запроса данных по этому адресу
+  ///  полученные данные устанавливаются через SetData
+  ///  уведомление наблюдателя выполняется через Notify
+  /// </summary>
+  IDCObserverLink = interface(IInvokable)
+    /// <summary>
+    ///   получить идентификатор, например адрес датчика или трекера
+    /// </summary>
     function GetID: string;
-    // установить новые данные
+    /// <summary>
+    ///   установить новые данные
+    /// </summary>
     procedure SetData(const aData: string);
+    /// <summary>
+    ///   уведомить наблюдателя
+    /// </summary>
+    procedure Notify;
   end;
 
-  // объект, за которым можно наблюдать
-  // к нему можно подключаться/отключаться и он может сообщать, что что-то изменилось
-  // aLink - это специальный объект, который создается в момент подключения и содержит в себе ссылку на наблюдателя
+  /// <summary>
+  ///  Объект, за которым можно наблюдать
+  ///  к нему можно подключаться/отключаться и он может сообщать, что что-то изменилось
+  ///  aLink - это специальный объект, который поддерживает интерфейс IDCObserverLink,
+  ///  создается в момент подключения и содержит в себе ссылку на наблюдателя
+  /// </summary>
   IDCObservable<T> = interface(IInvokable)
     procedure Attach(const aLink: T);
     procedure Detach(const aLink: T);
     procedure Notify;
   end;
 
-  // содержит параметры датчика Мониторинга, его значение и состояние
+  /// <summary>
+  ///   Невизуальный компонент Датчик Мониторинга
+  ///  содержит информацию о датчике Мониторинга:
+  ///  - адрес в Мониторинге
+  ///  - значение, момент времени и состояние
+  /// </summary>
   [ObservableMember('Value')]
   [ObservableMember('Timestamp')]
   [ObservableMember('Status')]
-  TDCSensor = class(TComponent, IDCObserver)
+  TDCSensor = class(TComponent) //, IDCObserver)
   private
     FData: string;
     FSID: string;
@@ -84,25 +113,64 @@ type
     property Enabled: Boolean read FEnabled write SetEnabled;
   end;
 
-  // связка с Наблюдателем
-  TDCLink = class
+  /// <summary>
+  ///   Трекер - может быть использован как наблюдатель, по аналогии с Датчиком
+  /// </summary>
+  TDCTracker = class(TComponent)
+  private
+    FSID: string;
+    FData: string;
+    procedure SetSID(const Value: string);
+  public
+    procedure SetData(const aData: string);
+  published
+    property SID: string read FSID write SetSID;
+  end;
+
+  /// <summary>
+  ///  Абстрактный класс Линк/адаптер
+  ///  наследники должны реализовать доступ к Наблюдателю определенного класса
+  ///  - определить конструктор, в котрый будет передан Наблюдатель
+  ///  - переопределить GetID и Notify для работы с этим Наблюдателем
+  /// </summary>
+  TDCLink = class abstract
   private
     FData: string;
-    FObserver: IDCObserver;
   public
-    constructor Create(aObserver: IDCObserver);
-    procedure Notify;
+    function GetID: string; virtual; abstract;
+    procedure SetData(const aData: string);
+    procedure Notify; virtual; abstract;
 
-    property Observer: IDCObserver read FObserver;
     property Data: string read FData write FData;
   end;
 
-  // список связок с Наблюдателями
-  TDCLinkList = class(TObjectList<TDCLink>)
+  /// <summary>
+  ///   Линк/адаптер к Датчику
+  /// </summary>
+  TDCSensorLink = class(TDCLink)
+  private
+    FObserver: TDCSensor;
+  public
+    constructor Create(aObserver: TDCSensor);
+
+    function GetID: string; override;
+    procedure Notify; override;
   end;
 
+//  /// <summary>
+//  ///   Линк/адаптер к Трекеру
+//  /// </summary>
+//  TDCTrackerLink = class(TDCLink)
+//  public
+//    function GetID: string; override;
+//    procedure Notify; override;
+//  end;
 
-  // объект, который получает данные из Мониторинга и уведомляет подписчиков
+
+  /// <summary>
+  ///  Объект, который получает данные из Мониторинга и уведомляет подписчиков
+  ///  Умеет работать с объектами-наблюдателями класса T
+  /// </summary>
   TDataUpdater = class(TComponent, IDCObservable<TDCLink>)
   private
     const
@@ -120,7 +188,7 @@ type
       end;
   private
     FLock: TMREWSync;
-    FLinks: TDCLinkList;
+    FLinks: TObjectList<TDCLink>;
     FLinksChanged: Boolean;
     FThread: TDataUpdateThread;
     FInterval: Int64;
@@ -148,7 +216,7 @@ type
     procedure ProcessServerResponce(const aResponce: string);
 
     // список линков, в которых есть ссылки на наблюдателей
-    property Links: TDCLinkList read FLinks;
+    property Links: TObjectList<TDCLink> read FLinks;
   published
     // подключение к серверу Мониторинга
     property Connector: TDCCustomConnector read FConnector write SetConnector;
@@ -157,6 +225,7 @@ type
     // период опроса сервера, мс
     property Interval: Int64 read FInterval write SetInterval;
   end;
+
 
 implementation
 
@@ -305,7 +374,7 @@ begin
   inherited Create(AOwner);
   FInterval := DefInterval;
   FLock := TMREWSync.Create;
-  FLinks := TDCLinkList.Create;
+  FLinks := TObjectList<TDCLink>.Create;
 end;
 
 destructor TDataUpdater.Destroy;
@@ -329,7 +398,8 @@ end;
 
 procedure TDataUpdater.DoNotify(const aLink: TDCLink);
 begin
-  aLink.Observer.SetData(aLink.Data);
+//  aLink.SetData(aLink.Data);
+  aLink.Notify;
 end;
 
 procedure TDataUpdater.DoThreadTerminated(aSender: TObject);
@@ -350,7 +420,7 @@ begin
   FLock.BeginRead;
   try
     for aLink in FLinks do
-      Result := Result + aLink.Observer.GetID + ';';
+      Result := Result + aLink.GetID + ';';
   finally
     FLock.EndRead;
   end;
@@ -393,7 +463,7 @@ begin
       if aResponce[i] = cDataDelimiter then
       begin
         p2 := i;
-        FLinks[aLinkIndex].Data := Copy(aResponce, p1, p2 - p1);
+        FLinks[aLinkIndex].SetData(Copy(aResponce, p1, p2 - p1));
         p1 := p2 + 1;
         if aLinkIndex = aLinkMaxIndex then
           Exit;
@@ -451,16 +521,6 @@ begin
   FThread.WaitFor;
 end;
 
-constructor TDCLink.Create(aObserver: IDCObserver);
-begin
-  FObserver := aObserver;
-end;
-
-procedure TDCLink.Notify;
-begin
-  Observer.SetData(Data);
-end;
-
 { TDataUpdater.TDataUpdateThread }
 
 constructor TDataUpdater.TDataUpdateThread.Create(CreateSuspended: Boolean; aUpdater: TDataUpdater; aInterval: Int64);
@@ -474,6 +534,50 @@ begin
   // запрашиваем данные с сервера
   // обновляем линки
   // уведомляем наблюдателей
+end;
+
+{ TDCTracker }
+
+procedure TDCTracker.SetData(const aData: string);
+begin
+  FData := aData;
+end;
+
+procedure TDCTracker.SetSID(const Value: string);
+begin
+  FSID := Value;
+end;
+
+{ TDCSensorLink }
+
+function TDCSensorLink.GetID: string;
+begin
+  Result := FObserver.SID;
+end;
+
+procedure TDCSensorLink.Notify;
+begin
+  FObserver.SetData(Data);
+end;
+
+//{ TDCTrackerLink }
+//
+//function TDCTrackerLink.GetID: string;
+//begin
+//  Result := Observer.SID;
+//end;
+//
+//procedure TDCTrackerLink.Notify;
+//begin
+//  inherited;
+//
+//end;
+
+{ TDCLink }
+
+procedure TDCLink.SetData(const aData: string);
+begin
+  FData := aData;
 end;
 
 end.
