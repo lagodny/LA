@@ -1,4 +1,4 @@
-unit LA.DC.StrUtils;
+unit LA.Utils.Str;
 
 interface
 

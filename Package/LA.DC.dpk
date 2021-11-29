@@ -40,15 +40,23 @@ requires
   LA.mORMot.Crossplatform;
 
 contains
-  LA.DC.CustomConnector in '..\Source\LA.DC.CustomConnector.pas',
-  LA.DC.HTTPConnector in '..\Source\LA.DC.HTTPConnector.pas',
-  LA.DC.mORMotClient in '..\Source\Extra\LA.DC.mORMotClient.pas',
-  LA.DC.TCPConnector in '..\Source\LA.DC.TCPConnector.pas',
-  LA.DC.TCPIntercept in '..\Source\LA.DC.TCPIntercept.pas',
-  LA.DC.Log in '..\Source\LA.DC.Log.pas',
-  LA.DC.StrUtils in '..\Source\LA.DC.StrUtils.pas',
-  LA.DC.SystemUtils in '..\Source\LA.DC.SystemUtils.pas',
-  LA.Data.Monitor in '..\Source\LA.Data.Monitor.pas',
-  LA.Data.Classes in '..\Source\LA.Data.Classes.pas';
+  LA.Net.Connector in '..\Source\LA.Net.Connector.pas',
+  LA.Net.Connector.Http in '..\Source\LA.Net.Connector.Http.pas',
+  LA.Net.Connector.Tcp in '..\Source\LA.Net.Connector.Tcp.pas',
+  LA.Net.Intercept.Tcp in '..\Source\LA.Net.Intercept.Tcp.pas',
+  LA.Log in '..\Source\LA.Log.pas',
+  LA.Utils.Str in '..\Source\LA.Utils.Str.pas',
+  LA.Utils.System in '..\Source\LA.Utils.System.pas',
+  LA.Data.Link.Intf in '..\Source\LA.Data.Link.Intf.pas',
+  LA.Data.Link in '..\Source\LA.Data.Link.pas',
+  LA.Data.Link.Sensor in '..\Source\LA.Data.Link.Sensor.pas',
+  LA.Data.Link.Tracker in '..\Source\LA.Data.Link.Tracker.pas',
+  LA.Data.Sensor in '..\Source\LA.Data.Sensor.pas',
+  LA.Data.Tracker in '..\Source\LA.Data.Tracker.pas',
+  LA.Data.Updater.Intf in '..\Source\LA.Data.Updater.Intf.pas',
+  LA.Data.Updater in '..\Source\LA.Data.Updater.pas',
+  LA.Threads in '..\Source\LA.Threads.pas',
+  LA.Net.Connector.Intf in '..\Source\LA.Net.Connector.Intf.pas',
+  LA.Net.DC.Client in '..\Source\LA.Net.DC.Client.pas';
 
 end.

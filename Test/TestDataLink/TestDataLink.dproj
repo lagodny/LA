@@ -97,10 +97,16 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\..\Source\LA.Data.Classes.pas"/>
         <DCCReference Include="..\..\Source\LA.Threads.pas"/>
         <DCCReference Include="..\..\Source\LA.Data.Sensor.pas"/>
         <DCCReference Include="..\..\Source\LA.Data.Link.pas"/>
+        <DCCReference Include="..\..\Source\LA.Data.Link.Sensor.pas"/>
+        <DCCReference Include="..\..\Source\LA.Data.Link.Tracker.pas"/>
+        <DCCReference Include="..\..\Source\LA.Data.Tracker.pas"/>
+        <DCCReference Include="..\..\Source\LA.Data.Updater.pas"/>
+        <DCCReference Include="..\..\Source\LA.Net.Connector.pas"/>
+        <DCCReference Include="..\..\Source\LA.Data.Updater.Intf.pas"/>
+        <DCCReference Include="..\..\Source\LA.Data.Link.Intf.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

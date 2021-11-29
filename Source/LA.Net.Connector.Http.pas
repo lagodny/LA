@@ -1,4 +1,4 @@
-unit LA.DC.HTTPConnector;
+unit LA.Net.Connector.Http;
 
 interface
 
@@ -6,11 +6,12 @@ uses
   System.Classes, System.SyncObjs, System.SysUtils,
   //IdGlobal, IdTCPClient, IdException,
   SynCrossPlatformREST,
-  LA.DC.CustomConnector,
-  LA.DC.mORMotClient;
+  LA.Net.Connector,
+  LA.Net.DC.Client;
+  //LA.DC.mORMotClient;
 
 type
-  TDCHTTPConnector = class(TDCCustomConnector)
+  TDCHttpConnector = class(TDCCustomConnector)
   private
     FClient: TSQLRestClientHTTP;
     FMonitoring: IMonitoring;
@@ -66,72 +67,72 @@ implementation
 
 { TDCHTTPConnector }
 
-procedure TDCHTTPConnector.Connect;
+procedure TDCHttpConnector.Connect;
 begin
   DoConnect;
 end;
 
-constructor TDCHTTPConnector.Create(AOwner: TComponent);
+constructor TDCHttpConnector.Create(AOwner: TComponent);
 begin
   inherited;
 
 end;
 
-destructor TDCHTTPConnector.Destroy;
+destructor TDCHttpConnector.Destroy;
 begin
   DoDisconnect;
   inherited;
 end;
 
-procedure TDCHTTPConnector.Disconnect;
+procedure TDCHttpConnector.Disconnect;
 begin
   DoDisconnect;
 end;
 
-procedure TDCHTTPConnector.DoConnect;
+procedure TDCHttpConnector.DoConnect;
 begin
   TryConnect;
 end;
 
-procedure TDCHTTPConnector.DoDisconnect;
+procedure TDCHttpConnector.DoDisconnect;
 begin
   FMonitoring := nil;
   FreeAndNil(FClient);
 end;
 
-function TDCHTTPConnector.GetCompressionLevel: Integer;
+function TDCHttpConnector.GetCompressionLevel: Integer;
 begin
   Result := FCompressionLevel;
 end;
 
-function TDCHTTPConnector.GetConnected: Boolean;
+function TDCHttpConnector.GetConnected: Boolean;
 begin
   Result := Assigned(FClient);
 end;
 
-function TDCHTTPConnector.GetConnectTimeOut: Integer;
+function TDCHttpConnector.GetConnectTimeOut: Integer;
 begin
   Result := FConnectTimeOut;
 end;
 
-function TDCHTTPConnector.GetEncrypt: boolean;
+function TDCHttpConnector.GetEncrypt: boolean;
 begin
   Result := FEncrypt;
 end;
 
-function TDCHTTPConnector.GetReadTimeOut: Integer;
+function TDCHttpConnector.GetReadTimeOut: Integer;
 begin
   Result := FReadTimeOut;
 end;
 
-function TDCHTTPConnector.GroupSensorValueByID(const IDs: TIDArr): TValArr;
+function TDCHttpConnector.GroupSensorValueByID(const IDs: TIDArr): TValArr;
 begin
   if not Connected then
     Connect;
   Result := FMonitoring.GroupSensorValueByID(IDs);
 end;
 
-function TDCHTTPConnector.SensorValue(const SID: String): String;
+function TDCHttpConnector.SensorValue(const SID: String): String;
 begin
   if not Connected then
     Connect;
@@ -142,13 +143,12 @@ begin
     begin
       DoDisconnect;
       DoConnect;
-//      FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
       Result := FMonitoring.SensorValue(SID);
     end;
   end;
 end;
 
-procedure TDCHTTPConnector.SetCompressionLevel(const Value: Integer);
+procedure TDCHttpConnector.SetCompressionLevel(const Value: Integer);
 begin
   if FCompressionLevel <> Value then
   begin
@@ -157,7 +157,7 @@ begin
   end;
 end;
 
-procedure TDCHTTPConnector.SetConnectTimeOut(const Value: Integer);
+procedure TDCHttpConnector.SetConnectTimeOut(const Value: Integer);
 begin
   if FConnectTimeOut <> Value then
   begin
@@ -166,7 +166,7 @@ begin
   end;
 end;
 
-procedure TDCHTTPConnector.SetEncrypt(const Value: boolean);
+procedure TDCHttpConnector.SetEncrypt(const Value: boolean);
 begin
   if FEncrypt <> Value then
   begin
@@ -175,7 +175,7 @@ begin
   end;
 end;
 
-procedure TDCHTTPConnector.SetHttps(const Value: boolean);
+procedure TDCHttpConnector.SetHttps(const Value: boolean);
 begin
   if FHttps <> Value then
   begin
@@ -184,7 +184,7 @@ begin
   end;
 end;
 
-procedure TDCHTTPConnector.SetProxyByPass(const Value: string);
+procedure TDCHttpConnector.SetProxyByPass(const Value: string);
 begin
   if FProxyByPass <>Value then
   begin
@@ -193,7 +193,7 @@ begin
   end;
 end;
 
-procedure TDCHTTPConnector.SetProxyName(const Value: string);
+procedure TDCHttpConnector.SetProxyName(const Value: string);
 begin
   if FProxyName <> Value then
   begin
@@ -202,7 +202,7 @@ begin
   end;
 end;
 
-procedure TDCHTTPConnector.SetReadTimeOut(const Value: Integer);
+procedure TDCHttpConnector.SetReadTimeOut(const Value: Integer);
 begin
   if FReadTimeOut <> Value then
   begin
@@ -211,7 +211,7 @@ begin
   end;
 end;
 
-procedure TDCHTTPConnector.SetSendTimeOut(const Value: Integer);
+procedure TDCHttpConnector.SetSendTimeOut(const Value: Integer);
 begin
   if FSendTimeOut <> Value then
   begin
@@ -220,10 +220,8 @@ begin
   end;
 end;
 
-procedure TDCHTTPConnector.TryConnectTo(const aHost: string; const aPort: Integer);
+procedure TDCHttpConnector.TryConnectTo(const aHost: string; const aPort: Integer);
 begin
-//  FMonitoring := nil;
-//  FClient.Free;
   DoDisconnect;
 
   FClient := GetClient(aHost, UserName, Password, aPort, SERVER_ROOT, HTTPs,

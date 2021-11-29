@@ -1,4 +1,4 @@
-unit LA.DC.Log;
+unit LA.Log;
 
 interface
 

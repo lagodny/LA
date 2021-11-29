@@ -6,12 +6,13 @@
 {                                                       }
 {*******************************************************}
 
-unit LA.DC.CustomConnector;
+unit LA.Net.Connector;
 
 interface
 
 uses
-  System.Classes, System.SysUtils;
+  System.Classes, System.SysUtils,
+  LA.Net.Connector.Intf;
 const
   cDefConnectTimeout = 2000;
   cDefReadTimeout = 60000;
@@ -22,15 +23,6 @@ const
   cDefPort = 5555;
 
 type
-  /// интерфейс доступа к серверу
-  IDCConnector = interface
-  ['{54ABD7AB-27A5-42A0-AE14-506242BB01F8}']
-    procedure Connect;
-    procedure Disconnect;
-
-    function SensorValue(const SID: String): String;
-
-  end;
 
   // эти исключения не нарушают работы программы
   EDCNotInhibitException = class(Exception);
@@ -223,7 +215,7 @@ begin
         except
           on Exception do
           begin
-            /// если мы долши до последнего варианта и так и не смогли подключиться,
+            /// если мы дошли до последнего варианта и так и не смогли подключиться,
             ///  то поднимаем последнее исключение, иначе продолжаем перебор
             if i = aAddressList.Count - 1 then
               raise

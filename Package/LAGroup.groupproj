@@ -15,13 +15,7 @@
         <Projects Include="LA.DC.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\Test\TestDataLink\TestDataLink.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\Repo\spring4d\Samples\SpringDemos\Demo.Patterns\Observer\Demo.Spring.ObserverPattern.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\Main\LA.Test.Main.dproj">
+        <Projects Include="..\Tests\LA.Test.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -68,41 +62,23 @@
     <Target Name="LA_DC:Make">
         <MSBuild Projects="LA.DC.dproj" Targets="Make"/>
     </Target>
-    <Target Name="TestDataLink">
-        <MSBuild Projects="..\Test\TestDataLink\TestDataLink.dproj"/>
+    <Target Name="LA_Test">
+        <MSBuild Projects="..\Tests\LA.Test.dproj"/>
     </Target>
-    <Target Name="TestDataLink:Clean">
-        <MSBuild Projects="..\Test\TestDataLink\TestDataLink.dproj" Targets="Clean"/>
+    <Target Name="LA_Test:Clean">
+        <MSBuild Projects="..\Tests\LA.Test.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="TestDataLink:Make">
-        <MSBuild Projects="..\Test\TestDataLink\TestDataLink.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="Demo_Spring_ObserverPattern">
-        <MSBuild Projects="..\..\..\Repo\spring4d\Samples\SpringDemos\Demo.Patterns\Observer\Demo.Spring.ObserverPattern.dproj"/>
-    </Target>
-    <Target Name="Demo_Spring_ObserverPattern:Clean">
-        <MSBuild Projects="..\..\..\Repo\spring4d\Samples\SpringDemos\Demo.Patterns\Observer\Demo.Spring.ObserverPattern.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Demo_Spring_ObserverPattern:Make">
-        <MSBuild Projects="..\..\..\Repo\spring4d\Samples\SpringDemos\Demo.Patterns\Observer\Demo.Spring.ObserverPattern.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="LA_Test_Main">
-        <MSBuild Projects="..\Test\Main\LA.Test.Main.dproj"/>
-    </Target>
-    <Target Name="LA_Test_Main:Clean">
-        <MSBuild Projects="..\Test\Main\LA.Test.Main.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="LA_Test_Main:Make">
-        <MSBuild Projects="..\Test\Main\LA.Test.Main.dproj" Targets="Make"/>
+    <Target Name="LA_Test:Make">
+        <MSBuild Projects="..\Tests\LA.Test.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="LA_Fundamentals_Utils;LA_Fundamentals_Crypto;LA_mORMot_Crossplatform;LA_DC;TestDataLink;Demo_Spring_ObserverPattern;LA_Test_Main"/>
+        <CallTarget Targets="LA_Fundamentals_Utils;LA_Fundamentals_Crypto;LA_mORMot_Crossplatform;LA_DC;LA_Test"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="LA_Fundamentals_Utils:Clean;LA_Fundamentals_Crypto:Clean;LA_mORMot_Crossplatform:Clean;LA_DC:Clean;TestDataLink:Clean;Demo_Spring_ObserverPattern:Clean;LA_Test_Main:Clean"/>
+        <CallTarget Targets="LA_Fundamentals_Utils:Clean;LA_Fundamentals_Crypto:Clean;LA_mORMot_Crossplatform:Clean;LA_DC:Clean;LA_Test:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="LA_Fundamentals_Utils:Make;LA_Fundamentals_Crypto:Make;LA_mORMot_Crossplatform:Make;LA_DC:Make;TestDataLink:Make;Demo_Spring_ObserverPattern:Make;LA_Test_Main:Make"/>
+        <CallTarget Targets="LA_Fundamentals_Utils:Make;LA_Fundamentals_Crypto:Make;LA_mORMot_Crossplatform:Make;LA_DC:Make;LA_Test:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

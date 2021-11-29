@@ -18,7 +18,7 @@ uses
   System.Generics.Collections,
 //  Spring.DesignPatterns,
   LA.Threads,
-  LA.DC.CustomConnector;
+  LA.Net.Connector;
 
 type
 //  // наблюдатель (датчик, трекер, маркер...)
@@ -549,6 +549,11 @@ begin
 end;
 
 { TDCSensorLink }
+
+constructor TDCSensorLink.Create(aObserver: TDCSensor);
+begin
+  FObserver := aObserver;
+end;
 
 function TDCSensorLink.GetID: string;
 begin

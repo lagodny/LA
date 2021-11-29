@@ -1,11 +1,11 @@
-unit LA.DC.TCPConnector;
+unit LA.Net.Connector.Tcp;
 
 interface
 
 uses
   System.Classes, System.SyncObjs, System.SysUtils,
   IdGlobal, IdTCPClient, IdException,
-  LA.DC.CustomConnector, LA.DC.TCPIntercept;
+  LA.Net.Connector, LA.Net.Intercept.Tcp;
 
 type
   TDCTCPConnector = class(TDCCustomConnector)
@@ -14,7 +14,7 @@ type
     FClient: TIdTCPClient;
     FIntercept: TDCTCPIntercept;
 
-    FEncrypt: boolean;
+    FEncrypt: Boolean;
     FCompressionLevel: Integer;
 
     FServerFS: TFormatSettings;
@@ -132,8 +132,8 @@ implementation
 uses
   System.Character,
   flcStdTypes, flcCipherRSA,
-  LA.DC.StrUtils, LA.DC.SystemUtils,
-  LA.DC.Log;
+  LA.Utils.Str, LA.Utils.System,
+  LA.Log;
 
 const
   sOk = 'ok';       // not localize
