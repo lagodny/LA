@@ -1,4 +1,4 @@
-unit LA.Net.Connector.Tcp;
+п»їunit LA.Net.Connector.Tcp;
 
 interface
 
@@ -55,7 +55,7 @@ type
     procedure DoCommandFmt(const aCommand: string; const Args: array of TVarRec);
     procedure CheckCommandResult;
 
-    // обработка ошибок TCP
+    // РѕР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РѕРє TCP
     function ProcessTCPException(const e: EIdException): Boolean;
 
     procedure LockAndDoCommand(const aCommand: string);
@@ -89,8 +89,8 @@ type
 
     procedure Authorize(const aUser, aPassword: string); virtual;
 
-    /// пытаемся подключиться по указанному адресу
-    ///  если подключение невозможно вызываем исключение
+    /// РїС‹С‚Р°РµРјСЃСЏ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ Р°РґСЂРµСЃСѓ
+    ///  РµСЃР»Рё РїРѕРґРєР»СЋС‡РµРЅРёРµ РЅРµРІРѕР·РјРѕР¶РЅРѕ РІС‹Р·С‹РІР°РµРј РёСЃРєР»СЋС‡РµРЅРёРµ
     procedure TryConnectTo(const aHost: string; const aPort: Integer); override;
 
     procedure DoConnect; override;
@@ -101,11 +101,11 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    /// методы потокобезопасны (используют критическую секцию)
+    /// РјРµС‚РѕРґС‹ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅС‹ (РёСЃРїРѕР»СЊР·СѓСЋС‚ РєСЂРёС‚РёС‡РµСЃРєСѓСЋ СЃРµРєС†РёСЋ)
     procedure Connect; override;
     procedure Disconnect; override;
 
-    /// методы работы с сервером
+    /// РјРµС‚РѕРґС‹ СЂР°Р±РѕС‚С‹ СЃ СЃРµСЂРІРµСЂРѕРј
 
 
     property ServerFS: TFormatSettings read FServerFS;
@@ -113,16 +113,16 @@ type
     property ServerOffsetFromUTC: TDateTime read FServerOffsetFromUTC;
     property ClientOffsetFromUTC: TDateTime read FClientOffsetFromUTC;
 
-    /// реализация интерфейса IMonitoring
+    /// СЂРµР°Р»РёР·Р°С†РёСЏ РёРЅС‚РµСЂС„РµР№СЃР° IMonitoring
     function SensorValue(const SID: String): String; override;
 
 
   published
-    /// версия протокола
+    /// РІРµСЂСЃРёСЏ РїСЂРѕС‚РѕРєРѕР»Р°
     property ProtocolVersion: Integer read FProtocolVersion write SetProtocolVersion default 30;
-    /// сервер может отправлять сообщения через это подключение
+    /// СЃРµСЂРІРµСЂ РјРѕР¶РµС‚ РѕС‚РїСЂР°РІР»СЏС‚СЊ СЃРѕРѕР±С‰РµРЅРёСЏ С‡РµСЂРµР· СЌС‚Рѕ РїРѕРґРєР»СЋС‡РµРЅРёРµ
     property EnableMessage: Boolean read FEnableMessage write SetEnableMessage default True;
-    /// язык, на котором сервер будет слать информационные сообщения (ошибки и т.д.)
+    /// СЏР·С‹Рє, РЅР° РєРѕС‚РѕСЂРѕРј СЃРµСЂРІРµСЂ Р±СѓРґРµС‚ СЃР»Р°С‚СЊ РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ (РѕС€РёР±РєРё Рё С‚.Рґ.)
     property Language: string read FLanguage write SetLanguage;
 
   end;
@@ -141,7 +141,7 @@ const
   sNoCommandHandler = 'no command handler'; // not localize
 
   sUnknownAnswer = 'Unknown answer : %s';
-  sBadParamCount = 'Получено некорректное количество параметров %d из %d.';
+  sBadParamCount = 'РџРѕР»СѓС‡РµРЅРѕ РЅРµРєРѕСЂСЂРµРєС‚РЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїР°СЂР°РјРµС‚СЂРѕРІ %d РёР· %d.';
 
 
 
@@ -150,7 +150,7 @@ const
 procedure TDCTCPConnector.Authorize(const aUser, aPassword: string);
 begin
   DoCommandFmt('Login %s;%s;1', [aUser, TDCStrUtils.StrToHex(aPassword, '')]);
-  ReadLn; // вычитываем приветствие
+  ReadLn; // РІС‹С‡РёС‚С‹РІР°РµРј РїСЂРёРІРµС‚СЃС‚РІРёРµ
 end;
 
 procedure TDCTCPConnector.CheckCommandResult;
@@ -161,7 +161,7 @@ begin
   if aStatus = sError then
     raise EDCConnectorCommandException.Create(ReadLn)
   else if aStatus <> sOk then
-    raise EDCConnectorUnknownAnswerException.Create('Нестандартый ответ на команду');
+    raise EDCConnectorUnknownAnswerException.Create('РќРµСЃС‚Р°РЅРґР°СЂС‚С‹Р№ РѕС‚РІРµС‚ РЅР° РєРѕРјР°РЅРґСѓ');
 end;
 
 procedure TDCTCPConnector.ClearIncomingData;
@@ -240,10 +240,10 @@ begin
   else
   begin
     try
-      // проверим насколько хорош этот коннект
+      // РїСЂРѕРІРµСЂРёРј РЅР°СЃРєРѕР»СЊРєРѕ С…РѕСЂРѕС€ СЌС‚РѕС‚ РєРѕРЅРЅРµРєС‚
       FClient.CheckForGracefulDisconnect(True);
     except
-      // подключаемся по новой, если подключения нет
+      // РїРѕРґРєР»СЋС‡Р°РµРјСЃСЏ РїРѕ РЅРѕРІРѕР№, РµСЃР»Рё РїРѕРґРєР»СЋС‡РµРЅРёСЏ РЅРµС‚
       TryConnect;
     end;
   end;
@@ -268,7 +268,7 @@ var
   aState: (sValue, sErrorCode, sErrorStr, sMoment, sEOL);
   aStrLength: integer;
 begin
-  // разбираем текст вида:
+  // СЂР°Р·Р±РёСЂР°РµРј С‚РµРєСЃС‚ РІРёРґР°:
   //
   // Value;ErrorCode;ErrorStr;Moment<EOL>
   // Value;ErrorCode;ErrorStr;Moment<EOL>
@@ -276,12 +276,12 @@ begin
   // ...
   // Value;ErrorCode;ErrorStr;Moment<EOL>
   //
-  // удаляем из испходного текста разобранную строку
+  // СѓРґР°Р»СЏРµРј РёР· РёСЃРїС…РѕРґРЅРѕРіРѕ С‚РµРєСЃС‚Р° СЂР°Р·РѕР±СЂР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ
 
   i := 1;
   aStrLength := Length(aValues);
 
-  Assert(aStrLength > 0, 'Получена пустая строка');
+  Assert(aStrLength > 0, 'РџРѕР»СѓС‡РµРЅР° РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°');
 
   Result := aValues[i] <> #13;
   if Result then
@@ -299,13 +299,13 @@ begin
         s := Copy(aValues, p1, i - p1);
         p1 := i + 1;
         case aState of
-          sValue:       // значение
+          sValue:       // Р·РЅР°С‡РµРЅРёРµ
             aValue := s;
-          sErrorCode:   // код ошибки
+          sErrorCode:   // РєРѕРґ РѕС€РёР±РєРё
             aErrorCode := StrToIntDef(s, 0);
-          sErrorStr:    // ошибка
+          sErrorStr:    // РѕС€РёР±РєР°
             aErrorStr := s;
-          sMoment:      // момент времени
+          sMoment:      // РјРѕРјРµРЅС‚ РІСЂРµРјРµРЅРё
             aMoment := StrToDateTimeDef(s, aMoment); // DateToClient(aMoment), OpcFS);
         end;
         Inc(aState);
@@ -432,16 +432,16 @@ function TDCTCPConnector.LockAndGetStringsCommand(const aCommand: string): strin
 var
   aByteCount: integer;
 begin
-  // в протоколе V30 многие команды получают в ответ список строк
-  // строки разделены симовлом EOL = CR+LF
-  // формат ответа на такие команды:
+  // РІ РїСЂРѕС‚РѕРєРѕР»Рµ V30 РјРЅРѕРіРёРµ РєРѕРјР°РЅРґС‹ РїРѕР»СѓС‡Р°СЋС‚ РІ РѕС‚РІРµС‚ СЃРїРёСЃРѕРє СЃС‚СЂРѕРє
+  // СЃС‚СЂРѕРєРё СЂР°Р·РґРµР»РµРЅС‹ СЃРёРјРѕРІР»РѕРј EOL = CR+LF
+  // С„РѕСЂРјР°С‚ РѕС‚РІРµС‚Р° РЅР° С‚Р°РєРёРµ РєРѕРјР°РЅРґС‹:
   // ok<EOL>
-  // <LineCount><EOL> - количество строк
-  // <ByteCount><EOL> - количество байт начиная с первого символа первой строки и заканчивая LF последней
-  // Строка 1<EOL>
-  // Строка 2<EOL>
+  // <LineCount><EOL> - РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє
+  // <ByteCount><EOL> - РєРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚ РЅР°С‡РёРЅР°СЏ СЃ РїРµСЂРІРѕРіРѕ СЃРёРјРІРѕР»Р° РїРµСЂРІРѕР№ СЃС‚СЂРѕРєРё Рё Р·Р°РєР°РЅС‡РёРІР°СЏ LF РїРѕСЃР»РµРґРЅРµР№
+  // РЎС‚СЂРѕРєР° 1<EOL>
+  // РЎС‚СЂРѕРєР° 2<EOL>
   // ...
-  // Строка N<EOL>
+  // РЎС‚СЂРѕРєР° N<EOL>
 
   Result := '';
   LockClient('LockAndGetStringsCommand: ' + aCommand);
@@ -449,10 +449,10 @@ begin
     try
       DoConnect;
       DoCommand(aCommand);
-      ReadLn;                           // количество строк данных
-      aByteCount := StrToInt(ReadLn);   // количество байт данных
+      ReadLn;                           // РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РґР°РЅРЅС‹С…
+      aByteCount := StrToInt(ReadLn);   // РєРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚ РґР°РЅРЅС‹С…
 
-      // читаем данные
+      // С‡РёС‚Р°РµРј РґР°РЅРЅС‹Рµ
       Result := FClient.IOHandler.ReadString(aByteCount);
     except
       on e: EIdException do
@@ -569,7 +569,7 @@ end;
 procedure TDCTCPConnector.SetConnectionParams;
 const
   cStringEncoding = '';  //'UTF8';
-  { TODO : проверить, почему не работает передача списка пользователей, если задан UTF8 }
+  { TODO : РїСЂРѕРІРµСЂРёС‚СЊ, РїРѕС‡РµРјСѓ РЅРµ СЂР°Р±РѕС‚Р°РµС‚ РїРµСЂРµРґР°С‡Р° СЃРїРёСЃРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№, РµСЃР»Рё Р·Р°РґР°РЅ UTF8 }
   //cStringEncoding = 'UTF8';
 begin
   try
@@ -663,36 +663,36 @@ end;
 
 procedure TDCTCPConnector.TryConnectTo(const aHost: string; const aPort: Integer);
 begin
-  // отключаем шифрование и сжатие
+  // РѕС‚РєР»СЋС‡Р°РµРј С€РёС„СЂРѕРІР°РЅРёРµ Рё СЃР¶Р°С‚РёРµ
   Intercept.CryptKey := '';
   Intercept.CompressionLevel := 0;
 
-  // устанавливаем соединение
+  // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЃРѕРµРґРёРЅРµРЅРёРµ
   FClient.Disconnect;
   FClient.Host := aHost;
   FClient.Port := aPort;
   FClient.Connect;
-  // проверяем наличие соединения
+  // РїСЂРѕРІРµСЂСЏРµРј РЅР°Р»РёС‡РёРµ СЃРѕРµРґРёРЅРµРЅРёСЏ
   FClient.CheckForGracefulDisconnect(true);
-  // устанавливаем параметры кодирования строк и максимальную длину строки
+  // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РїР°СЂР°РјРµС‚СЂС‹ РєРѕРґРёСЂРѕРІР°РЅРёСЏ СЃС‚СЂРѕРє Рё РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ СЃС‚СЂРѕРєРё
   if Assigned(FClient.IOHandler) then
   begin
     FClient.IOHandler.DefStringEncoding := IndyTextEncoding_OSDefault;
     FClient.IOHandler.MaxLineLength := 100 * (16 * 1024);
   end;
 
-  // получаем параметры сервера
+  // РїРѕР»СѓС‡Р°РµРј РїР°СЂР°РјРµС‚СЂС‹ СЃРµСЂРІРµСЂР°
   GetServerSettings;
-  // передаем на сервер информацию о подключении
+  // РїРµСЂРµРґР°РµРј РЅР° СЃРµСЂРІРµСЂ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕРґРєР»СЋС‡РµРЅРёРё
   SetConnectionParams;
 
-  // устанавливаем шифрование и сжатие
+  // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С€РёС„СЂРѕРІР°РЅРёРµ Рё СЃР¶Р°С‚РёРµ
   if Encrypt then
     UpdateEncrypted(False);
   if CompressionLevel > 0 then
     UpdateComressionLevel(False);
 
-  // авторизуемся
+  // Р°РІС‚РѕСЂРёР·СѓРµРјСЃСЏ
   if UserName <> '' then
   begin
     try
@@ -756,7 +756,7 @@ begin
 
     try
       try
-        // новая версия RSA
+        // РЅРѕРІР°СЏ РІРµСЂСЃРёСЏ RSA
         DoCommand('GetPublicKey2');
         aModulus := ReadLn;
         aExponent := ReadLn;

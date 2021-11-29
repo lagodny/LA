@@ -1,4 +1,4 @@
-{*******************************************************}
+п»ї{*******************************************************}
 {                                                       }
 {       LA DC Components                                }
 {                                                       }
@@ -24,7 +24,7 @@ const
 
 type
 
-  // эти исключения не нарушают работы программы
+  // СЌС‚Рё РёСЃРєР»СЋС‡РµРЅРёСЏ РЅРµ РЅР°СЂСѓС€Р°СЋС‚ СЂР°Р±РѕС‚С‹ РїСЂРѕРіСЂР°РјРјС‹
   EDCNotInhibitException = class(Exception);
 
   EDCConnectorException = class(EDCNotInhibitException);
@@ -33,8 +33,8 @@ type
   EDCConnectorUnknownAnswerException = class(EDCConnectorException);
   EDCConnectorOperationCanceledException = class(EDCConnectorException);
 
-  /// класс подключения к серверу Мониторинга
-  ///  его наследники реализуют различные протоколы взаимодейтвия с сервером
+  /// РєР»Р°СЃСЃ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє СЃРµСЂРІРµСЂСѓ РњРѕРЅРёС‚РѕСЂРёРЅРіР°
+  ///  РµРіРѕ РЅР°СЃР»РµРґРЅРёРєРё СЂРµР°Р»РёР·СѓСЋС‚ СЂР°Р·Р»РёС‡РЅС‹Рµ РїСЂРѕС‚РѕРєРѕР»С‹ РІР·Р°РёРјРѕРґРµР№С‚РІРёСЏ СЃ СЃРµСЂРІРµСЂРѕРј
   TDCCustomConnector = class(TComponent, IDCConnector)
   private
     FAddress: string;
@@ -61,19 +61,19 @@ type
     function GetConnected: Boolean; virtual; abstract;
     procedure SetConnected(const Value: Boolean); virtual;
 
-    // вызывается при изменении параметров
+    // РІС‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РёР·РјРµРЅРµРЅРёРё РїР°СЂР°РјРµС‚СЂРѕРІ
     procedure DoPropChanged; virtual;
 
-    /// пытаемся подключиться по указанному адресу
-    ///  если подключение невозможно вызываем исключение
+    /// РїС‹С‚Р°РµРјСЃСЏ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ Р°РґСЂРµСЃСѓ
+    ///  РµСЃР»Рё РїРѕРґРєР»СЋС‡РµРЅРёРµ РЅРµРІРѕР·РјРѕР¶РЅРѕ РІС‹Р·С‹РІР°РµРј РёСЃРєР»СЋС‡РµРЅРёРµ
     procedure TryConnectTo(const aHost: string; const aPort: Integer); virtual; abstract;
 
-    /// перебираем все возможные варианты
-    ///  если подключение невозможно вызываем исключение (из последнего варианта)
+    /// РїРµСЂРµР±РёСЂР°РµРј РІСЃРµ РІРѕР·РјРѕР¶РЅС‹Рµ РІР°СЂРёР°РЅС‚С‹
+    ///  РµСЃР»Рё РїРѕРґРєР»СЋС‡РµРЅРёРµ РЅРµРІРѕР·РјРѕР¶РЅРѕ РІС‹Р·С‹РІР°РµРј РёСЃРєР»СЋС‡РµРЅРёРµ (РёР· РїРѕСЃР»РµРґРЅРµРіРѕ РІР°СЂРёР°РЅС‚Р°)
     procedure TryConnect; virtual;
 
-    /// проверяем подключение перед вызовом методов сервера
-    ///  если подключения нет, то пытаемся подключиться
+    /// РїСЂРѕРІРµСЂСЏРµРј РїРѕРґРєР»СЋС‡РµРЅРёРµ РїРµСЂРµРґ РІС‹Р·РѕРІРѕРј РјРµС‚РѕРґРѕРІ СЃРµСЂРІРµСЂР°
+    ///  РµСЃР»Рё РїРѕРґРєР»СЋС‡РµРЅРёСЏ РЅРµС‚, С‚Рѕ РїС‹С‚Р°РµРјСЃСЏ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ
     procedure CheckConnection; virtual;
 
 
@@ -85,32 +85,32 @@ type
 
     function SensorValue(const SID: String): String; virtual; abstract;
   published
-    /// параметры подключения в формате Host:Port
-    ///  через точку с запятой (;) можно добавить альтернативые адреса: host1:port1;host2:port2;host3:port3
+    /// РїР°СЂР°РјРµС‚СЂС‹ РїРѕРґРєР»СЋС‡РµРЅРёСЏ РІ С„РѕСЂРјР°С‚Рµ Host:Port
+    ///  С‡РµСЂРµР· С‚РѕС‡РєСѓ СЃ Р·Р°РїСЏС‚РѕР№ (;) РјРѕР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІС‹Рµ Р°РґСЂРµСЃР°: host1:port1;host2:port2;host3:port3
     property Address: string read FAddress write SetAddress;
 
-    // ожидание подключения, мс
+    // РѕР¶РёРґР°РЅРёРµ РїРѕРґРєР»СЋС‡РµРЅРёСЏ, РјСЃ
     property ConnectTimeOut: Integer read GetConnectTimeOut write SetConnectTimeOut default cDefConnectTimeout;
-    // ожидание отклика на команду, мс
+    // РѕР¶РёРґР°РЅРёРµ РѕС‚РєР»РёРєР° РЅР° РєРѕРјР°РЅРґСѓ, РјСЃ
     property ReadTimeOut: Integer read GetReadTimeOut write SetReadTimeOut default cDefReadTimeout;
 
-    // уровень сжатия (0 - без сжатия ... 9 - максимальное сжатие)
+    // СѓСЂРѕРІРµРЅСЊ СЃР¶Р°С‚РёСЏ (0 - Р±РµР· СЃР¶Р°С‚РёСЏ ... 9 - РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ СЃР¶Р°С‚РёРµ)
     property CompressionLevel: Integer read GetCompressionLevel write SetCompressionLevel default cDefCompressionLevel;
-    // шифрование
+    // С€РёС„СЂРѕРІР°РЅРёРµ
     property Encrypt: boolean read GetEncrypt write SetEncrypt default cDefEncrypt;
 
-    // имя пользователя
+    // РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
     property UserName: string read FUserName write SetUserName;
-    // пароль
+    // РїР°СЂРѕР»СЊ
     property Password: string read FPassword write SetPassword;
 
-    // состояние подключения
+    // СЃРѕСЃС‚РѕСЏРЅРёРµ РїРѕРґРєР»СЋС‡РµРЅРёСЏ
     property Connected: Boolean read GetConnected write SetConnected;
 
-    /// как представиться серверу
+    /// РєР°Рє РїСЂРµРґСЃС‚Р°РІРёС‚СЊСЃСЏ СЃРµСЂРІРµСЂСѓ
     property Description: string read FDescription write SetDescription;
 
-    /// события
+    /// СЃРѕР±С‹С‚РёСЏ
     property OnConnect: TNotifyEvent read FOnConnect write FOnConnect;
     property OnDisconnect: TNotifyEvent read FOnDisconnect write FOnDisconnect;
   end;
@@ -203,20 +203,20 @@ begin
       begin
         try
           TryConnectTo(aParams[0], StrToInt(aParams[1]));
-          /// подключение прошло успешно
-          ///  передвинем успешные параметры подключения в начало списка для более быстрого переподключения
+          /// РїРѕРґРєР»СЋС‡РµРЅРёРµ РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ
+          ///  РїРµСЂРµРґРІРёРЅРµРј СѓСЃРїРµС€РЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РїРѕРґРєР»СЋС‡РµРЅРёСЏ РІ РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° РґР»СЏ Р±РѕР»РµРµ Р±С‹СЃС‚СЂРѕРіРѕ РїРµСЂРµРїРѕРґРєР»СЋС‡РµРЅРёСЏ
           if i <> 0 then
           begin
             aAddressList.Move(i, 0);
             FAddress := aAddressList.Text;
           end;
-          /// уходим
+          /// СѓС…РѕРґРёРј
           Exit;
         except
           on Exception do
           begin
-            /// если мы дошли до последнего варианта и так и не смогли подключиться,
-            ///  то поднимаем последнее исключение, иначе продолжаем перебор
+            /// РµСЃР»Рё РјС‹ РґРѕС€Р»Рё РґРѕ РїРѕСЃР»РµРґРЅРµРіРѕ РІР°СЂРёР°РЅС‚Р° Рё С‚Р°Рє Рё РЅРµ СЃРјРѕРіР»Рё РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ,
+            ///  С‚Рѕ РїРѕРґРЅРёРјР°РµРј РїРѕСЃР»РµРґРЅРµРµ РёСЃРєР»СЋС‡РµРЅРёРµ, РёРЅР°С‡Рµ РїСЂРѕРґРѕР»Р¶Р°РµРј РїРµСЂРµР±РѕСЂ
             if i = aAddressList.Count - 1 then
               raise
           end;

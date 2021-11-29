@@ -1,9 +1,9 @@
-unit LA.Net.Connector.Intf;
+п»їunit LA.Net.Connector.Intf;
 
 interface
 
 type
-  /// интерфейс доступа к серверу
+  /// РёРЅС‚РµСЂС„РµР№СЃ РґРѕСЃС‚СѓРїР° Рє СЃРµСЂРІРµСЂСѓ
   IDCConnector = interface
   ['{54ABD7AB-27A5-42A0-AE14-506242BB01F8}']
     procedure Connect;

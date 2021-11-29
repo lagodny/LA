@@ -1,4 +1,4 @@
-unit LA.Utils.System;
+﻿unit LA.Utils.System;
 
 interface
   uses

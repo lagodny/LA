@@ -1,4 +1,4 @@
-unit LA.Net.Intercept.Tcp;
+п»їunit LA.Net.Intercept.Tcp;
 
 interface
 
@@ -116,12 +116,12 @@ end;
 procedure TDCTCPIntercept.Receive(var VBuffer: TIdBytes);
 begin
   inherited Receive(VBuffer);
-  // при приеме
-  // сначала расшифровываем
+  // РїСЂРё РїСЂРёРµРјРµ
+  // СЃРЅР°С‡Р°Р»Р° СЂР°СЃС€РёС„СЂРѕРІС‹РІР°РµРј
   if Assigned(FBlockCipherIntercept) then
     FBlockCipherIntercept.Receive(VBuffer);
 
-  // а потом разжимаем
+  // Р° РїРѕС‚РѕРј СЂР°Р·Р¶РёРјР°РµРј
   if Assigned(FCompressionIntercept) then
     FCompressionIntercept.Receive(VBuffer);
 end;
@@ -129,12 +129,12 @@ end;
 procedure TDCTCPIntercept.Send(var VBuffer: TIdBytes);
 begin
   inherited Send(VBuffer);
-  // при отправке
-  // сначала сжимаем
+  // РїСЂРё РѕС‚РїСЂР°РІРєРµ
+  // СЃРЅР°С‡Р°Р»Р° СЃР¶РёРјР°РµРј
   if Assigned(FCompressionIntercept) then
     FCompressionIntercept.Send(VBuffer);
 
-  // а потом шифруем
+  // Р° РїРѕС‚РѕРј С€РёС„СЂСѓРµРј
   if Assigned(FBlockCipherIntercept) then
     FBlockCipherIntercept.Send(VBuffer);
 end;

@@ -1,4 +1,4 @@
-unit LA.Utils.Str;
+﻿unit LA.Utils.Str;
 
 interface
 

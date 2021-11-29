@@ -1,4 +1,4 @@
-unit LA.Data.Link.Sensor;
+п»їunit LA.Data.Link.Sensor;
 
 interface
 
@@ -7,7 +7,7 @@ uses
 
 type
   /// <summary>
-  ///   Линк/адаптер к Датчику
+  ///   Р›РёРЅРє/Р°РґР°РїС‚РµСЂ Рє Р”Р°С‚С‡РёРєСѓ
   /// </summary>
   TDCSensorLink = class(TDCLink)
   private

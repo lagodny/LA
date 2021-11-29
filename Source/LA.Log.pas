@@ -1,9 +1,9 @@
-unit LA.Log;
+п»їunit LA.Log;
 
 interface
 
 type
-  // класс для ведения лога
+  // РєР»Р°СЃСЃ РґР»СЏ РІРµРґРµРЅРёСЏ Р»РѕРіР°
   TDCLog = class
   private
     type

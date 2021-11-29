@@ -1,4 +1,4 @@
-/// remote access to a mORMot server using SynCrossPlatform* units
+﻿/// remote access to a mORMot server using SynCrossPlatform* units
 // - retrieved from http://localhost:89/DC/wrapper/CrossPlatform/mORMotClient.pas
 // at 2019-12-26 09:36:41 using "CrossPlatform.pas.mustache" template
 unit LA.Net.DC.Client;

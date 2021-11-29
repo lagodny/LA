@@ -1,4 +1,4 @@
-unit LA.Net.Connector.Http;
+﻿unit LA.Net.Connector.Http;
 
 interface
 
