@@ -15,12 +15,13 @@ uses
   LA.Tests.Utils.Str in 'Source\LA.Tests.Utils.Str.pas',
   LA.Tests.Net.Connector in 'Source\LA.Tests.Net.Connector.pas';
 
+{$IFNDEF TESTINSIGHT}
 var
   runner: ITestRunner;
   results: IRunResults;
   logger: ITestLogger;
   nunitLogger : ITestLogger;
-{.$ENDIF}
+{$ENDIF}
 begin
 {$IFDEF TESTINSIGHT}
   TestInsight.DUnitX.RunRegisteredTests;

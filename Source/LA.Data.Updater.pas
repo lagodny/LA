@@ -21,7 +21,7 @@ uses
   System.Generics.Collections,
   LA.Data.Updater.Intf,
   LA.Data.Link,
-  LA.Threads, LA.Net.Connector;
+  LA.Threads, LA.Net.Connector, LA.Types.Monitoring;
 
 type
 
@@ -38,6 +38,7 @@ type
       TDataUpdateThread = class(TDCIntervalThread)
       private
         FUpdater: TDataUpdater;
+        FIDs: TIDArr;
       protected
         procedure ProcessTimer; override;
       public
@@ -264,6 +265,7 @@ end;
 procedure TDataUpdater.TDataUpdateThread.ProcessTimer;
 begin
   // запрашиваем данные с сервера
+  FUpdater.Connector.GroupSensorDataExtByID(FIDs);
   // обновляем линки
   // уведомляем наблюдателей
 end;

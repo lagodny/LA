@@ -6,7 +6,7 @@ uses
   System.Classes, System.SyncObjs, System.SysUtils,
   //IdGlobal, IdTCPClient, IdException,
   SynCrossPlatformREST,
-  LA.Net.Connector,
+  LA.Net.Connector, LA.Types.Monitoring,
   LA.Net.DC.Client;
   //LA.DC.mORMotClient;
 
@@ -27,6 +27,7 @@ type
     procedure SetProxyByPass(const Value: string);
     procedure SetProxyName(const Value: string);
     procedure SetSendTimeOut(const Value: Integer);
+    function GroupSensorValueByID(const IDs: TIDArr): TValArr;
   protected
     function GetEncrypt: boolean; override;
     function GetCompressionLevel: Integer; override;
@@ -52,7 +53,7 @@ type
     procedure Disconnect; override;
 
     function SensorValue(const SID: String): String; override;
-    function GroupSensorValueByID(const IDs: TIDArr): TValArr;
+    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; override;
 
   published
     property Https: boolean read FHttps write SetHttps;
@@ -123,6 +124,13 @@ end;
 function TDCHttpConnector.GetReadTimeOut: Integer;
 begin
   Result := FReadTimeOut;
+end;
+
+function TDCHttpConnector.GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
+begin
+  if not Connected then
+    Connect;
+  Result := FMonitoring.GroupSensorDataExtByID(IDs);
 end;
 
 function TDCHttpConnector.GroupSensorValueByID(const IDs: TIDArr): TValArr;

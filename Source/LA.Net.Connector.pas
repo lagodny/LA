@@ -12,7 +12,7 @@ interface
 
 uses
   System.Classes, System.SysUtils,
-  LA.Net.Connector.Intf;
+  LA.Net.Connector.Intf, LA.Types.Monitoring;
 const
   cDefConnectTimeout = 2000;
   cDefReadTimeout = 60000;
@@ -84,6 +84,7 @@ type
     procedure Disconnect; virtual; abstract;
 
     function SensorValue(const SID: String): String; virtual; abstract;
+    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; virtual; abstract;
   published
     /// параметры подключения в формате Host:Port
     ///  через точку с запятой (;) можно добавить альтернативые адреса: host1:port1;host2:port2;host3:port3

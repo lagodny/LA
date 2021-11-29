@@ -5,7 +5,8 @@ interface
 uses
   System.Classes, System.SyncObjs, System.SysUtils,
   IdGlobal, IdTCPClient, IdException,
-  LA.Net.Connector, LA.Net.Intercept.Tcp;
+  LA.Net.Connector, LA.Types.Monitoring,
+  LA.Net.Intercept.Tcp;
 
 type
   TDCTCPConnector = class(TDCCustomConnector)
@@ -115,6 +116,7 @@ type
 
     /// реализация интерфейса IMonitoring
     function SensorValue(const SID: String): String; override;
+    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; override;
 
 
   published
@@ -404,6 +406,11 @@ begin
       if ProcessTCPException(e) then
         raise;
   end;
+end;
+
+function TDCTCPConnector.GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
+begin
+
 end;
 
 procedure TDCTCPConnector.LockAndDoCommand(const aCommand: string);

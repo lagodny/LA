@@ -2,6 +2,9 @@
 
 interface
 
+uses
+  LA.Types.Monitoring;
+
 type
   /// интерфейс доступа к серверу
   IDCConnector = interface
@@ -10,6 +13,7 @@ type
     procedure Disconnect;
 
     function SensorValue(const SID: String): String;
+    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
   end;
 
 
