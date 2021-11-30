@@ -13,7 +13,9 @@ uses
   {$ENDIF }
   DUnitX.TestFramework,
   LA.Tests.Utils.Str in 'Source\LA.Tests.Utils.Str.pas',
-  LA.Tests.Net.Connector in 'Source\LA.Tests.Net.Connector.pas';
+  LA.Tests.Net.Connector in 'Source\LA.Tests.Net.Connector.pas',
+  LA.Tests.Net.Connector.Http in 'Source\LA.Tests.Net.Connector.Http.pas',
+  LA.Tests.Net.Consts in 'Source\LA.Tests.Net.Consts.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

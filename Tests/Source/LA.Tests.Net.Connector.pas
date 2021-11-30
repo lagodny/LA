@@ -25,11 +25,14 @@ type
 
 implementation
 
+uses
+  La.Tests.Net.Consts;
+
 procedure TTestTDCCustomConnector.Setup;
 begin
   FConnector := TDCHttpConnector.Create(nil);
-  FConnector.UserName := 'Лагодный';
-  FConnector.Password := '314';
+  FConnector.UserName := cUserName;
+  FConnector.Password := cPassword;
 end;
 
 procedure TTestTDCCustomConnector.TearDown;
