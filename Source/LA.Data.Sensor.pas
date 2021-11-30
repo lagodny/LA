@@ -17,8 +17,9 @@ type
   [ObservableMember('Status')]
   TDCSensor = class(TComponent) //, IDCObserver)
   private
-    FData: string;
+    FID: Int64;
     FSID: string;
+    FData: string;
     FValue: string;
     FTimestamp: TDateTime;
     FStatus: string;
@@ -32,13 +33,13 @@ type
     procedure SetEnabled(const Value: Boolean);
   private
     procedure DataChanged;
+    procedure SetID(const Value: Int64);
   protected
     function CanObserve(const ID: Integer): Boolean; override;
     procedure ObserverAdded(const ID: Integer; const Observer: IObserver); override;
     procedure ObserverToggle(const AObserver: IObserver; const Value: Boolean);
   public
-    // реализация IDCObserver
-    function GetID: string;
+    function GetID: Int64;
     procedure SetData(const aData: string);
 
     procedure EncodeData(const aData: string);
@@ -47,6 +48,7 @@ type
     procedure EndUpdate;
     procedure UpdateData(const aValue: string; aTimestamp: TDateTime; const aStatus: string);
   published
+    property ID: Int64 read GetID write SetID;
     property SID: string read FSID write SetSID;
 
     property Value: string read FValue write SetValue;
@@ -107,9 +109,9 @@ begin
     DataChanged;
 end;
 
-function TDCSensor.GetID: string;
+function TDCSensor.GetID: Int64;
 begin
-  Result := SID;
+  Result := FID;
 end;
 
 procedure TDCSensor.ObserverAdded(const ID: Integer; const Observer: IObserver);
@@ -143,6 +145,11 @@ end;
 procedure TDCSensor.SetEnabled(const Value: Boolean);
 begin
   FEnabled := Value;
+end;
+
+procedure TDCSensor.SetID(const Value: Int64);
+begin
+  FID := Value;
 end;
 
 procedure TDCSensor.SetSID(const Value: string);

@@ -17,7 +17,7 @@
 interface
 
 uses
-  System.Classes, System.SysUtils,
+  System.Classes, System.SysUtils, System.SyncObjs,
   System.Generics.Collections,
   LA.Data.Updater.Intf,
   LA.Data.Link,
@@ -39,6 +39,7 @@ type
       private
         FUpdater: TDataUpdater;
         FIDs: TIDArr;
+        function GetIDs: TIDArr;
       protected
         procedure ProcessTimer; override;
       public
@@ -262,11 +263,42 @@ begin
   FUpdater := aUpdater;
 end;
 
-procedure TDataUpdater.TDataUpdateThread.ProcessTimer;
+function TDataUpdater.TDataUpdateThread.GetIDs: TIDArr;
 begin
+  FUpdater.FLock.BeginRead;
+  try
+    SetLength(FIDs, FUpdater.FLinks.Count);
+    for var i := 0 to FUpdater.FLinks.Count - 1 do
+      FIDs[i] := FUpdater.FLinks[i].GetID;
+  finally
+    FUpdater.FLock.EndRead;
+  end;
+end;
+
+procedure TDataUpdater.TDataUpdateThread.ProcessTimer;
+var
+  r: TDataRecExtArr;
+begin
+  if FUpdater.FLinksChanged then
+  begin
+    FIDs := GetIDs;
+    FUpdater.FLinksChanged := False;
+  end;
+
   // запрашиваем данные с сервера
-  FUpdater.Connector.GroupSensorDataExtByID(FIDs);
+  r := FUpdater.Connector.GroupSensorDataExtByID(FIDs);
+
   // обновляем линки
+  FUpdater.FLock.BeginRead;
+  try
+    for var i := 0 to FUpdater.FLinks.Count - 1 do
+    begin
+
+    end;
+  finally
+    FUpdater.FLock.EndRead;
+  end;
+
   // уведомляем наблюдателей
 end;
 

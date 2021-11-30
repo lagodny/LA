@@ -3,16 +3,16 @@
 interface
 
 uses
-  LA.Data.Link, LA.Data.Sensor;
+  LA.Data.Link, LA.Data.Tracker;
 
 type
   TDCTrackerLink = class(TDCLink)
   private
-    FObserver: TDCSensor;
+    FObserver: TDCTracker;
   public
-    constructor Create(aObserver: TDCSensor);
+    constructor Create(aObserver: TDCTracker);
 
-    function GetID: string; override;
+    function GetID: Int64; override;
     procedure Notify; override;
   end;
 
@@ -21,14 +21,14 @@ implementation
 
 { TDCTrackerLink }
 
-constructor TDCTrackerLink.Create(aObserver: TDCSensor);
+constructor TDCTrackerLink.Create(aObserver: TDCTracker);
 begin
   FObserver := aObserver;
 end;
 
-function TDCTrackerLink.GetID: string;
+function TDCTrackerLink.GetID: Int64;
 begin
-  Result := FObserver.GetID;
+  Result := FObserver.ID;
 end;
 
 procedure TDCTrackerLink.Notify;

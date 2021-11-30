@@ -14,7 +14,7 @@ type
   private
     FData: string;
   public
-    function GetID: string; virtual; abstract;
+    function GetID: Int64; virtual; abstract;
     procedure SetData(const aData: string);
     procedure Notify; virtual; abstract;
 
