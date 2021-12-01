@@ -15,7 +15,7 @@ type
   public
     constructor Create(aObserver: TDCSensor);
 
-    function GetID: Int64; override;
+    function GetID: string; override;
     procedure Notify; override;
   end;
 
@@ -29,7 +29,7 @@ begin
   FObserver := aObserver;
 end;
 
-function TDCSensorLink.GetID: Int64;
+function TDCSensorLink.GetID: string;
 begin
   Result := FObserver.GetID;
 end;

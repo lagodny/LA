@@ -15,7 +15,10 @@ uses
   LA.Tests.Utils.Str in 'Source\LA.Tests.Utils.Str.pas',
   LA.Tests.Net.Connector in 'Source\LA.Tests.Net.Connector.pas',
   LA.Tests.Net.Connector.Http in 'Source\LA.Tests.Net.Connector.Http.pas',
-  LA.Tests.Net.Consts in 'Source\LA.Tests.Net.Consts.pas';
+  LA.Tests.Net.Consts in 'Source\LA.Tests.Net.Consts.pas',
+  LA.Tests.Data.Updater in 'Source\LA.Tests.Data.Updater.pas',
+  LA.Tests.Threads in 'Source\LA.Tests.Threads.pas';
+
 
 {$IFNDEF TESTINSIGHT}
 var

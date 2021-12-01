@@ -24,7 +24,8 @@ type
     procedure ProcessTimer; virtual;
     procedure Cleanup; virtual;
   public
-    constructor Create(CreateSuspended: Boolean; aInterval: Int64); overload;
+    constructor CreateInterval(CreateSuspended: Boolean; aInterval: Int64);
+    destructor Destroy; override;
 
     property Interval: Int64 read GetInterval write SetInterval;
   end;
@@ -49,10 +50,17 @@ begin
   // очистка после выхода из цикла
 end;
 
-constructor TDCIntervalThread.Create(CreateSuspended: Boolean; aInterval: Int64);
+constructor TDCIntervalThread.CreateInterval(CreateSuspended: Boolean; aInterval: Int64);
 begin
   inherited Create(CreateSuspended);
+  FEvent := TEvent.Create;
   FInterval := aInterval;
+end;
+
+destructor TDCIntervalThread.Destroy;
+begin
+  FEvent.Free;
+  inherited;
 end;
 
 procedure TDCIntervalThread.Execute;
@@ -79,7 +87,7 @@ begin
         else
           Break; //Terminate thread
       end;
-    until False;
+    until Terminated;
   finally
     Cleanup;
   end;

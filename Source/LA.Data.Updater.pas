@@ -18,7 +18,7 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.SyncObjs,
-  System.Generics.Collections,
+  System.Generics.Collections, System.Generics.Defaults,
   LA.Data.Updater.Intf,
   LA.Data.Link,
   LA.Threads, LA.Net.Connector, LA.Types.Monitoring;
@@ -38,9 +38,10 @@ type
       TDataUpdateThread = class(TDCIntervalThread)
       private
         FUpdater: TDataUpdater;
-        FIDs: TIDArr;
-        function GetIDs: TIDArr;
+        FIDs: TSIDArr;
+        function GetIDs: TSIDArr;
       protected
+        procedure DoUpdate;
         procedure ProcessTimer; override;
       public
         constructor Create(CreateSuspended: Boolean; aUpdater: TDataUpdater; aInterval: Int64); overload;
@@ -52,6 +53,7 @@ type
     FThread: TDataUpdateThread;
     FInterval: Int64;
     FConnector: TDCCustomConnector;
+    FOnUpdate: TNotifyEvent;
     function GetActive: Boolean;
     procedure SetActive(const Value: Boolean);
     procedure Start;
@@ -69,12 +71,11 @@ type
     procedure Detach(const aLink: TDCLink);
     procedure Notify;
 
-    // формирование строки запрашиваемых адресов
-    function GetRequestedAddresses: string;
     // разбор ответа сервера
     procedure ProcessServerResponce(const aResponce: string);
 
-    // список линков, в которых есть ссылки на наблюдателей
+    // список линков, в которых есть ссылки на наблюдателей (отсортирован по ID)
+    // разрешаем линки с одинаковым ID, но в запросе оставляем только первый
     property Links: TObjectList<TDCLink> read FLinks;
   published
     // подключение к серверу Мониторинга
@@ -83,6 +84,8 @@ type
     property Active: Boolean read GetActive write SetActive stored False;
     // период опроса сервера, мс
     property Interval: Int64 read FInterval write SetInterval;
+
+    property OnUpdate: TNotifyEvent read FOnUpdate write FOnUpdate;
   end;
 
 
@@ -94,10 +97,19 @@ uses
 
 
 procedure TDataUpdater.Attach(const aLink: TDCLink);
+var
+  aInsertIndex: Integer;
 begin
   FLock.BeginWrite;
   try
-    FLinks.Add(aLink);
+    if FLinks.Count = 0 then
+      FLinks.Add(aLink)
+    else
+    begin
+      FLinks.BinarySearch(aLink, aInsertIndex);
+      FLinks.Insert(aInsertIndex, aLink);
+    end;
+
     FLinksChanged := True;
   finally
     FLock.EndWrite;
@@ -109,7 +121,13 @@ begin
   inherited Create(AOwner);
   FInterval := DefInterval;
   FLock := TMREWSync.Create;
-  FLinks := TObjectList<TDCLink>.Create;
+
+  FLinks := TObjectList<TDCLink>.Create(TDelegatedComparer<TDCLink>.Create(
+    function (const aLeft, aRight: TDCLink): Integer
+    begin
+      Result := CompareStr(aLeft.GetID, aRight.GetID);
+    end)
+  , True);
 end;
 
 destructor TDataUpdater.Destroy;
@@ -138,26 +156,13 @@ end;
 
 procedure TDataUpdater.DoThreadTerminated(aSender: TObject);
 begin
-  FreeAndNil(FThread);
+//  FreeAndNil(FThread);
+  FThread := nil;
 end;
 
 function TDataUpdater.GetActive: Boolean;
 begin
   Result := Assigned(FThread);
-end;
-
-function TDataUpdater.GetRequestedAddresses: string;
-var
-  aLink: TDCLink;
-begin
-  Result := '';
-  FLock.BeginRead;
-  try
-    for aLink in FLinks do
-      Result := Result + aLink.GetID + ';';
-  finally
-    FLock.EndRead;
-  end;
 end;
 
 procedure TDataUpdater.Notify;
@@ -242,28 +247,35 @@ begin
     Exit;
 
   FThread := TDataUpdateThread.Create(True, Self, Interval);
+  FThread.FreeOnTerminate := True;
   FThread.OnTerminate := DoThreadTerminated;
   FThread.Start;
 end;
 
 procedure TDataUpdater.Stop;
 begin
-  if Active then
+  if not Active then
     Exit;
 
   FThread.Terminate;
-  FThread.WaitFor;
+  FThread := nil;
+  //FThread.WaitFor;
 end;
 
 { TDataUpdater.TDataUpdateThread }
 
 constructor TDataUpdater.TDataUpdateThread.Create(CreateSuspended: Boolean; aUpdater: TDataUpdater; aInterval: Int64);
 begin
-  inherited Create(CreateSuspended, aInterval);
+  inherited CreateInterval(CreateSuspended, aInterval);
   FUpdater := aUpdater;
 end;
 
-function TDataUpdater.TDataUpdateThread.GetIDs: TIDArr;
+procedure TDataUpdater.TDataUpdateThread.DoUpdate;
+begin
+  FUpdater.OnUpdate(FUpdater);
+end;
+
+function TDataUpdater.TDataUpdateThread.GetIDs: TSIDArr;
 begin
   FUpdater.FLock.BeginRead;
   try
@@ -278,6 +290,7 @@ end;
 procedure TDataUpdater.TDataUpdateThread.ProcessTimer;
 var
   r: TDataRecExtArr;
+  aLinkIndex, aDataIndex, aDataCount: Integer;
 begin
   if FUpdater.FLinksChanged then
   begin
@@ -286,20 +299,61 @@ begin
   end;
 
   // запрашиваем данные с сервера
-  r := FUpdater.Connector.GroupSensorDataExtByID(FIDs);
+  r := FUpdater.Connector.GetSensorsData(FIDs);
+  aDataCount := Length(r);
+  if aDataCount > 0 then
+  begin
+    aDataIndex := 0;
+    // обновляем линки
+    FUpdater.FLock.BeginRead;
+    try
+      /// линки отсортированы в порядке возрастания ID
+      ///  результат приходит в таком же порядке, но за время отработки запроса
+      ///  линки могли измениться (порядок не изменился)
+      ///  значит если ID текущего линка отличается он ID текущего ответа, то
+      ///  нужно выполнить поиск
+      for aLinkIndex := 0 to FUpdater.FLinks.Count - 1 do
+      begin
+        case CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) of
+          -1: // <
+          begin
+            // переходим к следующему линку
+            Continue;
+          end;
 
-  // обновляем линки
-  FUpdater.FLock.BeginRead;
-  try
-    for var i := 0 to FUpdater.FLinks.Count - 1 do
-    begin
+          0: // =
+          begin
+            // нашли - устанавливаем новые данные
+            FUpdater.Links[aLinkIndex].SetData(r[aDataIndex].v);
+          end;
 
+          1: // >
+          begin
+            // выполняем поиск в массиве данных
+            while (aDataIndex < aDataCount) and (CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) = 1) do
+              Inc(aDataIndex);
+
+            // прерываем цикл, если данных больше нет
+            if aDataIndex >= aDataCount then
+              Break;
+
+            // нашли - устанавливаем новые данные
+            if CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) = 0 then
+              FUpdater.Links[aLinkIndex].SetData(r[aDataIndex].v);
+          end;
+        end;
+      end;
+    finally
+      FUpdater.FLock.EndRead;
     end;
-  finally
-    FUpdater.FLock.EndRead;
+
+    // уведомляем наблюдателей
+    Queue(FUpdater.Notify);
   end;
 
-  // уведомляем наблюдателей
+
+  if Assigned(FUpdater.OnUpdate) then
+    Queue(DoUpdate);
 end;
 
 

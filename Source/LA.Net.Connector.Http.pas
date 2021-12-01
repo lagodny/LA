@@ -54,6 +54,7 @@ type
 
     function SensorValue(const SID: String): String; override;
     function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; override;
+    function GetSensorsData(const IDs: TSIDArr): TDataRecExtArr; override;
 
   published
     property Https: boolean read FHttps write SetHttps;
@@ -124,6 +125,13 @@ end;
 function TDCHttpConnector.GetReadTimeOut: Integer;
 begin
   Result := FReadTimeOut;
+end;
+
+function TDCHttpConnector.GetSensorsData(const IDs: TSIDArr): TDataRecExtArr;
+begin
+  if not Connected then
+    Connect;
+  Result := FMonitoring.GroupSensorDataExt(IDs);
 end;
 
 function TDCHttpConnector.GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;

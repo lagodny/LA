@@ -12,15 +12,12 @@ type
   /// </summary>
   TDCTracker = class(TComponent)
   private
-    FID: Int64;
-    FSID: string;
+    FID: string;
     FData: string;
-    procedure SetSID(const Value: string);
   public
     procedure SetData(const aData: string);
   published
-    property ID: Int64 read FID write FID;
-    property SID: string read FSID write SetSID;
+    property ID: string read FID write FID;
   end;
 
 
@@ -32,11 +29,5 @@ procedure TDCTracker.SetData(const aData: string);
 begin
   FData := aData;
 end;
-
-procedure TDCTracker.SetSID(const Value: string);
-begin
-  FSID := Value;
-end;
-
 
 end.

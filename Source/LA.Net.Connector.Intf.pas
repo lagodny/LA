@@ -14,6 +14,7 @@ type
 
     function SensorValue(const SID: String): String;
     function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
+    function GetSensorsData(const IDs: TSIDArr): TDataRecExtArr;
   end;
 
 

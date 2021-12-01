@@ -12,7 +12,7 @@ type
   public
     constructor Create(aObserver: TDCTracker);
 
-    function GetID: Int64; override;
+    function GetID: string; override;
     procedure Notify; override;
   end;
 
@@ -26,7 +26,7 @@ begin
   FObserver := aObserver;
 end;
 
-function TDCTrackerLink.GetID: Int64;
+function TDCTrackerLink.GetID: string;
 begin
   Result := FObserver.ID;
 end;

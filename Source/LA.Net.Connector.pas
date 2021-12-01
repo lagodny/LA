@@ -85,6 +85,7 @@ type
 
     function SensorValue(const SID: String): String; virtual; abstract;
     function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; virtual; abstract;
+    function GetSensorsData(const IDs: TSIDArr): TDataRecExtArr; virtual; abstract;
   published
     /// параметры подключения в формате Host:Port
     ///  через точку с запятой (;) можно добавить альтернативые адреса: host1:port1;host2:port2;host3:port3
