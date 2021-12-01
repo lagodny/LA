@@ -21,7 +21,7 @@ type
     procedure TestConnect;
 //    [Test]
     [TestCase('TestSensorValue', '41204,d:\_services\DC\Data\UploadFile\Demo.scp')]
-    [TestCase('TestSensorValue', '5,74332')]
+//    [TestCase('TestSensorValue', '5,74332')]
     procedure TestSensorValue(const aSensorAddr, aSensorValue: string);
 
     [Test]

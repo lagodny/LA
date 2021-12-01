@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
-  LA.Data.Updater;
+  LA.Data.Updater, LA.Net.Connector.Http;
 
 type
   TForm1 = class(TForm)
@@ -17,6 +17,7 @@ type
     procedure bCreateClick(Sender: TObject);
     procedure bStopClick(Sender: TObject);
   private
+    FConnector: TDCHttpConnector;
     FUpdater: TDataUpdater;
   public
     procedure DoUpdate(Sender: TObject);
@@ -34,6 +35,13 @@ begin
   FUpdater := TDataUpdater.Create(Self);
   FUpdater.OnUpdate := DoUpdate;
   FUpdater.Interval := 100;
+
+  FConnector := TDCHttpConnector.Create(Self);
+  FConnector.Address := 'dc.tdc.org.ua:80';
+  FConnector.UserName := 'demo';
+  FConnector.Password := 'demo';
+
+  FUpdater.Connector := FConnector;
 end;
 
 procedure TForm1.bStartClick(Sender: TObject);

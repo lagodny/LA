@@ -18,7 +18,7 @@ type
     procedure Setup;
     [TearDown]
     procedure TearDown;
-    [Test]
+//    [Test]
     procedure TestStartStopThread;
   end;
 

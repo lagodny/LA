@@ -18,19 +18,25 @@ type
     procedure TearDown;
     [Test]
     procedure TestAddLinksToSortedList;
-    [Test]
+//    [Test]
     procedure TestStartStopThread;
+
+    procedure TestUpdater;
+
   end;
 
 implementation
 
+uses
+  System.SysUtils;
+
 type
   TMockLink = class(TDCLink)
   private
-    FID: Int64;
-    function GetID: Int64; override;
+    FID: string;
+    function GetID: string; override;
   public
-    property ID: Int64 read GetID write FID;
+    property ID: string read GetID write FID;
   end;
 
 procedure TTest_TDataUpdater.Setup;
@@ -55,7 +61,7 @@ begin
   for i := 1 to cExpectedCount do
   begin
     aLink := TMockLink.Create;
-    aLink.ID := Random(cExpectedCount);
+    aLink.ID := Random(cExpectedCount).ToString;
     CUT.Attach(aLink);
   end;
 
@@ -74,9 +80,14 @@ begin
   CUT.Active := False;
 end;
 
+procedure TTest_TDataUpdater.TestUpdater;
+begin
+
+end;
+
 { TMockLink }
 
-function TMockLink.GetID: Int64;
+function TMockLink.GetID: string;
 begin
   Result := FID;
 end;

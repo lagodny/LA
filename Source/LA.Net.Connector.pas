@@ -188,6 +188,8 @@ procedure TDCCustomConnector.TryConnect;
 var
   aAddressList, aParams: TStringList;
   i: Integer;
+  aHTTPs: Boolean;
+  aServer, aPort: string;
 begin
   if Address = '' then
     raise EDCConnectorBadAddress.Create(sResAddressIsEmpty);
@@ -201,10 +203,26 @@ begin
     for i := 0 to aAddressList.Count - 1 do
     begin
       aParams.Text := aAddressList[i];
-      if aParams.Count = 2 then
+      if aParams.Count >= 2 then
       begin
         try
-          TryConnectTo(aParams[0], StrToInt(aParams[1]));
+          if aParams.Count = 3 then
+          begin
+            // https://dc.tdc.org.ua:443
+            aHTTPs := SameText(aParams[0], cHTTPs);
+            aServer := StringReplace(aParams[1], '//', '', [rfReplaceAll]);
+            aPort := aParams[2];
+          end
+          else
+          begin
+            // dc.tdc.org.ua:80
+            aHTTPs := False;
+            aServer := aParams[0];
+            aPort := aParams[1];
+          end;
+
+
+          TryConnectTo(aServer, StrToInt(aPort));
           /// подключение прошло успешно
           ///  передвинем успешные параметры подключения в начало списка для более быстрого переподключения
           if i <> 0 then
