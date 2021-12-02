@@ -13,12 +13,13 @@ type
   TDCLink = class abstract
   private
     FData: string;
+    FIsNeedNotify: Boolean;
   public
     function GetID: string; virtual; abstract;
     procedure SetData(const aData: string);
-    procedure Notify; virtual; abstract;
+    procedure Notify; virtual;
 
-    property Data: string read FData write FData;
+    property Data: string read FData write SetData;
   end;
 
 
@@ -26,9 +27,18 @@ implementation
 
 { TDCLink }
 
+procedure TDCLink.Notify;
+begin
+  FIsNeedNotify := False;
+end;
+
 procedure TDCLink.SetData(const aData: string);
 begin
-  FData := aData;
+  if aData <> FData then
+  begin
+    FData := aData;
+    FIsNeedNotify := True;
+  end;
 end;
 
 end.
