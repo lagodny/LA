@@ -9,6 +9,11 @@ uses
   LA.Net.Intercept.Tcp;
 
 type
+  TDCTcpAddr = record
+    Host, Port: string;
+    function InitFrom(const aAddr: string): TDCTcpAddr;
+  end;
+
   TDCTCPConnector = class(TDCCustomConnector)
   private
     FLock: TCriticalSection;
@@ -92,7 +97,8 @@ type
 
     /// пытаемся подключиться по указанному адресу
     ///  если подключение невозможно вызываем исключение
-    procedure TryConnectTo(const aHost: string; const aPort: Integer); override;
+    procedure TryConnectTo(const aAddrLine: string); override;
+//    procedure TryConnectTo(const aHost: string; const aPort: Integer); override;
 
     procedure DoConnect; override;
     procedure DoDisconnect; override;
@@ -668,7 +674,9 @@ begin
 
 end;
 
-procedure TDCTCPConnector.TryConnectTo(const aHost: string; const aPort: Integer);
+procedure TDCTCPConnector.TryConnectTo(const aAddrLine: string);
+var
+  aAddrRec: TDCTcpAddr;
 begin
   // отключаем шифрование и сжатие
   Intercept.CryptKey := '';
@@ -676,8 +684,11 @@ begin
 
   // устанавливаем соединение
   FClient.Disconnect;
-  FClient.Host := aHost;
-  FClient.Port := aPort;
+
+  aAddrRec.InitFrom(aAddrLine);
+  FClient.Host := aAddrRec.Host;
+  FClient.Port := StrToInt(aAddrRec.Port);
+
   FClient.Connect;
   // проверяем наличие соединения
   FClient.CheckForGracefulDisconnect(true);
@@ -685,7 +696,7 @@ begin
   if Assigned(FClient.IOHandler) then
   begin
     FClient.IOHandler.DefStringEncoding := IndyTextEncoding_OSDefault;
-    FClient.IOHandler.MaxLineLength := 100 * (16 * 1024);
+    FClient.IOHandler.MaxLineLength := 1000 * (16 * 1024);
   end;
 
   // получаем параметры сервера
@@ -713,6 +724,52 @@ begin
     end;
   end;
 end;
+
+//procedure TDCTCPConnector.TryConnectTo(const aHost: string; const aPort: Integer);
+//begin
+//  // отключаем шифрование и сжатие
+//  Intercept.CryptKey := '';
+//  Intercept.CompressionLevel := 0;
+//
+//  // устанавливаем соединение
+//  FClient.Disconnect;
+//  FClient.Host := aHost;
+//  FClient.Port := aPort;
+//  FClient.Connect;
+//  // проверяем наличие соединения
+//  FClient.CheckForGracefulDisconnect(true);
+//  // устанавливаем параметры кодирования строк и максимальную длину строки
+//  if Assigned(FClient.IOHandler) then
+//  begin
+//    FClient.IOHandler.DefStringEncoding := IndyTextEncoding_OSDefault;
+//    FClient.IOHandler.MaxLineLength := 100 * (16 * 1024);
+//  end;
+//
+//  // получаем параметры сервера
+//  GetServerSettings;
+//  // передаем на сервер информацию о подключении
+//  SetConnectionParams;
+//
+//  // устанавливаем шифрование и сжатие
+//  if Encrypt then
+//    UpdateEncrypted(False);
+//  if CompressionLevel > 0 then
+//    UpdateComressionLevel(False);
+//
+//  // авторизуемся
+//  if UserName <> '' then
+//  begin
+//    try
+//      Authorize(UserName, Password);
+//    except
+//      on e: EIdException do
+//        if ProcessTCPException(e) then
+//          raise;
+//      on e: Exception do
+//        ;
+//    end;
+//  end;
+//end;
 
 procedure TDCTCPConnector.UnLockClient(const aMessage: string);
 begin
@@ -785,6 +842,30 @@ begin
     end;
   end;
   FIntercept.CryptKey := aCryptKey;
+end;
+
+{ TDCTcpAddr }
+
+function TDCTcpAddr.InitFrom(const aAddr: string): TDCTcpAddr;
+var
+  aParams: TStrings;
+begin
+  aParams := TStringList.Create;
+  try
+    aParams.LineBreak := ':';
+    aParams.Text := aAddr;
+
+    if aParams.Count = 2 then
+    begin
+      // dc.tdc.org.ua:5152
+      Host := aParams[1];
+      Port := aParams[2];
+    end
+    else
+      raise EDCConnectorBadAddress.CreateFmt(sResAddressIsBadFmt, [aAddr]);
+  finally
+    aParams.Free;
+  end;
 end;
 
 end.

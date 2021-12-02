@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
-  LA.Data.Updater, LA.Net.Connector.Http;
+  LA.Data.Updater, LA.Net.Connector.Http,
+  LA.Data.Link.Sensor, LA.Data.Sensor;
 
 type
   TForm1 = class(TForm)
@@ -19,6 +20,7 @@ type
   private
     FConnector: TDCHttpConnector;
     FUpdater: TDataUpdater;
+    FSensor: TDCSensor;
   public
     procedure DoUpdate(Sender: TObject);
   end;
@@ -34,12 +36,18 @@ procedure TForm1.bCreateClick(Sender: TObject);
 begin
   FUpdater := TDataUpdater.Create(Self);
   FUpdater.OnUpdate := DoUpdate;
-  FUpdater.Interval := 100;
+  FUpdater.Interval := 1000;
 
   FConnector := TDCHttpConnector.Create(Self);
-  FConnector.Address := 'dc.tdc.org.ua:80';
+//  FConnector.Address := 'https://dc.tdc.org.ua';
+  FConnector.Address := 'localhost:89';
   FConnector.UserName := 'demo';
   FConnector.Password := 'demo';
+
+  FSensor := TDCSensor.Create(Self);
+  FSensor.ID := '4';
+
+  FUpdater.Attach(TDCSensorLink.Create(FSensor));
 
   FUpdater.Connector := FConnector;
 end;
@@ -56,7 +64,9 @@ end;
 
 procedure TForm1.DoUpdate(Sender: TObject);
 begin
-  aLog.Lines.Add(FormatDateTime('hh:mm:ss:zzz', Now));
+  aLog.Lines.Add(FormatDateTime('hh:mm:ss.zzz', Now) +
+    ' : ' + FSensor.Value +
+    ' : ' + FormatDateTime('hh:mm:ss.zzz', FSensor.Timestamp));
 end;
 
 end.

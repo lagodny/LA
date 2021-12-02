@@ -33,6 +33,7 @@ end;
 
 procedure TDCTrackerLink.Notify;
 begin
+  inherited;
   FObserver.SetData(Data);
 end;
 

@@ -39,9 +39,10 @@ type
       private
         FUpdater: TDataUpdater;
         FIDs: TSIDArr;
-        function GetIDs: TSIDArr;
+        procedure InitIDs;
       protected
         procedure DoUpdate;
+        procedure Initialize; override;
         procedure ProcessTimer; override;
       public
         constructor Create(CreateSuspended: Boolean; aUpdater: TDataUpdater; aInterval: Int64); overload;
@@ -205,7 +206,7 @@ begin
         FLinks[aLinkIndex].SetData(Copy(aResponce, p1, p2 - p1));
         p1 := p2 + 1;
         if aLinkIndex = aLinkMaxIndex then
-          Exit;
+          Break;
       end;
     end;
 
@@ -275,7 +276,7 @@ begin
   FUpdater.OnUpdate(FUpdater);
 end;
 
-function TDataUpdater.TDataUpdateThread.GetIDs: TSIDArr;
+procedure TDataUpdater.TDataUpdateThread.InitIDs;
 begin
   FUpdater.FLock.BeginRead;
   try
@@ -287,69 +288,84 @@ begin
   end;
 end;
 
+procedure TDataUpdater.TDataUpdateThread.Initialize;
+begin
+  inherited;
+  FUpdater.FLinksChanged := True;
+end;
+
 procedure TDataUpdater.TDataUpdateThread.ProcessTimer;
 var
-  r: TDataRecExtArr;
+//  r: TDataRecExtArr;
+  r: string;
   aLinkIndex, aDataIndex, aDataCount: Integer;
 begin
   if FUpdater.FLinksChanged then
   begin
-    FIDs := GetIDs;
+    InitIDs;
     FUpdater.FLinksChanged := False;
   end;
 
-  // запрашиваем данные с сервера
-  r := FUpdater.Connector.GetSensorsData(FIDs);
-  aDataCount := Length(r);
-  if aDataCount > 0 then
-  begin
-    aDataIndex := 0;
-    // обновляем линки
-    FUpdater.FLock.BeginRead;
-    try
-      /// линки отсортированы в порядке возрастания ID
-      ///  результат приходит в таком же порядке, но за время отработки запроса
-      ///  линки могли измениться (порядок не изменился)
-      ///  значит если ID текущего линка отличается он ID текущего ответа, то
-      ///  нужно выполнить поиск
-      for aLinkIndex := 0 to FUpdater.FLinks.Count - 1 do
-      begin
-        case CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) of
-          -1: // <
-          begin
-            // переходим к следующему линку
-            Continue;
-          end;
+  r := FUpdater.Connector.SensorsDataAsText(FIDs);
+  // в следующий запрос ID не передаем, они будут взяты из кеша сервера
+  SetLength(FIDs, 0);
 
-          0: // =
-          begin
-            // нашли - устанавливаем новые данные
-            FUpdater.Links[aLinkIndex].SetData(r[aDataIndex].v);
-          end;
+  FUpdater.ProcessServerResponce(r);
 
-          1: // >
-          begin
-            // выполняем поиск в массиве данных
-            while (aDataIndex < aDataCount) and (CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) = 1) do
-              Inc(aDataIndex);
+  Queue(FUpdater.Notify);
 
-            // прерываем цикл, если данных больше нет
-            if aDataIndex >= aDataCount then
-              Break;
-
-            // нашли - устанавливаем новые данные
-            if CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) = 0 then
-              FUpdater.Links[aLinkIndex].SetData(r[aDataIndex].v);
-          end;
-        end;
-      end;
-    finally
-      FUpdater.FLock.EndRead;
-    end;
-
-    // уведомляем наблюдателей
-    Queue(FUpdater.Notify);
-  end;
+//  // запрашиваем данные с сервера
+//  r := FUpdater.Connector.GetSensorsData(FIDs);
+//  aDataCount := Length(r);
+//  if aDataCount > 0 then
+//  begin
+//    aDataIndex := 0;
+//    // обновляем линки
+//    FUpdater.FLock.BeginRead;
+//    try
+//      /// линки отсортированы в порядке возрастания ID
+//      ///  результат приходит в таком же порядке, но за время отработки запроса
+//      ///  линки могли измениться (порядок не изменился)
+//      ///  значит если ID текущего линка отличается он ID текущего ответа, то
+//      ///  нужно выполнить поиск
+//      for aLinkIndex := 0 to FUpdater.FLinks.Count - 1 do
+//      begin
+//        case CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) of
+//          -1: // <
+//          begin
+//            // переходим к следующему линку
+//            Continue;
+//          end;
+//
+//          0: // =
+//          begin
+//            // нашли - устанавливаем новые данные
+//            FUpdater.Links[aLinkIndex].SetData(r[aDataIndex].v);
+//          end;
+//
+//          1: // >
+//          begin
+//            // выполняем поиск в массиве данных
+//            while (aDataIndex < aDataCount) and (CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) = 1) do
+//              Inc(aDataIndex);
+//
+//            // прерываем цикл, если данных больше нет
+//            if aDataIndex >= aDataCount then
+//              Break;
+//
+//            // нашли - устанавливаем новые данные
+//            if CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) = 0 then
+//              FUpdater.Links[aLinkIndex].SetData(r[aDataIndex].v);
+//          end;
+//        end;
+//      end;
+//    finally
+//      FUpdater.FLock.EndRead;
+//    end;
+//
+//    // уведомляем наблюдателей
+//    Queue(FUpdater.Notify);
+//  end;
 
 
   if Assigned(FUpdater.OnUpdate) then

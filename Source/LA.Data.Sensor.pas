@@ -60,7 +60,7 @@ type
 implementation
 
 uses
-  System.SysUtils;
+  System.SysUtils, System.DateUtils;
 
 procedure TDCSensor.BeginUpdate;
 begin
@@ -96,7 +96,16 @@ end;
 
 procedure TDCSensor.EncodeData(const aData: string);
 begin
-
+  var a := aData.Split([';']);
+  if Length(a) >= 4 then
+  begin
+    if a[0] = ID then
+    begin
+      FValue := a[1];
+      FTimestamp := ISO8601ToDate(a[2]);
+      FStatus := a[3];
+    end;
+  end;
 end;
 
 procedure TDCSensor.EndUpdate;
@@ -134,7 +143,8 @@ procedure TDCSensor.SetData(const aData: string);
 begin
   if aData <> FData then
   begin
-    EncodeData(aData);
+    FData := aData;
+    EncodeData(FData);
     DataChanged;
   end;
 end;

@@ -13,6 +13,12 @@ interface
 uses
   System.Classes, System.SysUtils,
   LA.Net.Connector.Intf, LA.Types.Monitoring;
+
+resourcestring
+  sResAddressIsEmpty = 'Address is empty. The format of Address should be: host1:port1;host2:port2 etc';
+  sResAddressIsBadFmt = 'Check Address (%s). The format of Address should be: host1:port1;host2:port2 etc';
+
+
 const
   cDefConnectTimeout = 2000;
   cDefReadTimeout = 60000;
@@ -66,7 +72,8 @@ type
 
     /// пытаемся подключиться по указанному адресу
     ///  если подключение невозможно вызываем исключение
-    procedure TryConnectTo(const aHost: string; const aPort: Integer); virtual; abstract;
+    procedure TryConnectTo(const aAddrLine: string); virtual; abstract;
+//    procedure TryConnectTo(const aHost: string; const aPort: Integer); virtual; abstract;
 
     /// перебираем все возможные варианты
     ///  если подключение невозможно вызываем исключение (из последнего варианта)
@@ -86,6 +93,7 @@ type
     function SensorValue(const SID: String): String; virtual; abstract;
     function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; virtual; abstract;
     function GetSensorsData(const IDs: TSIDArr): TDataRecExtArr; virtual; abstract;
+    function SensorsDataAsText(const IDs: TSIDArr): string; virtual; abstract;
   published
     /// параметры подключения в формате Host:Port
     ///  через точку с запятой (;) можно добавить альтернативые адреса: host1:port1;host2:port2;host3:port3
@@ -118,11 +126,6 @@ type
   end;
 
 implementation
-
-resourcestring
-  sResAddressIsEmpty = 'Address is empty. The format of Address should be: host1:port1;host2:port2 etc';
-  sResAddressIsBadFmt = 'Check Address (%s). The format of Address should be: host1:port1;host2:port2 etc';
-
 
 { TDCCustomConnector }
 procedure TDCCustomConnector.CheckConnection;
@@ -186,69 +189,40 @@ end;
 
 procedure TDCCustomConnector.TryConnect;
 var
-  aAddressList, aParams: TStringList;
   i: Integer;
-  aHTTPs: Boolean;
-  aServer, aPort: string;
+  aAddressList: TStringList;
 begin
   if Address = '' then
     raise EDCConnectorBadAddress.Create(sResAddressIsEmpty);
 
   aAddressList := TStringList.Create;
-  aParams := TStringList.Create;
   try
     aAddressList.LineBreak := ';';
-    aParams.LineBreak := ':';
     aAddressList.Text := Address;
     for i := 0 to aAddressList.Count - 1 do
     begin
-      aParams.Text := aAddressList[i];
-      if aParams.Count >= 2 then
-      begin
-        try
-          if aParams.Count = 3 then
-          begin
-            // https://dc.tdc.org.ua:443
-            aHTTPs := SameText(aParams[0], cHTTPs);
-            aServer := StringReplace(aParams[1], '//', '', [rfReplaceAll]);
-            aPort := aParams[2];
-          end
-          else
-          begin
-            // dc.tdc.org.ua:80
-            aHTTPs := False;
-            aServer := aParams[0];
-            aPort := aParams[1];
-          end;
-
-
-          TryConnectTo(aServer, StrToInt(aPort));
-          /// подключение прошло успешно
-          ///  передвинем успешные параметры подключения в начало списка для более быстрого переподключения
-          if i <> 0 then
-          begin
-            aAddressList.Move(i, 0);
-            FAddress := aAddressList.Text;
-          end;
-          /// уходим
-          Exit;
-        except
-          on Exception do
-          begin
-            /// если мы дошли до последнего варианта и так и не смогли подключиться,
-            ///  то поднимаем последнее исключение, иначе продолжаем перебор
-            if i = aAddressList.Count - 1 then
-              raise
-          end;
+      try
+        TryConnectTo(aAddressList[i]);
+        /// подключение прошло успешно
+        ///  передвинем успешные параметры подключения в начало списка для более быстрого переподключения
+        if i <> 0 then
+        begin
+          aAddressList.Move(i, 0);
+          FAddress := aAddressList.Text;
         end;
-      end
-      else
-        raise EDCConnectorBadAddress.CreateFmt(sResAddressIsBadFmt, [Address]);
+        /// уходим
+        Exit;
+      except
+        on Exception do
+        begin
+          /// если мы дошли до последнего варианта и так и не смогли подключиться,
+          ///  то поднимаем последнее исключение, иначе продолжаем перебор
+          if i = aAddressList.Count - 1 then
+            raise
+        end;
+      end;
     end;
-
-
   finally
-    aParams.Free;
     aAddressList.Free;
   end;
 end;

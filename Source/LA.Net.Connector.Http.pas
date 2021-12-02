@@ -10,7 +10,19 @@ uses
   LA.Net.DC.Client;
   //LA.DC.mORMotClient;
 
+const
+  cHttp = 'http';
+  cHttps = 'https';
+  cDefHttpPort = '80';
+  cDefHttpsPort = '443';
+
 type
+  TDCHttpAddr = record
+    Https: Boolean;
+    Host, Port: string;
+    function InitFrom(const aAddr: string): TDCHttpAddr;
+  end;
+
   TDCHttpConnector = class(TDCCustomConnector)
   private
     FClient: TSQLRestClientHTTP;
@@ -41,7 +53,8 @@ type
 
     function GetConnected: Boolean; override;
 
-    procedure TryConnectTo(const aHost: string; const aPort: Integer); override;
+    procedure TryConnectTo(const aAddrLine: string); override;
+//    procedure TryConnectTo(const aHost: string; const aPort: Integer); override;
 
     procedure DoConnect; override;
     procedure DoDisconnect; override;
@@ -55,6 +68,7 @@ type
     function SensorValue(const SID: String): String; override;
     function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; override;
     function GetSensorsData(const IDs: TSIDArr): TDataRecExtArr; override;
+    function SensorsDataAsText(const IDs: TSIDArr): string; override;
 
   published
     property Https: boolean read FHttps write SetHttps;
@@ -148,6 +162,13 @@ begin
   Result := FMonitoring.GroupSensorValueByID(IDs);
 end;
 
+function TDCHttpConnector.SensorsDataAsText(const IDs: TSIDArr): string;
+begin
+  if not Connected then
+    Connect;
+  Result := FMonitoring.SensorsDataAsText(IDs);
+end;
+
 function TDCHttpConnector.SensorValue(const SID: String): String;
 begin
   if not Connected then
@@ -236,15 +257,92 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.TryConnectTo(const aHost: string; const aPort: Integer);
+procedure TDCHttpConnector.TryConnectTo(const aAddrLine: string);
+var
+  aAddrRec: TDCHttpAddr;
 begin
   DoDisconnect;
+  aAddrRec.InitFrom(aAddrLine);
 
-  FClient := GetClient(aHost, UserName, Password, aPort, SERVER_ROOT, HTTPs,
+  FClient := GetClient(aAddrRec.Host, UserName, Password, StrToInt(aAddrRec.Port), SERVER_ROOT, aAddrRec.Https,
     ProxyName, ProxyByPass,
     SendTimeOut, ReadTimeout, ConnectTimeout);
   FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
   FMonitoring :=  TServiceMonitoring.Create(FClient);
+end;
+
+//procedure TDCHttpConnector.TryConnectTo(const aHost: string; const aPort: Integer);
+//begin
+//  DoDisconnect;
+//
+//  FClient := GetClient(aHost, UserName, Password, aPort, SERVER_ROOT, HTTPs,
+//    ProxyName, ProxyByPass,
+//    SendTimeOut, ReadTimeout, ConnectTimeout);
+//  FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
+//  FMonitoring :=  TServiceMonitoring.Create(FClient);
+//end;
+
+{ TDCHttpAddr }
+
+function TDCHttpAddr.InitFrom(const aAddr: string): TDCHttpAddr;
+var
+  aParams: TStrings;
+begin
+  aParams := TStringList.Create;
+  try
+    aParams.LineBreak := ':';
+    aParams.Text := aAddr;
+
+    if aParams.Count = 3 then
+    begin
+      // https://dc.tdc.org.ua:443
+      HTTPs := SameText(aParams[0], cHTTPs);
+      Host := StringReplace(aParams[1], '//', '', [rfReplaceAll]);
+      Port := aParams[2];
+    end
+
+    else if aParams.Count = 2 then
+    begin
+      // http://dc.tdc.org.ua
+      if SameText(aParams[0], cHttp) then
+      begin
+        Https := False;
+        Host := StringReplace(aParams[1], '//', '', [rfReplaceAll]);
+        Port := cDefHttpPort;
+      end
+
+      // https://dc.tdc.org.ua
+      else if SameText(aParams[0], cHttps) then
+      begin
+        Https := True;
+        Host := StringReplace(aParams[1], '//', '', [rfReplaceAll]);
+        Port := cDefHttpsPort;
+      end
+
+      // dc.tdc.org.ua:80
+      else
+      begin
+        Https := False;
+        Host := aParams[0];
+        Port := aParams[1];
+      end
+    end
+
+    // dc.tdc.org.ua
+    else if aParams.Count = 1 then
+    begin
+      Https := False;
+      Host := aParams[0];
+      Port := cDefHttpPort;
+    end
+
+    else
+      raise EDCConnectorBadAddress.CreateFmt(sResAddressIsBadFmt, [aAddr]);
+
+  finally
+    aParams.Free;
+  end;
+
 end;
 
 end.

@@ -36,6 +36,7 @@ end;
 
 procedure TDCSensorLink.Notify;
 begin
+  inherited;
   FObserver.SetData(Data);
 end;
 

@@ -66,6 +66,8 @@ type
     function GroupSensorValueByID(const IDs: TIDArr): TValArr;
     function GroupSensorDataByID(const IDs: TIDArr): TDataRecArr;
     function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
+    function SensorDataAsText(const SID: String): String;
+    function SensorsDataAsText(const SIDs: TSIDArr): String;
     function SensorHistory(const SID: String; const FromDate: Int64; const ToDate: Int64): THistoryRecArr;
     function SensorHistoryExt(const SID: String; const FromDate: Int64; const ToDate: Int64): THistoryRecExtArr;
     function CloneGroup(const aGroupID: TID; const aCloneChildren: Boolean; const aCloneSensors: Boolean; const aCloneDevices: Boolean; const aCount: Integer): Integer;
@@ -93,6 +95,8 @@ type
     function GroupSensorValueByID(const IDs: TIDArr): TValArr;
     function GroupSensorDataByID(const IDs: TIDArr): TDataRecArr;
     function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
+    function SensorDataAsText(const SID: String): String;
+    function SensorsDataAsText(const SIDs: TSIDArr): String;
     function SensorHistory(const SID: String; const FromDate: Int64; const ToDate: Int64): THistoryRecArr;
     function SensorHistoryExt(const SID: String; const FromDate: Int64; const ToDate: Int64): THistoryRecExtArr;
     function CloneGroup(const aGroupID: TID; const aCloneChildren: Boolean; const aCloneSensors: Boolean; const aCloneDevices: Boolean; const aCount: Integer): Integer;
@@ -464,7 +468,7 @@ begin
   fServiceName := 'Monitoring';
   fServiceURI := 'Monitoring';
   fInstanceImplementation := sicClientDriven;
-  fContractExpected := '2979DD607FFC29B8';
+  fContractExpected := 'DC99A2840C161E9B';
   inherited Create(aClient);
 end;
 
@@ -498,6 +502,14 @@ begin
   fClient.CallRemoteService(self,'SensorData',1, // raise EServiceException on error
     [SID],res);
   Result := Variant2TDataRec(res[0]);
+end;
+
+function TServiceMonitoring.SensorDataAsText(const SID: string): string;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'SensorDataAsText',1, // raise EServiceException on error
+    [SID],res);
+  Result := res[0];
 end;
 
 function TServiceMonitoring.SensorDataExt(const SID: String): TDataRecExt;
@@ -594,6 +606,14 @@ begin
   fClient.CallRemoteService(self,'SensorHistoryExt',1, // raise EServiceException on error
     [SID,FromDate,ToDate],res);
   Result := Variant2THistoryRecExtArr(res[0]);
+end;
+
+function TServiceMonitoring.SensorsDataAsText(const SIDs: TSIDArr): string;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'SensorsDataAsText',1, // raise EServiceException on error
+    [TSIDArr2Variant(SIDs)],res);
+  Result := res[0];
 end;
 
 function TServiceMonitoring.CloneGroup(const aGroupID: TID; const aCloneChildren: Boolean; const aCloneSensors: Boolean; const aCloneDevices: Boolean; const aCount: Integer): Integer;
