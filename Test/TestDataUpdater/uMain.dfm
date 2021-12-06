@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Form1'
   ClientHeight = 441
-  ClientWidth = 624
+  ClientWidth = 1053
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,7 +12,7 @@ object Form1: TForm1
   Font.Style = []
   PixelsPerInch = 96
   DesignSize = (
-    624
+    1053
     441)
   TextHeight = 15
   object bStart: TButton
@@ -45,9 +45,46 @@ object Form1: TForm1
   object aLog: TMemo
     Left = 8
     Top = 39
-    Width = 608
+    Width = 1037
     Height = 394
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 3
+    OnDblClick = aLogDblClick
+    ExplicitWidth = 608
+  end
+  object bTestSessionCache: TButton
+    Left = 288
+    Top = 8
+    Width = 145
+    Height = 25
+    Caption = 'Test session cache'
+    TabOrder = 4
+    OnClick = bTestSessionCacheClick
+  end
+  object bTestNoSID: TButton
+    Left = 439
+    Top = 8
+    Width = 130
+    Height = 25
+    Caption = 'No SIDs request'
+    TabOrder = 5
+    OnClick = bTestNoSIDClick
+  end
+  object bTestMany: TButton
+    Left = 575
+    Top = 8
+    Width = 75
+    Height = 25
+    Caption = 'Many: 1 - '
+    TabOrder = 6
+    OnClick = bTestManyClick
+  end
+  object eItemCount: TEdit
+    Left = 656
+    Top = 8
+    Width = 81
+    Height = 23
+    TabOrder = 7
+    Text = '100'
   end
 end
