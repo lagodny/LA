@@ -21,6 +21,7 @@ type
     [TestCase('TestTryConnectArrangeAddr','host1:1;dc.tdc.org.ua:80,dc.tdc.org.ua:80;host1:1;')]
     [TestCase('TestTryConnectArrangeAddr','dc.tdc.org.ua:80;host1:1,dc.tdc.org.ua:80;host1:1')]
     procedure TestTryConnectArrangeAddr(const aAddrIn, aAddrOut: string);
+
   end;
 
 implementation

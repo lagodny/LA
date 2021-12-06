@@ -97,13 +97,21 @@ end;
 procedure TDCSensor.EncodeData(const aData: string);
 begin
   var a := aData.Split([';']);
-  if Length(a) >= 4 then
+  var L := Length(a);
+  if L >= 2 then
   begin
     if a[0] = ID then
     begin
       FValue := a[1];
-      FTimestamp := ISO8601ToDate(a[2]);
-      FStatus := a[3];
+      if L >= 3 then
+      begin
+        FStatus := a[2];
+        if L >= 4 then
+          FTimestamp := ISO8601ToDate(a[2])
+        else
+          FTimestamp := Now;
+      end
+      else
     end;
   end;
 end;
