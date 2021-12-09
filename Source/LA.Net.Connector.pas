@@ -11,7 +11,7 @@ unit LA.Net.Connector;
 interface
 
 uses
-  System.Classes, System.SysUtils,
+  System.Classes, System.SysUtils, System.SyncObjs,
   LA.Net.Connector.Intf, LA.Types.Monitoring;
 
 resourcestring
@@ -43,6 +43,7 @@ type
   ///  его наследники реализуют различные протоколы взаимодейтвия с сервером
   TDCCustomConnector = class(TComponent, IDCConnector)
   private
+    FClientLock: TCriticalSection;
     FAddress: string;
     FUserName: string;
     FPassword: string;
@@ -73,7 +74,6 @@ type
     /// пытаемся подключиться по указанному адресу
     ///  если подключение невозможно вызываем исключение
     procedure TryConnectTo(const aAddrLine: string); virtual; abstract;
-//    procedure TryConnectTo(const aHost: string; const aPort: Integer); virtual; abstract;
 
     /// перебираем все возможные варианты
     ///  если подключение невозможно вызываем исключение (из последнего варианта)
@@ -87,13 +87,15 @@ type
     procedure DoConnect; virtual; abstract;
     procedure DoDisconnect; virtual; abstract;
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
     procedure Connect; virtual; abstract;
     procedure Disconnect; virtual; abstract;
 
-    function SensorValue(const SID: String): String; virtual; abstract;
-    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; virtual; abstract;
-    function GetSensorsData(const IDs: TSIDArr): TDataRecExtArr; virtual; abstract;
-    function SensorsDataAsText(const IDs: TSIDArr): string; virtual; abstract;
+    function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; virtual; abstract;
+
+    property ClientLock: TCriticalSection read FClientLock;
   published
     /// параметры подключения в формате Host:Port
     ///  через точку с запятой (;) можно добавить альтернативые адреса: host1:port1;host2:port2;host3:port3
@@ -132,6 +134,18 @@ procedure TDCCustomConnector.CheckConnection;
 begin
   if not Connected then
     DoConnect;
+end;
+
+constructor TDCCustomConnector.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FClientLock := TCriticalSection.Create;
+end;
+
+destructor TDCCustomConnector.Destroy;
+begin
+  FClientLock.Free;
+  inherited;
 end;
 
 procedure TDCCustomConnector.DoPropChanged;

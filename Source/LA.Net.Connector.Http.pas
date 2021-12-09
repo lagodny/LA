@@ -39,7 +39,6 @@ type
     procedure SetProxyByPass(const Value: string);
     procedure SetProxyName(const Value: string);
     procedure SetSendTimeOut(const Value: Integer);
-    function GroupSensorValueByID(const IDs: TIDArr): TValArr;
   protected
     function GetEncrypt: boolean; override;
     function GetCompressionLevel: Integer; override;
@@ -54,7 +53,6 @@ type
     function GetConnected: Boolean; override;
 
     procedure TryConnectTo(const aAddrLine: string); override;
-//    procedure TryConnectTo(const aHost: string; const aPort: Integer); override;
 
     procedure DoConnect; override;
     procedure DoDisconnect; override;
@@ -65,11 +63,8 @@ type
     procedure Connect; override;
     procedure Disconnect; override;
 
-    function SensorValue(const SID: String): String; override;
-    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; override;
-    function GetSensorsData(const IDs: TSIDArr): TDataRecExtArr; override;
-    function SensorsDataAsText(const IDs: TSIDArr): string; override;
-
+    // взаимодействие с Мониторингом
+    function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; override;
   published
     property Https: boolean read FHttps write SetHttps;
     property ProxyName: string read FProxyName write SetProxyName;
@@ -108,12 +103,25 @@ end;
 procedure TDCHttpConnector.DoConnect;
 begin
   TryConnect;
+
+  if Assigned(OnConnect) then
+    OnConnect(Self);
 end;
 
 procedure TDCHttpConnector.DoDisconnect;
 begin
-  FMonitoring := nil;
-  FreeAndNil(FClient);
+  ClientLock.Enter;
+  try
+    if Assigned(FClient) then
+    begin
+      FMonitoring := nil;
+      FreeAndNil(FClient);
+      if Assigned(OnDisconnect) then
+        OnDisconnect(Self);
+    end;
+  finally
+    ClientLock.Leave;
+  end;
 end;
 
 function TDCHttpConnector.GetCompressionLevel: Integer;
@@ -123,7 +131,12 @@ end;
 
 function TDCHttpConnector.GetConnected: Boolean;
 begin
-  Result := Assigned(FClient);
+  ClientLock.Enter;
+  try
+    Result := Assigned(FClient);
+  finally
+    ClientLock.Leave;
+  end;
 end;
 
 function TDCHttpConnector.GetConnectTimeOut: Integer;
@@ -141,47 +154,17 @@ begin
   Result := FReadTimeOut;
 end;
 
-function TDCHttpConnector.GetSensorsData(const IDs: TSIDArr): TDataRecExtArr;
+function TDCHttpConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
 begin
   if not Connected then
     Connect;
-  Result := FMonitoring.GroupSensorDataExt(IDs);
-end;
 
-function TDCHttpConnector.GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
-begin
-  if not Connected then
-    Connect;
-  Result := FMonitoring.GroupSensorDataExtByID(IDs);
-end;
-
-function TDCHttpConnector.GroupSensorValueByID(const IDs: TIDArr): TValArr;
-begin
-  if not Connected then
-    Connect;
-  Result := FMonitoring.GroupSensorValueByID(IDs);
-end;
-
-function TDCHttpConnector.SensorsDataAsText(const IDs: TSIDArr): string;
-begin
-  if not Connected then
-    Connect;
-  Result := FMonitoring.SensorsDataAsText(IDs);
-end;
-
-function TDCHttpConnector.SensorValue(const SID: String): String;
-begin
-  if not Connected then
-    Connect;
+  ClientLock.Enter;
   try
-    Result := FMonitoring.SensorValue(SID);
-  except
-    on e: EServiceException do
-    begin
-      DoDisconnect;
-      DoConnect;
-      Result := FMonitoring.SensorValue(SID);
-    end;
+    if Assigned(FMonitoring) then
+      Result := FMonitoring.SensorsDataAsText(IDs, aUseCache);
+  finally
+    ClientLock.Leave;
   end;
 end;
 
@@ -260,27 +243,23 @@ end;
 procedure TDCHttpConnector.TryConnectTo(const aAddrLine: string);
 var
   aAddrRec: TDCHttpAddr;
+//  aClient: TSQLRestClientHTTP;
 begin
-  DoDisconnect;
   aAddrRec.InitFrom(aAddrLine);
 
-  FClient := GetClient(aAddrRec.Host, UserName, Password, StrToInt(aAddrRec.Port), SERVER_ROOT, aAddrRec.Https,
-    ProxyName, ProxyByPass,
-    SendTimeOut, ReadTimeout, ConnectTimeout);
-  FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
-  FMonitoring :=  TServiceMonitoring.Create(FClient);
-end;
+  DoDisconnect;
 
-//procedure TDCHttpConnector.TryConnectTo(const aHost: string; const aPort: Integer);
-//begin
-//  DoDisconnect;
-//
-//  FClient := GetClient(aHost, UserName, Password, aPort, SERVER_ROOT, HTTPs,
-//    ProxyName, ProxyByPass,
-//    SendTimeOut, ReadTimeout, ConnectTimeout);
-//  FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
-//  FMonitoring :=  TServiceMonitoring.Create(FClient);
-//end;
+  ClientLock.Enter;
+  try
+    FClient := GetClient(aAddrRec.Host, UserName, Password, StrToInt(aAddrRec.Port), SERVER_ROOT, aAddrRec.Https,
+      ProxyName, ProxyByPass,
+      SendTimeOut, ReadTimeout, ConnectTimeout);
+    FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
+    FMonitoring :=  TServiceMonitoring.Create(FClient);
+  finally
+    ClientLock.Leave;
+  end;
+end;
 
 { TDCHttpAddr }
 

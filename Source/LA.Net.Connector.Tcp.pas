@@ -98,10 +98,10 @@ type
     /// пытаемся подключиться по указанному адресу
     ///  если подключение невозможно вызываем исключение
     procedure TryConnectTo(const aAddrLine: string); override;
-//    procedure TryConnectTo(const aHost: string; const aPort: Integer); override;
 
     procedure DoConnect; override;
     procedure DoDisconnect; override;
+
 
     property Intercept: TDCTCPIntercept read FIntercept;
   public
@@ -113,6 +113,7 @@ type
     procedure Disconnect; override;
 
     /// методы работы с сервером
+    function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; override;
 
 
     property ServerFS: TFormatSettings read FServerFS;
@@ -120,9 +121,9 @@ type
     property ServerOffsetFromUTC: TDateTime read FServerOffsetFromUTC;
     property ClientOffsetFromUTC: TDateTime read FClientOffsetFromUTC;
 
-    /// реализация интерфейса IMonitoring
-    function SensorValue(const SID: String): String; override;
-    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; override;
+//    /// реализация интерфейса IMonitoring
+//    function SensorValue(const SID: String): String; override;
+//    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr; override;
 
 
   published
@@ -414,10 +415,10 @@ begin
   end;
 end;
 
-function TDCTCPConnector.GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
-begin
-
-end;
+//function TDCTCPConnector.GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
+//begin
+//
+//end;
 
 procedure TDCTCPConnector.LockAndDoCommand(const aCommand: string);
 begin
@@ -544,30 +545,35 @@ begin
   SendCommand(Format(aCommand, Args));
 end;
 
-function TDCTCPConnector.SensorValue(const SID: String): String;
-var
-  aStr: String;
-  aErrorCode: integer;
-  aErrorStr: string;
-  aMoment: TDateTime;
+function TDCTCPConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
 begin
-  LockClient('SensorValue');
-  try
-    try
-      DoConnect;
-      DoCommandFmt('GetValue %s', [SID]);
-      aStr := ReadLn;
-      ExtractValue(aStr, Result, aErrorCode, aErrorStr, aMoment);
-      //Moment := DateToClient(Moment);
-    except
-      on e: EIdException do
-        if ProcessTCPException(e) then
-          raise;
-    end;
-  finally
-    UnLockClient('SensorValue');
-  end;
+
 end;
+
+//function TDCTCPConnector.SensorValue(const SID: String): String;
+//var
+//  aStr: String;
+//  aErrorCode: integer;
+//  aErrorStr: string;
+//  aMoment: TDateTime;
+//begin
+//  LockClient('SensorValue');
+//  try
+//    try
+//      DoConnect;
+//      DoCommandFmt('GetValue %s', [SID]);
+//      aStr := ReadLn;
+//      ExtractValue(aStr, Result, aErrorCode, aErrorStr, aMoment);
+//      //Moment := DateToClient(Moment);
+//    except
+//      on e: EIdException do
+//        if ProcessTCPException(e) then
+//          raise;
+//    end;
+//  finally
+//    UnLockClient('SensorValue');
+//  end;
+//end;
 
 procedure TDCTCPConnector.SetCompressionLevel(const Value: Integer);
 begin

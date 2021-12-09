@@ -12,9 +12,10 @@ type
     procedure Connect;
     procedure Disconnect;
 
-    function SensorValue(const SID: String): String;
-    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
-    function GetSensorsData(const IDs: TSIDArr): TDataRecExtArr;
+//    function SensorValue(const SID: String): String;
+//    function GroupSensorDataExtByID(const IDs: TIDArr): TDataRecExtArr;
+//    function GetSensorsData(const IDs: TSIDArr): TDataRecExtArr;
+    function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
   end;
 
 
