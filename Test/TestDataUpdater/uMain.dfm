@@ -50,7 +50,6 @@ object Form1: TForm1
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 3
     OnDblClick = aLogDblClick
-    ExplicitWidth = 608
   end
   object bTestSessionCache: TButton
     Left = 288
@@ -75,7 +74,7 @@ object Form1: TForm1
     Top = 8
     Width = 75
     Height = 25
-    Caption = 'Many: 1 - '
+    Caption = 'Many (cache)'
     TabOrder = 6
     OnClick = bTestManyClick
   end
@@ -86,5 +85,14 @@ object Form1: TForm1
     Height = 23
     TabOrder = 7
     Text = '100'
+  end
+  object bManyNoCache: TButton
+    Left = 743
+    Top = 8
+    Width = 114
+    Height = 25
+    Caption = 'Many (no cache)'
+    TabOrder = 8
+    OnClick = bManyNoCacheClick
   end
 end

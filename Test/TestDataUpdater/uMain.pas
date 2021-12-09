@@ -18,6 +18,7 @@ type
     bTestNoSID: TButton;
     bTestMany: TButton;
     eItemCount: TEdit;
+    bManyNoCache: TButton;
     procedure bStartClick(Sender: TObject);
     procedure bCreateClick(Sender: TObject);
     procedure bStopClick(Sender: TObject);
@@ -25,6 +26,7 @@ type
     procedure bTestNoSIDClick(Sender: TObject);
     procedure bTestManyClick(Sender: TObject);
     procedure aLogDblClick(Sender: TObject);
+    procedure bManyNoCacheClick(Sender: TObject);
   private
     FConnector: TDCHttpConnector;
     FUpdater: TDataUpdater;
@@ -54,11 +56,11 @@ procedure TForm1.bCreateClick(Sender: TObject);
 begin
   FUpdater := TDataUpdater.Create(Self);
   FUpdater.OnUpdate := DoUpdate;
-  FUpdater.Interval := 1000;
+  FUpdater.Interval := 5000;
 
   FConnector := TDCHttpConnector.Create(Self);
-  FConnector.Address := 'https://dc.tdc.org.ua';
-//  FConnector.Address := 'localhost:89';
+//  FConnector.Address := 'https://dc.tdc.org.ua';
+  FConnector.Address := 'localhost:89;https://dc.tdc.org.ua';
 //  FConnector.Address := 'elcomteh.ddns.mksat.net:5153';
   FConnector.UserName := 'demo';
   FConnector.Password := 'demo';
@@ -69,6 +71,23 @@ begin
   FUpdater.Attach(TDCSensorLink.Create(FSensor));
 
   FUpdater.Connector := FConnector;
+end;
+
+procedure TForm1.bManyNoCacheClick(Sender: TObject);
+var
+  aSIDs: TSIDArr;
+  s: TStopwatch;
+  r: string;
+begin
+  SetLength(aSIDs, StrToInt(eItemCount.Text));
+  for var i := 0 to High(aSIDs) do
+    aSIDs[i] := (i+1).ToString;
+
+
+//  log(FConnector.SensorsDataAsText(aSIDs));
+  s := TStopwatch.StartNew;
+  r := FConnector.SensorsDataAsText(aSIDs, False);
+  log(Format('NO cache: Count = %s : Time, ms = %d : size, byte = %d', [eItemCount.Text, s.ElapsedMilliseconds, r.Length]));
 end;
 
 procedure TForm1.bStartClick(Sender: TObject);
@@ -94,8 +113,8 @@ begin
 
 //  log(FConnector.SensorsDataAsText(aSIDs));
   s := TStopwatch.StartNew;
-  r := FConnector.SensorsDataAsText(aSIDs);
-  log(Format('time, ms = %d : size, byte = %d', [s.ElapsedMilliseconds, r.Length]));
+  r := FConnector.SensorsDataAsText(aSIDs, True);
+  log(Format('Use cache: Count = %s : Time, ms = %d : size, byte = %d', [eItemCount.Text, s.ElapsedMilliseconds, r.Length]));
 
 end;
 
@@ -106,18 +125,18 @@ var
 begin
 //  log(FConnector.SensorsDataAsText([]));
   s := TStopwatch.StartNew;
-  r := FConnector.SensorsDataAsText([]);
+  r := FConnector.SensorsDataAsText([], True);
   log(Format('time, ms = %d : size, byte = %d', [s.ElapsedMilliseconds, r.Length]));
 end;
 
 procedure TForm1.bTestSessionCacheClick(Sender: TObject);
 begin
-  log(FConnector.SensorsDataAsText(['1','2','3']));
-  log(FConnector.SensorsDataAsText([]));
-  log(FConnector.SensorsDataAsText([]));
-  log(FConnector.SensorsDataAsText(['1','2','3','4']));
-  log(FConnector.SensorsDataAsText([]));
-  log(FConnector.SensorsDataAsText([]));
+  log(FConnector.SensorsDataAsText(['1','2','3'], True));
+  log(FConnector.SensorsDataAsText([], True));
+  log(FConnector.SensorsDataAsText([], True));
+  log(FConnector.SensorsDataAsText(['1','2','3','4'], True));
+  log(FConnector.SensorsDataAsText([], True));
+  log(FConnector.SensorsDataAsText([], True));
 end;
 
 procedure TForm1.DoUpdate(Sender: TObject);
