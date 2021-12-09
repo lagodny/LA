@@ -55,18 +55,21 @@ type
     FInterval: Int64;
     FConnector: TDCCustomConnector;
     FOnUpdate: TNotifyEvent;
-    function GetActive: Boolean;
-    procedure SetActive(const Value: Boolean);
+
+    // управление потоком обновления
     procedure Start;
     procedure Stop;
+    function GetActive: Boolean;
+    procedure SetActive(const Value: Boolean);
+
     procedure SetInterval(const Value: Int64);
-    procedure DoThreadTerminated(aSender: TObject);
     procedure SetConnector(const Value: TDCCustomConnector);
   protected
     procedure DoNotify(const aLink: TDCLink); virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
     // подключение, отключение, уведомление наблюдателей
     procedure Attach(const aLink: TDCLink);
     procedure Detach(const aLink: TDCLink);
@@ -85,7 +88,7 @@ type
     property Active: Boolean read GetActive write SetActive stored False;
     // период опроса сервера, мс
     property Interval: Int64 read FInterval write SetInterval;
-
+    // дополнительное событие, которое вызывается после обновления линков
     property OnUpdate: TNotifyEvent read FOnUpdate write FOnUpdate;
   end;
 
@@ -155,11 +158,11 @@ begin
   aLink.Notify;
 end;
 
-procedure TDataUpdater.DoThreadTerminated(aSender: TObject);
-begin
-//  FreeAndNil(FThread);
-  FThread := nil;
-end;
+//procedure TDataUpdater.DoThreadTerminated(aSender: TObject);
+//begin
+////  FreeAndNil(FThread);
+//  FThread := nil;
+//end;
 
 function TDataUpdater.GetActive: Boolean;
 begin
@@ -225,7 +228,7 @@ end;
 
 procedure TDataUpdater.SetConnector(const Value: TDCCustomConnector);
 begin
-  // нельзя изменить коннктор, во время работы потока
+  // нельзя изменить коннeктор, во время работы потока
   if Active then
     Exit;
 
@@ -247,9 +250,10 @@ begin
   if Active then
     Exit;
 
+  // поток не может завершиться сам ни при каких условиях,
+  // только Stop корректно завершает и очищает поток
   FThread := TDataUpdateThread.Create(True, Self, Interval);
-  FThread.FreeOnTerminate := True;
-  FThread.OnTerminate := DoThreadTerminated;
+  FThread.FreeOnTerminate := False;
   FThread.Start;
 end;
 
@@ -259,8 +263,9 @@ begin
     Exit;
 
   FThread.Terminate;
+  FThread.WaitFor;
+  FThread.Free;
   FThread := nil;
-  //FThread.WaitFor;
 end;
 
 { TDataUpdater.TDataUpdateThread }
@@ -269,6 +274,7 @@ constructor TDataUpdater.TDataUpdateThread.Create(CreateSuspended: Boolean; aUpd
 begin
   inherited CreateInterval(CreateSuspended, aInterval);
   FUpdater := aUpdater;
+  FEvent.SetEvent;
 end;
 
 procedure TDataUpdater.TDataUpdateThread.DoUpdate;
@@ -296,80 +302,47 @@ end;
 
 procedure TDataUpdater.TDataUpdateThread.ProcessTimer;
 var
-//  r: TDataRecExtArr;
   r: string;
   aLinkIndex, aDataIndex, aDataCount: Integer;
 begin
-  if FUpdater.FLinksChanged then
-  begin
-    InitIDs;
-    FUpdater.FLinksChanged := False;
+  try
+    if FUpdater.FLinksChanged then
+    begin
+      InitIDs;
+      FUpdater.FLinksChanged := False;
+    end;
+
+    /// получаем данные с сервера
+    ///  в случае ошибки, отключаемся и выходим - в слудующей инерации повторим попытку подключения и запрос данных
+    try
+      if not FUpdater.Connector.Connected then
+        FUpdater.Connector.Connect;
+      r := FUpdater.Connector.SensorsDataAsText(FIDs, True);
+      // если запрос выполнен без ошибок, то нет необходимости повторно передавать IDs (сервер их запомнил)
+      SetLength(FIDs, 0);
+    except
+      on e: Exception do
+      begin
+        // в случае ошибки, нужно будет заново подключаться к серверу и передавать ID запрашиваемых датчиков
+        FUpdater.Connector.Disconnect;
+        FUpdater.FLinksChanged := True;
+        Exit;
+      end;
+    end;
+
+    /// обрабатываем результат запроса
+    FUpdater.ProcessServerResponce(r);
+
+    /// уведомляем подписчиков
+    Queue(FUpdater.Notify);
+
+    /// в OnUpdate можем выполнить дополнительные действия с новыми данными
+    if Assigned(FUpdater.OnUpdate) then
+      Queue(DoUpdate);
+  except
+    on e: Exception do
+      ;
   end;
-
-  r := FUpdater.Connector.SensorsDataAsText(FIDs);
-  // в следующий запрос ID не передаем, они будут взяты из кеша сервера
-  SetLength(FIDs, 0);
-
-  FUpdater.ProcessServerResponce(r);
-
-  Queue(FUpdater.Notify);
-
-//  // запрашиваем данные с сервера
-//  r := FUpdater.Connector.GetSensorsData(FIDs);
-//  aDataCount := Length(r);
-//  if aDataCount > 0 then
-//  begin
-//    aDataIndex := 0;
-//    // обновляем линки
-//    FUpdater.FLock.BeginRead;
-//    try
-//      /// линки отсортированы в порядке возрастания ID
-//      ///  результат приходит в таком же порядке, но за время отработки запроса
-//      ///  линки могли измениться (порядок не изменился)
-//      ///  значит если ID текущего линка отличается он ID текущего ответа, то
-//      ///  нужно выполнить поиск
-//      for aLinkIndex := 0 to FUpdater.FLinks.Count - 1 do
-//      begin
-//        case CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) of
-//          -1: // <
-//          begin
-//            // переходим к следующему линку
-//            Continue;
-//          end;
-//
-//          0: // =
-//          begin
-//            // нашли - устанавливаем новые данные
-//            FUpdater.Links[aLinkIndex].SetData(r[aDataIndex].v);
-//          end;
-//
-//          1: // >
-//          begin
-//            // выполняем поиск в массиве данных
-//            while (aDataIndex < aDataCount) and (CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) = 1) do
-//              Inc(aDataIndex);
-//
-//            // прерываем цикл, если данных больше нет
-//            if aDataIndex >= aDataCount then
-//              Break;
-//
-//            // нашли - устанавливаем новые данные
-//            if CompareStr(FUpdater.Links[aLinkIndex].GetID, r[aDataIndex].SID) = 0 then
-//              FUpdater.Links[aLinkIndex].SetData(r[aDataIndex].v);
-//          end;
-//        end;
-//      end;
-//    finally
-//      FUpdater.FLock.EndRead;
-//    end;
-//
-//    // уведомляем наблюдателей
-//    Queue(FUpdater.Notify);
-//  end;
-
-
-  if Assigned(FUpdater.OnUpdate) then
-    Queue(DoUpdate);
 end;
 
 
