@@ -76,7 +76,14 @@ begin
         wrSignaled:
           begin
             if Terminated then
-              Break;
+              Break
+            else
+            begin
+              // старт или принудительный запуск
+              FTimer.Reset;
+              FTimer.Start;
+              ProcessTimer;
+            end;
           end;
         wrTimeout:
           begin
