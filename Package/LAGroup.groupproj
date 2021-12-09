@@ -21,6 +21,9 @@
         <Projects Include="..\Test\TestDataUpdater\TestDataUpdater.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Test\TestDataComp\TestDataComp.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -83,14 +86,23 @@
     <Target Name="TestDataUpdater:Make">
         <MSBuild Projects="..\Test\TestDataUpdater\TestDataUpdater.dproj" Targets="Make"/>
     </Target>
+    <Target Name="TestDataComp">
+        <MSBuild Projects="..\Test\TestDataComp\TestDataComp.dproj"/>
+    </Target>
+    <Target Name="TestDataComp:Clean">
+        <MSBuild Projects="..\Test\TestDataComp\TestDataComp.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestDataComp:Make">
+        <MSBuild Projects="..\Test\TestDataComp\TestDataComp.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="LA_Fundamentals_Utils;LA_Fundamentals_Crypto;LA_mORMot_Crossplatform;LA_DC;LA_Test;TestDataUpdater"/>
+        <CallTarget Targets="LA_Fundamentals_Utils;LA_Fundamentals_Crypto;LA_mORMot_Crossplatform;LA_DC;LA_Test;TestDataUpdater;TestDataComp"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="LA_Fundamentals_Utils:Clean;LA_Fundamentals_Crypto:Clean;LA_mORMot_Crossplatform:Clean;LA_DC:Clean;LA_Test:Clean;TestDataUpdater:Clean"/>
+        <CallTarget Targets="LA_Fundamentals_Utils:Clean;LA_Fundamentals_Crypto:Clean;LA_mORMot_Crossplatform:Clean;LA_DC:Clean;LA_Test:Clean;TestDataUpdater:Clean;TestDataComp:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="LA_Fundamentals_Utils:Make;LA_Fundamentals_Crypto:Make;LA_mORMot_Crossplatform:Make;LA_DC:Make;LA_Test:Make;TestDataUpdater:Make"/>
+        <CallTarget Targets="LA_Fundamentals_Utils:Make;LA_Fundamentals_Crypto:Make;LA_mORMot_Crossplatform:Make;LA_DC:Make;LA_Test:Make;TestDataUpdater:Make;TestDataComp:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

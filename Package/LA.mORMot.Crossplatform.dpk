@@ -42,3 +42,5 @@ contains
   SynWinSock in '..\..\..\Lib\mORMot\SynWinSock.pas';
 
 end.
+
+

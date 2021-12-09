@@ -58,6 +58,7 @@ contains
   LA.Threads in '..\Source\LA.Threads.pas',
   LA.Net.Connector.Intf in '..\Source\LA.Net.Connector.Intf.pas',
   LA.Net.DC.Client in '..\Source\LA.Net.DC.Client.pas',
-  LA.Types.Monitoring in '..\Source\LA.Types.Monitoring.pas';
+  LA.Types.Monitoring in '..\Source\LA.Types.Monitoring.pas',
+  LA.Registration in '..\Source\LA.Registration.pas';
 
 end.

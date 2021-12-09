@@ -85,9 +85,7 @@ begin
 
   if FUpdateCounter = 0 then
   begin
-    if FIsDataChanged then
-      TLinkObservers.ControlChanged(Self);
-
+    TLinkObservers.ControlChanged(Self);
     FIsDataChanged := False;
   end
   else
@@ -119,7 +117,7 @@ end;
 procedure TDCSensor.EndUpdate;
 begin
   Dec(FUpdateCounter);
-  if FUpdateCounter = 0 then
+  if (FUpdateCounter = 0) and (FIsDataChanged) then
     DataChanged;
 end;
 
