@@ -97,6 +97,8 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
+    procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
   published
     property DataSource: TLADataSource read FDataSource write SetDataSource;
   end;
@@ -336,22 +338,37 @@ end;
 constructor TLASensorList.Create(AOwner: TComponent);
 begin
   inherited;
-  FSensors := TList<TLASensor>.Create;
+  FSensors := TObjectList<TLASensor>.Create(True);
 end;
 
 destructor TLASensorList.Destroy;
 begin
   DataSource := nil;
   FSensors.Free;
+  FSensors := nil;
   inherited;
+end;
+
+procedure TLASensorList.GetChildren(Proc: TGetChildProc; Root: TComponent);
+var
+  aSensor: TLASensor;
+begin
+  for aSensor in FSensors do
+  begin
+    if aSensor.Owner = Root then Proc(aSensor);
+  end;
 end;
 
 procedure TLASensorList.Notification(AComponent: TComponent; Operation: TOperation);
 begin
   inherited;
   if Operation = opRemove then
+  begin
     if (AComponent is TLASensor) and Assigned(FSensors) then
-      RemoveSensor(TLASensor(AComponent));
+      RemoveSensor(TLASensor(AComponent))
+    else if (AComponent is TLADataSource) then
+      DataSource := nil;
+  end;
 end;
 
 procedure TLASensorList.RemoveSensor(aSensor: TLASensor);
@@ -391,7 +408,7 @@ begin
   if Assigned(Value) then
   begin
     for i := 0 to FSensors.Count - 1 do
-      FDataSource.Attach(TLASensorLink.Create(FSensors[i]));
+      Value.Attach(TLASensorLink.Create(FSensors[i]));
   end;
   FDataSource := Value;
 end;

@@ -4,3 +4,24 @@ Coordinates=0,0,98,36
 []
 Coordinates=117,1,91,36
 
+[LASensor1]
+Visible=True
+Coordinates=470,20,78,58
+
+[Label1]
+Coordinates=0,0,53,58
+
+[BindingsList1]
+Coordinates=72,1,91,36
+
+[DCHttpConnector1]
+Coordinates=72,1,123,36
+
+[DataUpdater1]
+Coordinates=320,100,94,58
+Visible=True
+ExplicitSubNodes=Active
+
+[CheckBox1]
+Coordinates=60,120,114,58
+

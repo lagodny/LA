@@ -12,7 +12,7 @@ uses
 
 type
   TLADataSource = class(TComponent, IDCObservable<TLALink>)
-  private
+  protected
     FLock: TMREWSync;
     FLinks: TObjectList<TLALink>;
     FLinksChanged: Boolean;
