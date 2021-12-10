@@ -31,6 +31,8 @@ package LA.DC;
 
 requires
   rtl,
+  bindengine,
+  bindcomp,
   IndySystem,
   IndyProtocols,
   IndyCore,
@@ -53,12 +55,14 @@ contains
   LA.Data.Link.Tracker in '..\Source\LA.Data.Link.Tracker.pas',
   LA.Data.Sensor in '..\Source\LA.Data.Sensor.pas',
   LA.Data.Tracker in '..\Source\LA.Data.Tracker.pas',
-  LA.Data.Updater.Intf in '..\Source\LA.Data.Updater.Intf.pas',
+  LA.Data.Source.Intf in '..\Source\LA.Data.Source.Intf.pas',
   LA.Data.Updater in '..\Source\LA.Data.Updater.pas',
   LA.Threads in '..\Source\LA.Threads.pas',
   LA.Net.Connector.Intf in '..\Source\LA.Net.Connector.Intf.pas',
   LA.Net.DC.Client in '..\Source\LA.Net.DC.Client.pas',
   LA.Types.Monitoring in '..\Source\LA.Types.Monitoring.pas',
-  LA.Registration in '..\Source\LA.Registration.pas';
+  LA.Registration in '..\Source\LA.Registration.pas',
+  LA.Data.SensorList in '..\Source\LA.Data.SensorList.pas',
+  LA.Data.Source in '..\Source\LA.Data.Source.pas';
 
 end.

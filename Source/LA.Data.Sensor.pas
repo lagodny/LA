@@ -3,9 +3,13 @@
 interface
 
 uses
-  System.Classes;
+  System.Classes,
+  System.Generics.Collections,
+  LA.Data.Source;
 
 type
+  TLASensorList = class;
+
   /// <summary>
   ///   Невизуальный компонент Датчик Мониторинга
   ///  содержит информацию о датчике Мониторинга:
@@ -15,8 +19,10 @@ type
   [ObservableMember('Value')]
   [ObservableMember('Timestamp')]
   [ObservableMember('Status')]
-  TDCSensor = class(TComponent) //, IDCObserver)
+  TLASensor = class(TComponent) //, IDCObserver)
   private
+    [weak] FSensorList: TLASensorList;
+
     FID: string;
     FData: string;
     FValue: string;
@@ -32,11 +38,23 @@ type
   private
     procedure DataChanged;
     procedure SetID(const Value: string);
+    function GetDataSource: TLADataSource;
+    procedure SetSensorList(const Value: TLASensorList);
   protected
     function CanObserve(const ID: Integer): Boolean; override;
     procedure ObserverAdded(const ID: Integer; const Observer: IObserver); override;
     procedure ObserverToggle(const AObserver: IObserver; const Value: Boolean);
+
+    procedure ReadState(Reader: TReader); override;
+
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    function HasParent: Boolean; override;
+    function GetParentComponent: TComponent; override;
+    procedure SetParentComponent(AParent: TComponent); override;
+
     function GetID: string;
     procedure SetData(const aData: string);
 
@@ -45,7 +63,12 @@ type
     procedure BeginUpdate;
     procedure EndUpdate;
     procedure UpdateData(const aValue: string; aTimestamp: TDateTime; const aStatus: string);
+
+    property DataSource: TLADataSource read GetDataSource;
+
   published
+    property SensorList: TLASensorList read FSensorList write SetSensorList;
+
     property ID: string read GetID write SetID;
 
     property Value: string read FValue write SetValue;
@@ -56,18 +79,43 @@ type
     property Enabled: Boolean read FEnabled write SetEnabled;
   end;
 
+  /// <summary>
+  ///   список датчиков
+  ///  является родителем и владельцем датчиков
+  ///  содержит ссылку на источник данных для датчиков
+  /// </summary>
+  TLASensorList = class(TComponent)
+  private
+    FSensors: TList<TLASensor>;
+    FDataSource: TLADataSource;
+    procedure SetDataSource(const Value: TLADataSource);
+  protected
+    procedure AddSensor(aSensor: TLASensor);
+    procedure RemoveSensor(aSensor: TLASensor);
+
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  published
+    property DataSource: TLADataSource read FDataSource write SetDataSource;
+  end;
+
+
 
 implementation
 
 uses
-  System.SysUtils, System.DateUtils;
+  System.SysUtils, System.DateUtils,
+  //vcl.Dialogs,
+  LA.Data.Link.Sensor;
 
-procedure TDCSensor.BeginUpdate;
+procedure TLASensor.BeginUpdate;
 begin
   Inc(FUpdateCounter);
 end;
 
-function TDCSensor.CanObserve(const ID: Integer): Boolean;
+function TLASensor.CanObserve(const ID: Integer): Boolean;
 begin
   case ID of
     TObserverMapping.EditLinkID,
@@ -78,7 +126,14 @@ begin
   end;
 end;
 
-procedure TDCSensor.DataChanged;
+constructor TLASensor.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+//  if AOwner is TLASensorList then
+//    SensorList := TLASensorList(AOwner);
+end;
+
+procedure TLASensor.DataChanged;
 begin
   if (csLoading in ComponentState) or (csDestroying in ComponentState) then
     Exit;
@@ -92,7 +147,13 @@ begin
     FIsDataChanged := True;
 end;
 
-procedure TDCSensor.EncodeData(const aData: string);
+destructor TLASensor.Destroy;
+begin
+//  SensorList := nil;
+  inherited;
+end;
+
+procedure TLASensor.EncodeData(const aData: string);
 begin
   var a := aData.Split([';']);
   var L := Length(a);
@@ -114,25 +175,49 @@ begin
   end;
 end;
 
-procedure TDCSensor.EndUpdate;
+procedure TLASensor.EndUpdate;
 begin
   Dec(FUpdateCounter);
   if (FUpdateCounter = 0) and (FIsDataChanged) then
     DataChanged;
 end;
 
-function TDCSensor.GetID: string;
+function TLASensor.GetDataSource: TLADataSource;
+begin
+  if Assigned(FSensorList) then
+    Result := FSensorList.DataSource
+  else
+    Result := nil;
+end;
+
+function TLASensor.GetID: string;
 begin
   Result := FID;
 end;
 
-procedure TDCSensor.ObserverAdded(const ID: Integer; const Observer: IObserver);
+function TLASensor.GetParentComponent: TComponent;
+begin
+  if Assigned(SensorList) then
+    Result := SensorList
+  else
+    Result := inherited GetParentComponent;
+end;
+
+function TLASensor.HasParent: Boolean;
+begin
+  if FSensorList <> nil then
+    Result := True
+  else
+    Result := inherited HasParent;
+end;
+
+procedure TLASensor.ObserverAdded(const ID: Integer; const Observer: IObserver);
 begin
   if ID = TObserverMapping.EditLinkID then
     Observer.OnObserverToggle := ObserverToggle;
 end;
 
-procedure TDCSensor.ObserverToggle(const AObserver: IObserver; const Value: Boolean);
+procedure TLASensor.ObserverToggle(const AObserver: IObserver; const Value: Boolean);
 var
   LEditLinkObserver: IEditLinkObserver;
 begin
@@ -145,7 +230,15 @@ begin
     Enabled := True;
 end;
 
-procedure TDCSensor.SetData(const aData: string);
+procedure TLASensor.ReadState(Reader: TReader);
+begin
+  inherited ReadState(Reader);
+
+  if Reader.Parent is TLASensorList then
+     SensorList := TLASensorList(Reader.Parent);
+end;
+
+procedure TLASensor.SetData(const aData: string);
 begin
   if aData <> FData then
   begin
@@ -155,17 +248,37 @@ begin
   end;
 end;
 
-procedure TDCSensor.SetEnabled(const Value: Boolean);
+procedure TLASensor.SetEnabled(const Value: Boolean);
 begin
   FEnabled := Value;
 end;
 
-procedure TDCSensor.SetID(const Value: string);
+procedure TLASensor.SetID(const Value: string);
 begin
   FID := Value;
 end;
 
-procedure TDCSensor.SetStatus(const Value: string);
+procedure TLASensor.SetParentComponent(AParent: TComponent);
+begin
+  if not (csLoading in ComponentState) and (AParent is TLASensorList) then
+    SensorList := TLASensorList(AParent);
+end;
+
+procedure TLASensor.SetSensorList(const Value: TLASensorList);
+begin
+  if FSensorList = Value then
+    Exit;
+
+  if Assigned(FSensorList) then
+    FSensorList.RemoveSensor(Self);
+
+  if Assigned(Value) then
+    Value.AddSensor(Self);
+
+  FSensorList := Value;
+end;
+
+procedure TLASensor.SetStatus(const Value: string);
 begin
   if FStatus <> Value then
   begin
@@ -174,7 +287,7 @@ begin
   end;
 end;
 
-procedure TDCSensor.SetTimestamp(const Value: TDateTime);
+procedure TLASensor.SetTimestamp(const Value: TDateTime);
 begin
   if FTimestamp <> Value then
   begin
@@ -183,7 +296,7 @@ begin
   end;
 end;
 
-procedure TDCSensor.SetValue(const Value: string);
+procedure TLASensor.SetValue(const Value: string);
 begin
   if FValue <> Value then
   begin
@@ -192,7 +305,7 @@ begin
   end;
 end;
 
-procedure TDCSensor.UpdateData(const aValue: string; aTimestamp: TDateTime; const aStatus: string);
+procedure TLASensor.UpdateData(const aValue: string; aTimestamp: TDateTime; const aStatus: string);
 begin
   if (FValue <> aValue) or (FTimestamp <> aTimestamp) or (FStatus <> aStatus) then
   begin
@@ -201,6 +314,86 @@ begin
     FStatus := aStatus;
     DataChanged;
   end;
+end;
+
+
+{ TLASensorList }
+
+procedure TLASensorList.AddSensor(aSensor: TLASensor);
+begin
+  Assert(Assigned(aSensor));
+
+  // добавляем в список
+  FSensors.Add(aSensor);
+  aSensor.FSensorList := Self;
+  aSensor.FreeNotification(Self);
+
+  // подключаем к DataSource
+  if Assigned(FDataSource) then
+    FDataSource.Attach(TLASensorLink.Create(aSensor));
+end;
+
+constructor TLASensorList.Create(AOwner: TComponent);
+begin
+  inherited;
+  FSensors := TList<TLASensor>.Create;
+end;
+
+destructor TLASensorList.Destroy;
+begin
+  DataSource := nil;
+  FSensors.Free;
+  inherited;
+end;
+
+procedure TLASensorList.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  inherited;
+  if Operation = opRemove then
+    if (AComponent is TLASensor) and Assigned(FSensors) then
+      RemoveSensor(TLASensor(AComponent));
+end;
+
+procedure TLASensorList.RemoveSensor(aSensor: TLASensor);
+begin
+  Assert(Assigned(aSensor));
+
+  // отключаем датчик от DataSource
+  if Assigned(FDataSource) then
+    FDataSource.DetachObject(aSensor);
+
+  // удаляем из списка
+  //FSensors.Remove(aSensor);
+
+  if FSensors.Extract(aSensor) <> nil then
+  begin
+    aSensor.RemoveFreeNotification(Self);
+    aSensor.FSensorList := nil;
+  end;
+
+end;
+
+procedure TLASensorList.SetDataSource(const Value: TLADataSource);
+var
+  i: Integer;
+begin
+  if FDataSource = Value then
+    Exit;
+
+  // отключаем ВСЕ датчики от старого DataSource
+  if Assigned(FDataSource) then
+  begin
+    for i := 0 to FSensors.Count - 1 do
+      FDataSource.DetachObject(FSensors[i]);
+  end;
+
+  // подлключаем ВСЕ датчики к новому DataSorce
+  if Assigned(Value) then
+  begin
+    for i := 0 to FSensors.Count - 1 do
+      FDataSource.Attach(TLASensorLink.Create(FSensors[i]));
+  end;
+  FDataSource := Value;
 end;
 
 

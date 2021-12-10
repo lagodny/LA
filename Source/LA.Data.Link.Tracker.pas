@@ -6,7 +6,7 @@ uses
   LA.Data.Link, LA.Data.Tracker;
 
 type
-  TDCTrackerLink = class(TDCLink)
+  TDCTrackerLink = class(TLALink)
   private
     FObserver: TDCTracker;
   public

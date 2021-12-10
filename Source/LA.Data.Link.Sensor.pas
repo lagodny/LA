@@ -9,11 +9,11 @@ type
   /// <summary>
   ///   Линк/адаптер к Датчику
   /// </summary>
-  TDCSensorLink = class(TDCLink)
+  TLASensorLink = class(TLALink)
   private
-    FObserver: TDCSensor;
+    FObserver: TLASensor;
   public
-    constructor Create(aObserver: TDCSensor);
+    constructor Create(aObserver: TLASensor);
 
     function GetID: string; override;
     procedure Notify; override;
@@ -24,17 +24,17 @@ implementation
 
 { TDCSensorLink }
 
-constructor TDCSensorLink.Create(aObserver: TDCSensor);
+constructor TLASensorLink.Create(aObserver: TLASensor);
 begin
   FObserver := aObserver;
 end;
 
-function TDCSensorLink.GetID: string;
+function TLASensorLink.GetID: string;
 begin
   Result := FObserver.GetID;
 end;
 
-procedure TDCSensorLink.Notify;
+procedure TLASensorLink.Notify;
 begin
   inherited;
   FObserver.SetData(Data);
