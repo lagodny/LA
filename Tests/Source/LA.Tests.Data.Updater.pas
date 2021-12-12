@@ -31,7 +31,7 @@ uses
   System.SysUtils;
 
 type
-  TMockLink = class(TDCLink)
+  TMockLink = class(TLALink)
   private
     FID: string;
     function GetID: string; override;
@@ -60,7 +60,7 @@ begin
   Randomize;
   for i := 1 to cExpectedCount do
   begin
-    aLink := TMockLink.Create;
+    aLink := TMockLink.Create(nil);
     aLink.ID := Random(cExpectedCount).ToString;
     CUT.Attach(aLink);
   end;

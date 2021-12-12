@@ -32,12 +32,9 @@ type
     [TestCase('EmpttyAddrRaiseException', '')]
     procedure TestBadAddrRaiseException(const AddrLine: string);
 //    [Test]
-    [TestCase('TestSensorValue', '41204,d:\_services\DC\Data\UploadFile\Demo.scp')]
+    [TestCase('SensorsDataAsText', '41204,41204;d:\_services\DC\Data\UploadFile\Demo.scp;'#$D)]
 //    [TestCase('TestSensorValue', '5,74332')]
-    procedure TestSensorValue(const aSensorAddr, aSensorValue: string);
-
-    [Test]
-    procedure GroupSensorDataExtByID;
+    procedure SensorsDataAsText(const aSensorAddr, aSensorData: string);
 
 
   end;
@@ -47,29 +44,6 @@ implementation
 uses
   LA.Tests.Net.Consts,
   LA.Types.Monitoring;
-
-procedure TTest_TDCHttpConnector.GroupSensorDataExtByID;
-var
-  r: TDataRecExtArr;
-begin
-  r := FConnector.GroupSensorDataExtByID([41204]);
-  Assert.AreEqual(r[0].SID, '41204');
-  Assert.AreEqual(r[0].v, 'd:\_services\DC\Data\UploadFile\Demo.scp');
-  Assert.AreEqual(r[0].e, '');
-
-  r := FConnector.GroupSensorDataExtByID([41204,31174]);
-  Assert.AreEqual(2, Length(r));
-
-  Assert.AreEqual('41204', r[0].SID);
-  Assert.AreEqual('31174', r[1].SID);
-
-  Assert.AreEqual('d:\_services\DC\Data\UploadFile\Demo.scp', r[0].v);
-  Assert.AreEqual('d:\_services\DC\Data\UploadFile\Vladimir.scp', r[1].v);
-
-  Assert.AreEqual('', r[0].e);
-  Assert.AreEqual('', r[1].e);
-
-end;
 
 procedure TTest_TDCHttpConnector.Setup;
 begin
@@ -112,10 +86,10 @@ begin
   Assert.IsTrue(FConnector.Connected);
 end;
 
-procedure TTest_TDCHttpConnector.TestSensorValue(const aSensorAddr, aSensorValue: string);
+procedure TTest_TDCHttpConnector.SensorsDataAsText(const aSensorAddr, aSensorData: string);
 begin
   FConnector.Connect;
-  Assert.AreEqual(FConnector.SensorValue(aSensorAddr), aSensorValue);
+  Assert.AreEqual(FConnector.SensorsDataAsText([aSensorAddr], False), aSensorData);
 end;
 
 initialization
