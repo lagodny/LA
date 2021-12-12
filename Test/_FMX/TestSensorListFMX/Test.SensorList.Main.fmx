@@ -1,0 +1,109 @@
+object Form3: TForm3
+  Left = 0
+  Top = 0
+  Caption = 'Form3'
+  ClientHeight = 480
+  ClientWidth = 306
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Text1: TText
+    Position.X = 24.000000000000000000
+    Position.Y = 57.000000000000000000
+    Size.Width = 193.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Leading
+    object Text2: TText
+      Position.Y = 32.000000000000000000
+      Size.Width = 193.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Leading
+      object Text3: TText
+        Position.Y = 32.000000000000000000
+        Size.Width = 193.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Leading
+      end
+    end
+  end
+  object CheckBox1: TCheckBox
+    Position.X = 24.000000000000000000
+    Position.Y = 30.000000000000000000
+    TabOrder = 6
+    Text = 'CheckBox1'
+  end
+  object LASensorList1: TLASensorList
+    DataSource = DataUpdater1
+    Left = 144
+    Top = 224
+    object LASensor1: TLASensor
+      SensorList = LASensorList1
+      ID = '1'
+      Enabled = False
+    end
+    object LASensor2: TLASensor
+      SensorList = LASensorList1
+      ID = '3'
+      Enabled = False
+    end
+    object LASensor3: TLASensor
+      SensorList = LASensorList1
+      ID = '4'
+      Enabled = False
+    end
+  end
+  object DCHttpConnector1: TDCHttpConnector
+    Address = 'https://dc.tdc.org.ua'
+    ConnectTimeOut = 0
+    ReadTimeOut = 0
+    CompressionLevel = 0
+    UserName = 'demo'
+    Password = 'demo'
+    Connected = False
+    Https = False
+    SendTimeOut = 0
+    Left = 144
+    Top = 344
+  end
+  object DataUpdater1: TDataUpdater
+    Connector = DCHttpConnector1
+    Interval = 1000
+    Left = 144
+    Top = 280
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 60
+    Top = 237
+    object LinkControlToPropertyText3: TLinkControlToProperty
+      Category = 'Quick Bindings'
+      Control = LASensor3
+      Component = Text3
+      ComponentProperty = 'Text'
+    end
+    object LinkControlToPropertyActive: TLinkControlToProperty
+      Category = 'Quick Bindings'
+      Control = CheckBox1
+      Track = True
+      Component = DataUpdater1
+      ComponentProperty = 'Active'
+    end
+    object LinkControlToPropertyText: TLinkControlToProperty
+      Category = 'Quick Bindings'
+      Control = LASensor1
+      Component = Text1
+      ComponentProperty = 'Text'
+    end
+    object LinkControlToPropertyText2: TLinkControlToProperty
+      Category = 'Quick Bindings'
+      Control = LASensor2
+      Component = Text2
+      ComponentProperty = 'Text'
+    end
+  end
+end
