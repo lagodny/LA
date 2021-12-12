@@ -30,7 +30,7 @@ type
   private
     FConnector: TDCHttpConnector;
     FUpdater: TDataUpdater;
-    FSensor: TDCSensor;
+    FSensor: TLASensor;
     procedure Log(const aMsg: string);
   public
     procedure DoUpdate(Sender: TObject);
@@ -65,10 +65,10 @@ begin
   FConnector.UserName := 'demo';
   FConnector.Password := 'demo';
 
-  FSensor := TDCSensor.Create(Self);
+  FSensor := TLASensor.Create(Self);
   FSensor.ID := '4';
 
-  FUpdater.Attach(TDCSensorLink.Create(FSensor));
+  FUpdater.Attach(TLASensorLink.Create(FSensor));
 
   FUpdater.Connector := FConnector;
 end;

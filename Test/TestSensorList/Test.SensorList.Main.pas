@@ -19,6 +19,12 @@ type
     DataUpdater1: TDataUpdater;
     CheckBox1: TCheckBox;
     LinkControlToPropertyActive: TLinkControlToProperty;
+    Label2: TLabel;
+    LASensor2: TLASensor;
+    LinkControlToPropertyCaption2: TLinkControlToProperty;
+    LASensor3: TLASensor;
+    Label3: TLabel;
+    LinkControlToPropertyCaption3: TLinkControlToProperty;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }

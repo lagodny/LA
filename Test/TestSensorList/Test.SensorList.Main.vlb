@@ -1,27 +1,43 @@
 ﻿[LASensorList1]
-Coordinates=0,0,98,36
+Coordinates=0,0,87,33
 
 []
-Coordinates=117,1,91,36
+Coordinates=72,77,78,36
+Visible=True
 
 [LASensor1]
 Visible=True
-Coordinates=470,20,78,58
+Coordinates=120,0,68,51
 
 [Label1]
-Coordinates=0,0,53,58
+Coordinates=0,0,46,51
 
 [BindingsList1]
-Coordinates=72,1,91,36
+Coordinates=72,1,82,33
 
 [DCHttpConnector1]
-Coordinates=72,1,123,36
+Coordinates=72,1,107,33
 
 [DataUpdater1]
-Coordinates=320,100,94,58
+Coordinates=570,20,81,51
 Visible=True
 ExplicitSubNodes=Active
 
 [CheckBox1]
-Coordinates=60,120,114,58
+Coordinates=420,20,95,51
+
+[Label2]
+Coordinates=0,60,46,51
+Visible=True
+
+[LASensor2]
+Coordinates=120,60,68,51
+Visible=True
+
+[LASensor3]
+Coordinates=120,120,68,51
+Visible=True
+
+[Label3]
+Coordinates=0,120,46,51
 
