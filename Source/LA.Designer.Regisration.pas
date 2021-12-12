@@ -19,7 +19,6 @@ procedure Register;
 implementation
 
 uses
-  Vcl.Dialogs,
   LA.Data.Sensor;
 
 resourcestring
@@ -38,12 +37,9 @@ begin
   case Index of
     0:
     begin
-      ShowMessage(Component.Name);
       var aSensor := TLASensor.Create(Component.Owner);
       aSensor.Name := Designer.UniqueName(aSensor.ClassName);
-      ShowMessage(aSensor.Name);
       aSensor.SensorList := TLASensorList(Component);
-      ShowMessage(aSensor.GetParentComponent.Name);
     end;
   end;
 end;

@@ -11,10 +11,12 @@ uses
   LA.Data.Link;
 
 type
+  TLALinkList = TObjectList<TLALink>;
+
   TLADataSource = class(TComponent, IDCObservable<TLALink>)
   protected
     FLock: TMREWSync;
-    FLinks: TObjectList<TLALink>;
+    FLinks: TLALinkList;
     FLinksChanged: Boolean;
   public
     constructor Create(AOwner: TComponent); override;
@@ -27,6 +29,7 @@ type
 
     procedure DetachObject(aObject: TObject);
 
+    property Links: TLALinkList read FLinks;
   end;
 
 implementation

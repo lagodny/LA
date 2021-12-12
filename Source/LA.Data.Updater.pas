@@ -185,9 +185,11 @@ end;
 
 procedure TDataUpdater.ProcessServerResponce(const aResponce: string);
 const
+  cValueDelimiter = ';';
   cDataDelimiter = #13;
 var
   p1, p2: Integer;
+  aLineID: string;
   i, aLinkIndex, aLinkMaxIndex: Integer;
 begin
   if FLinksChanged then
@@ -202,15 +204,35 @@ begin
 
   FLock.BeginRead;
   try
+    /// из строки вида:
+    ///  id1;value1;status1;moment1$13
+    ///  id2;value2;status2;moment2$13
+    ///  вырезаем строку
+    ///  и эту строку сохраняем в Link с ID = id строки
     for i := 1 to Length(aResponce) do
     begin
-      if aResponce[i] = cDataDelimiter then
+      // нашли конец значения и aLineID еще не найден
+      if (aResponce[i] = cValueDelimiter) and (aLineID = '') then
+      begin
+        aLineID := Copy(aResponce, p1, i - p1);
+
+        // ищем Link для этого ID
+        while (aLinkIndex <= aLinkMaxIndex) and (FLinks[aLinkIndex].GetID <> aLineID) do
+          Inc(aLinkIndex);
+
+        // не нашли Линк - выходим (нет необходимости разбирать оставшуюся часть)
+        if aLinkIndex > aLinkMaxIndex then
+          Break;
+      end
+
+      // нашли конец строки
+      else if aResponce[i] = cDataDelimiter then
       begin
         p2 := i;
         FLinks[aLinkIndex].SetData(Copy(aResponce, p1, p2 - p1));
         p1 := p2 + 1;
-        if aLinkIndex = aLinkMaxIndex then
-          Break;
+        // сбрасываем, чтобы иницировать из следующей строки
+        aLineID := '';
       end;
     end;
 
