@@ -39,7 +39,7 @@ object Form3: TForm3
   object LASensorList1: TLASensorList
     DataSource = DataUpdater1
     Left = 144
-    Top = 224
+    Top = 32
     object LASensor1: TLASensor
       SensorList = LASensorList1
       ID = '1'
@@ -55,6 +55,10 @@ object Form3: TForm3
       ID = '4'
       Enabled = False
     end
+    object LASensor4: TLASensor
+      SensorList = LASensorList1
+      Enabled = False
+    end
   end
   object DCHttpConnector1: TDCHttpConnector
     Address = 'https://dc.tdc.org.ua'
@@ -66,20 +70,20 @@ object Form3: TForm3
     Connected = False
     Https = False
     SendTimeOut = 0
-    Left = 144
-    Top = 344
+    Left = 184
+    Top = 96
   end
   object DataUpdater1: TDataUpdater
     Connector = DCHttpConnector1
     Interval = 1000
-    Left = 144
-    Top = 280
+    Left = 80
+    Top = 96
   end
   object BindingsList1: TBindingsList
     Methods = <>
     OutputConverters = <>
-    Left = 60
-    Top = 237
+    Left = 244
+    Top = 45
     object LinkControlToPropertyText3: TLinkControlToProperty
       Category = 'Quick Bindings'
       Control = LASensor3

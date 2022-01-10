@@ -33,6 +33,12 @@
         <Projects Include="..\Test\_FMX\TestSensorListFMX\TestSensorListFMX.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\TestMac\testmac.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\Test\_FMX\TestBindSourceAdapter\TestBindSourceAdapter.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -131,14 +137,32 @@
     <Target Name="TestSensorListFMX:Make">
         <MSBuild Projects="..\Test\_FMX\TestSensorListFMX\TestSensorListFMX.dproj" Targets="Make"/>
     </Target>
+    <Target Name="testmac">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\TestMac\testmac.dproj"/>
+    </Target>
+    <Target Name="testmac:Clean">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\TestMac\testmac.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="testmac:Make">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\TestMac\testmac.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestBindSourceAdapter">
+        <MSBuild Projects="..\Test\_FMX\TestBindSourceAdapter\TestBindSourceAdapter.dproj"/>
+    </Target>
+    <Target Name="TestBindSourceAdapter:Clean">
+        <MSBuild Projects="..\Test\_FMX\TestBindSourceAdapter\TestBindSourceAdapter.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestBindSourceAdapter:Make">
+        <MSBuild Projects="..\Test\_FMX\TestBindSourceAdapter\TestBindSourceAdapter.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="LA_Fundamentals_Utils;LA_Fundamentals_Crypto;LA_mORMot_Crossplatform;LA_DC;LA_Designer;LA_Test;TestDataUpdater;TestDataComp;Test_SensorList;TestSensorListFMX"/>
+        <CallTarget Targets="LA_Fundamentals_Utils;LA_Fundamentals_Crypto;LA_mORMot_Crossplatform;LA_DC;LA_Designer;LA_Test;TestDataUpdater;TestDataComp;Test_SensorList;TestSensorListFMX;testmac;TestBindSourceAdapter"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="LA_Fundamentals_Utils:Clean;LA_Fundamentals_Crypto:Clean;LA_mORMot_Crossplatform:Clean;LA_DC:Clean;LA_Designer:Clean;LA_Test:Clean;TestDataUpdater:Clean;TestDataComp:Clean;Test_SensorList:Clean;TestSensorListFMX:Clean"/>
+        <CallTarget Targets="LA_Fundamentals_Utils:Clean;LA_Fundamentals_Crypto:Clean;LA_mORMot_Crossplatform:Clean;LA_DC:Clean;LA_Designer:Clean;LA_Test:Clean;TestDataUpdater:Clean;TestDataComp:Clean;Test_SensorList:Clean;TestSensorListFMX:Clean;testmac:Clean;TestBindSourceAdapter:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="LA_Fundamentals_Utils:Make;LA_Fundamentals_Crypto:Make;LA_mORMot_Crossplatform:Make;LA_DC:Make;LA_Designer:Make;LA_Test:Make;TestDataUpdater:Make;TestDataComp:Make;Test_SensorList:Make;TestSensorListFMX:Make"/>
+        <CallTarget Targets="LA_Fundamentals_Utils:Make;LA_Fundamentals_Crypto:Make;LA_mORMot_Crossplatform:Make;LA_DC:Make;LA_Designer:Make;LA_Test:Make;TestDataUpdater:Make;TestDataComp:Make;Test_SensorList:Make;TestSensorListFMX:Make;testmac:Make;TestBindSourceAdapter:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -25,6 +25,7 @@ type
     LinkControlToPropertyActive: TLinkControlToProperty;
     LinkControlToPropertyText: TLinkControlToProperty;
     LinkControlToPropertyText2: TLinkControlToProperty;
+    LASensor4: TLASensor;
   private
     { Private declarations }
   public

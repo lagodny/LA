@@ -1,0 +1,244 @@
+object Form5: TForm5
+  Left = 0
+  Top = 0
+  Caption = 'Form5'
+  ClientHeight = 476
+  ClientWidth = 353
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object ListView1: TListView
+    ItemAppearanceClassName = 'TDynamicAppearance'
+    ItemEditAppearanceClassName = 'TDynamicAppearance'
+    HeaderAppearanceClassName = 'TListHeaderObjects'
+    FooterAppearanceClassName = 'TListHeaderObjects'
+    ItemIndex = 0
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Position.X = 16.000000000000000000
+    Position.Y = 128.000000000000000000
+    Size.Width = 321.000000000000000000
+    Size.Height = 340.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
+      item
+        AppearanceObjectName = 'Name'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.TextAlign = Leading
+        Appearance.WordWrap = True
+        Appearance.Width = 127.000000000000000000
+        Appearance.Height = 44.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'Value'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Width = 169.000000000000000000
+        Appearance.Height = 25.000000000000000000
+        Appearance.Align = Trailing
+        Appearance.PlaceOffset.X = -2.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'Moment'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Width = 169.000000000000000000
+        Appearance.Height = 20.000000000000000000
+        Appearance.Align = Trailing
+        Appearance.PlaceOffset.X = -2.000000000000000000
+        Appearance.PlaceOffset.Y = 24.000000000000000000
+      end>
+    ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
+      item
+        AppearanceObjectName = 'Text1'
+        AppearanceClassName = 'TTextObjectAppearance'
+      end>
+    SearchVisible = True
+    ControlType = Platform
+  end
+  object EditValue: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 2
+    Text = 'Mark Anderson'
+    Position.X = 8.000000000000000000
+    Position.Y = 65.000000000000000000
+    object LabelValue: TLabel
+      Position.Y = -16.000000000000000000
+      TextSettings.WordWrap = False
+      Text = 'Value'
+      TabOrder = 0
+    end
+  end
+  object EditStatus: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 4
+    Text = 'Darkgoldenrod'
+    Position.X = 116.000000000000000000
+    Position.Y = 65.000000000000000000
+    object LabelStatus: TLabel
+      Position.Y = -16.000000000000000000
+      TextSettings.WordWrap = False
+      Text = 'Status'
+      TabOrder = 0
+    end
+  end
+  object LabelMoment: TLabel
+    Position.X = 224.000000000000000000
+    Position.Y = 65.000000000000000000
+    Text = '01.11.2021 0:58:00'
+    TabOrder = 5
+    object LabelMoment2: TLabel
+      Position.Y = -16.000000000000000000
+      TextSettings.WordWrap = False
+      Text = 'Moment'
+      TabOrder = 4
+    end
+  end
+  object NavigatorPrototypeBindSource1: TBindNavigator
+    Position.X = 8.000000000000000000
+    Position.Y = 95.000000000000000000
+    Size.Width = 320.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+    DataSource = PrototypeBindSource1
+    xRadius = 4.000000000000000000
+    yRadius = 4.000000000000000000
+  end
+  object chActive: TCheckBox
+    Position.X = 8.000000000000000000
+    Position.Y = 22.000000000000000000
+    TabOrder = 10
+    Text = 'Active'
+  end
+  object Button1: TButton
+    Position.X = 104.000000000000000000
+    Position.Y = 19.000000000000000000
+    TabOrder = 11
+    Text = 'Button1'
+    OnClick = Button1Click
+  end
+  object PrototypeBindSource1: TPrototypeBindSource
+    AutoActivate = True
+    AutoPost = False
+    FieldDefs = <
+      item
+        Name = 'Name'
+        Generator = 'BitmapNames'
+        ReadOnly = False
+      end
+      item
+        Name = 'Value'
+        Generator = 'ContactNames'
+        ReadOnly = False
+      end
+      item
+        Name = 'Status'
+        Generator = 'ColorsNames'
+        ReadOnly = False
+      end
+      item
+        Name = 'Moment'
+        Generator = 'DateTime'
+        ReadOnly = False
+      end>
+    ScopeMappings = <>
+    OnCreateAdapter = PrototypeBindSource1CreateAdapter
+    Left = 256
+    Top = 168
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 548
+    Top = 101
+    object LinkControlToFieldValue: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = PrototypeBindSource1
+      FieldName = 'Value'
+      Control = EditValue
+      Track = False
+    end
+    object LinkControlToFieldStatus: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = PrototypeBindSource1
+      FieldName = 'Status'
+      Control = EditStatus
+      Track = False
+    end
+    object LinkControlToFieldMoment: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = PrototypeBindSource1
+      FieldName = 'Moment'
+      Control = LabelMoment
+      Direction = linkDataToControl
+      Track = False
+    end
+    object LinkControlToPropertyActive: TLinkControlToProperty
+      Category = 'Quick Bindings'
+      Control = chActive
+      Track = True
+      Component = DataUpdater1
+      ComponentProperty = 'Active'
+    end
+    object LinkListControlToField1: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = PrototypeBindSource1
+      Control = ListView1
+      FillExpressions = <
+        item
+          SourceMemberName = 'Name'
+          ControlMemberName = 'Name'
+        end
+        item
+          SourceMemberName = 'Value'
+          ControlMemberName = 'Value'
+        end
+        item
+          SourceMemberName = 'Moment'
+          ControlMemberName = 'Moment'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+  object DCHttpConnector1: TDCHttpConnector
+    Address = 'https://dc.tdc.org.ua'
+    ConnectTimeOut = 0
+    ReadTimeOut = 0
+    CompressionLevel = 0
+    UserName = 'demo'
+    Password = 'demo'
+    Connected = False
+    Https = False
+    SendTimeOut = 0
+    Left = 240
+    Top = 352
+  end
+  object DataUpdater1: TDataUpdater
+    Connector = DCHttpConnector1
+    Interval = 1000
+    OnUpdate = DataUpdater1Update
+    Left = 128
+    Top = 304
+  end
+  object LASensorList1: TLASensorList
+    DataSource = DataUpdater1
+    Left = 128
+    Top = 240
+    object LASensor1: TLASensor
+      SensorList = LASensorList1
+      ID = '4'
+      Enabled = False
+    end
+    object LASensor2: TLASensor
+      SensorList = LASensorList1
+      ID = '3'
+      Enabled = False
+    end
+    object LASensor3: TLASensor
+      SensorList = LASensorList1
+      ID = '1'
+      Enabled = False
+    end
+  end
+end

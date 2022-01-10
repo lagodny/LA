@@ -90,15 +90,17 @@ type
     FDataSource: TLADataSource;
     procedure SetDataSource(const Value: TLADataSource);
   protected
-    procedure AddSensor(aSensor: TLASensor);
-    procedure RemoveSensor(aSensor: TLASensor);
 
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
+    procedure AddSensor(aSensor: TLASensor);
+    procedure RemoveSensor(aSensor: TLASensor);
+
     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
+    property Senosrs: TList<TLASensor> read FSensors;
   published
     property DataSource: TLADataSource read FDataSource write SetDataSource;
   end;
