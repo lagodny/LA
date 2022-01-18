@@ -38,8 +38,14 @@ type
     procedure PrototypeBindSource1CreateAdapter(Sender: TObject; var ABindSourceAdapter: TBindSourceAdapter);
     procedure DataUpdater1Update(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DoOnIdle(Sender: TObject; var Done: Boolean);
   public
+    FIsIdle: Boolean;
+    FNeedRefresh: Boolean;
     constructor Create(AOwner: TComponent); override;
+    procedure InitListView;
+    procedure RefreshListView;
   end;
 
 var
@@ -61,7 +67,8 @@ begin
     aSensor.Name := 'Sensor' + i.ToString;
     LASensorList1.AddSensor(aSensor);
   end;
-  PrototypeBindSource1.Refresh;
+//  PrototypeBindSource1.Refresh;
+InitListView;
 end;
 
 constructor TForm5.Create(AOwner: TComponent);
@@ -72,8 +79,44 @@ end;
 procedure TForm5.DataUpdater1Update(Sender: TObject);
 begin
 //  (PrototypeBindSource1.InternalAdapter as TListBindSourceAdapter<TLASensor>).Current
-  PrototypeBindSource1.Refresh;
+//  if FIsIdle then
+//  FNeedRefresh := True;
+//    PrototypeBindSource1.Refresh;
 //  PrototypeBindSource1.Refresh;
+  RefreshListView;
+end;
+
+procedure TForm5.DoOnIdle(Sender: TObject; var Done: Boolean);
+begin
+  if FNeedRefresh then
+  begin
+    //PrototypeBindSource1.Refresh;
+    FNeedRefresh := False;
+  end;
+
+  Done := True;
+end;
+
+procedure TForm5.FormCreate(Sender: TObject);
+begin
+  Application.OnIdle := DoOnIdle;
+  InitListView;
+end;
+
+procedure TForm5.InitListView;
+begin
+  ListView1.BeginUpdate;
+  try
+    ListView1.Items.Clear;
+    for var i := 0 to LASensorList1.Senosrs.Count - 1 do
+    begin
+      ListView1.Items.Add; // Items[i].Text := LASensorList1.Senosrs[i].Data;
+      Listview1.Items.AppearanceItem[i].Data['Name'] := LASensorList1.Senosrs[i].Name;
+      Listview1.Items.AppearanceItem[i].Data['Value'] := LASensorList1.Senosrs[i].Value;
+    end;
+  finally
+    ListView1.EndUpdate;
+  end;
 end;
 
 procedure TForm5.PrototypeBindSource1CreateAdapter(Sender: TObject; var ABindSourceAdapter: TBindSourceAdapter);
@@ -81,6 +124,19 @@ begin
   //
   ABindSourceAdapter := TListBindSourceAdapter<TLASensor>.Create(Self,LASensorList1.Senosrs, False);
   //ABindSourceAdapter.Refresh;
+end;
+
+procedure TForm5.RefreshListView;
+begin
+  ListView1.BeginUpdate;
+  try
+    for var i := 0 to ListView1.Items.Count - 1 do
+    begin
+      Listview1.Items.AppearanceItem[i].Data['Value'] := LASensorList1.Senosrs[i].Value;
+    end;
+  finally
+    ListView1.EndUpdate;
+  end;
 end;
 
 end.

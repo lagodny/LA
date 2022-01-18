@@ -37,9 +37,7 @@ contains
   SynCrossPlatformJSON in '..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformJSON.pas',
   SynCrossPlatformREST in '..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformREST.pas',
   SynCrossPlatformSpecific in '..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformSpecific.pas',
-  SynCrossPlatformSynLZ in '..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformSynLZ.pas',
-  SynCrtSock in '..\..\..\Lib\mORMot\SynCrtSock.pas',
-  SynWinSock in '..\..\..\Lib\mORMot\SynWinSock.pas';
+  SynCrossPlatformSynLZ in '..\..\..\Lib\mORMot\CrossPlatform\SynCrossPlatformSynLZ.pas';
 
 end.
 

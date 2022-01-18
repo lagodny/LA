@@ -4,8 +4,7 @@ uses
   System.StartUpCopy,
   FMX.Forms,
   LA.Test.Main in 'LA.Test.Main.pas' {Form5},
-  FMX.ListView in 'FMX.ListView.pas',
-  Data.Bind.Components in 'Data.Bind.Components.pas';
+  FMX.ListView in 'FMX.ListView.pas';
 
 {$R *.res}
 
