@@ -83,9 +83,11 @@ type
     ///  если подключения нет, то пытаемся подключиться
     procedure CheckConnection; virtual;
 
-
     procedure DoConnect; virtual; abstract;
     procedure DoDisconnect; virtual; abstract;
+
+    procedure DoServicesConnect; virtual;
+    procedure DoServicesDisconnect; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -152,6 +154,16 @@ procedure TDCCustomConnector.DoPropChanged;
 begin
   if Connected then
     Disconnect;
+end;
+
+procedure TDCCustomConnector.DoServicesConnect;
+begin
+
+end;
+
+procedure TDCCustomConnector.DoServicesDisconnect;
+begin
+
 end;
 
 procedure TDCCustomConnector.SetAddress(const Value: string);

@@ -6,7 +6,7 @@ uses
   System.Classes, System.SyncObjs, System.SysUtils,
   //IdGlobal, IdTCPClient, IdException,
   SynCrossPlatformREST,
-  LA.Net.Connector, LA.Types.Monitoring,
+  LA.Net.Connector, LA.Types.Monitoring, LA.Net.Connector.Intf,
   LA.Net.DC.Client;
   //LA.DC.mORMotClient;
 
@@ -23,7 +23,7 @@ type
     function InitFrom(const aAddr: string): TDCHttpAddr;
   end;
 
-  TDCHttpConnector = class(TDCCustomConnector)
+  TDCHttpConnector = class(TDCCustomConnector, IDCMonitoring)
   private
     FClient: TSQLRestClientHTTP;
     FMonitoring: IMonitoring;
@@ -56,6 +56,9 @@ type
 
     procedure DoConnect; override;
     procedure DoDisconnect; override;
+
+    procedure DoServicesConnect; override;
+    procedure DoServicesDisconnect; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -70,6 +73,18 @@ type
     property ProxyName: string read FProxyName write SetProxyName;
     property ProxyByPass: string read FProxyByPass write SetProxyByPass;
     property SendTimeOut: Integer read FSendTimeout write SetSendTimeOut;
+  end;
+
+  TDCHttpTrackingConnection = class(TDCHttpConnector, IDCTracking)
+  private
+    FTracking: ITracking;
+  protected
+    procedure DoServicesConnect; override;
+    procedure DoServicesDisconnect; override;
+  public
+    function GetClients: Variant;
+    function GetDevices(const Clients: TIDDynArray): Variant;
+    function GetDevicesData(const Devices: TIDDynArray): Variant;
   end;
 
 
@@ -114,7 +129,8 @@ begin
   try
     if Assigned(FClient) then
     begin
-      FMonitoring := nil;
+      //FMonitoring := nil;
+      DoServicesDisconnect;
       FreeAndNil(FClient);
       if Assigned(OnDisconnect) then
         OnDisconnect(Self);
@@ -122,6 +138,18 @@ begin
   finally
     ClientLock.Leave;
   end;
+end;
+
+procedure TDCHttpConnector.DoServicesConnect;
+begin
+  inherited;
+  FMonitoring :=  TServiceMonitoring.Create(FClient);
+end;
+
+procedure TDCHttpConnector.DoServicesDisconnect;
+begin
+  inherited;
+  FMonitoring := nil;
 end;
 
 function TDCHttpConnector.GetCompressionLevel: Integer;
@@ -243,7 +271,6 @@ end;
 procedure TDCHttpConnector.TryConnectTo(const aAddrLine: string);
 var
   aAddrRec: TDCHttpAddr;
-//  aClient: TSQLRestClientHTTP;
 begin
   aAddrRec.InitFrom(aAddrLine);
 
@@ -255,7 +282,9 @@ begin
       ProxyName, ProxyByPass,
       SendTimeOut, ReadTimeout, ConnectTimeout);
     FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
-    FMonitoring :=  TServiceMonitoring.Create(FClient);
+
+    DoServicesConnect;
+//    FMonitoring :=  TServiceMonitoring.Create(FClient);
   finally
     ClientLock.Leave;
   end;
@@ -322,6 +351,63 @@ begin
     aParams.Free;
   end;
 
+end;
+
+{ TDCHttpTrackingConnection }
+
+procedure TDCHttpTrackingConnection.DoServicesConnect;
+begin
+  inherited;
+  FTracking :=  TServiceTracking.Create(FClient);
+end;
+
+procedure TDCHttpTrackingConnection.DoServicesDisconnect;
+begin
+  inherited;
+  FTracking := nil;
+end;
+
+function TDCHttpTrackingConnection.GetClients: Variant;
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if Assigned(FTracking) then
+      Result := FTracking.GetClients;
+  finally
+    ClientLock.Leave;
+  end;
+end;
+
+
+function TDCHttpTrackingConnection.GetDevices(const Clients: TIDDynArray): Variant;
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if Assigned(FTracking) then
+      Result := FTracking.GetDevices(Clients);
+  finally
+    ClientLock.Leave;
+  end;
+end;
+
+function TDCHttpTrackingConnection.GetDevicesData(const Devices: TIDDynArray): Variant;
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if Assigned(FTracking) then
+      Result := FTracking.GetDevicesData(Devices);
+  finally
+    ClientLock.Leave;
+  end;
 end;
 
 end.

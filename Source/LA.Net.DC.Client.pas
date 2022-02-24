@@ -105,6 +105,58 @@ type
     procedure InitDevicesByID(const IDs: TIntegerDynArray);
   end;
 
+  /// service implemented by TServiceTracking
+  // - you can access this service as such:
+  // !var aTracking: ITracking;
+  // !begin
+  // !   aTracking := TServiceTracking.Create(aClient);
+  // !   // now you can use aTracking methods
+  // !...
+
+  TTrackingTagRec = record
+    sid: String;
+    name: String;
+    addr: String;
+    un: String;
+    kind: Integer;
+  end;
+
+  TTrackingObjectRec = record
+    id: Integer;
+    name: String;
+    groupId: Integer;
+    tags: array of TTrackingTagRec;
+  end;
+
+  TTrackingObjects = array of TTrackingObjectRec;
+
+
+  /// service implemented by TServiceTracking
+  // - you can access this service as such:
+  // !var aTracking: ITracking;
+  // !begin
+  // !   aTracking := TServiceTracking.Create(aClient);
+  // !   // now you can use aTracking methods
+  // !...
+  ITracking = interface(IServiceAbstract)
+    ['{0287BC71-0194-4F9D-8D6F-3CFEE7C6C371}']
+    function GetClients(): Variant;
+    function GetDevices(const Clients: TIDDynArray): Variant;
+    function GetDevicesData(const Devices: TIDDynArray): Variant;
+  end;
+
+  /// implements ITracking from http://localhost:89/DC/Tracking
+  // - this service will run in sicClientDriven mode
+  TServiceTracking = class(TServiceClientAbstractClientDriven,ITracking)
+  public
+    constructor Create(aClient: TSQLRestClientURI); override;
+    function GetClients(): Variant;
+    function GetDevices(const Clients: TIDDynArray): Variant;
+    function GetDevicesData(const Devices: TIDDynArray): Variant;
+  end;
+
+
+
 const
   /// the server port, corresponding to http://localhost:89
   SERVER_PORT = 89;
@@ -176,6 +228,18 @@ function Variant2THistoryRecExtArr(const _variant: variant): THistoryRecExtArr;
 function THistoryRecExtArr2Variant(const _array: THistoryRecExtArr): variant;
 
 function TIntegerDynArray2Variant(const _array: TIntegerDynArray): variant;
+
+function Variant2TTrackingObjects(const _variant: variant): TTrackingObjects;
+function TTrackingObjects2Variant(const _array: TTrackingObjects): variant;
+function Variant2TTrackingObjectRec(_variant: variant): TTrackingObjectRec;
+function TTrackingObjectRec2Variant(const _record: TTrackingObjectRec): variant;
+function Variant2TTrackingTagRec(_variant: variant): TTrackingTagRec;
+function TTrackingTagRec2Variant(const _record: TTrackingTagRec): variant;
+
+function TIDDynArray2Variant(const _array: TIDDynArray): variant;
+
+
+
 
 
 implementation
@@ -436,6 +500,90 @@ begin
 end;
 
 
+function Variant2TTrackingObjects(const _variant: variant): TTrackingObjects;
+var i: integer;
+    arr: PJSONVariantData;
+begin
+  arr := JSONVariantDataSafe(_variant,jvArray);
+  SetLength(result,arr^.Count);
+  for i := 0 to arr^.Count-1 do
+    result[i] := Variant2TTrackingObjectRec(arr^.Values[i]);
+end;
+
+function TTrackingObjects2Variant(const _array: TTrackingObjects): variant;
+var i: integer;
+    res: TJSONVariantData;
+begin
+  res.Init;
+  for i := 0 to high(_array) do
+    res.AddValue(TTrackingObjectRec2Variant(_array[i]));
+  result := variant(res);
+end;
+
+function Variant2TTrackingObjectRec(_variant: variant): TTrackingObjectRec;
+var _a: integer;
+    _arr: PJSONVariantData;
+begin
+  result.id := _variant.id;
+  result.name := _variant.name;
+  result.groupId := _variant.groupId;
+  _arr := JSONVariantDataSafe(_variant.tags,jvArray);
+  SetLength(result.tags,_arr^.Count);
+  for _a := 0 to high(result.tags) do
+    result.tags[_a] := Variant2TTrackingTagRec(_arr^.Values[_a]);
+end;
+
+function TTrackingObjectRec2Variant(const _record: TTrackingObjectRec): variant;
+var i: integer;
+    res: TJSONVariantData;
+begin
+  res.Init;
+  res.SetPath('id',_record.id);
+  res.SetPath('name',_record.name);
+  res.SetPath('groupId',_record.groupId);
+  with res.EnsureData('tags')^ do
+    for i := 0 to high(_record.tags) do
+      AddValue(TTrackingTagRec2Variant(_record.tags[i]));
+  result := variant(res);
+end;
+
+function Variant2TTrackingTagRec(_variant: variant): TTrackingTagRec;
+var _a: integer;
+    _arr: PJSONVariantData;
+begin
+  result.sid := _variant.sid;
+  result.name := _variant.name;
+  result.addr := _variant.addr;
+  result.un := _variant.un;
+  result.kind := _variant.kind;
+end;
+
+function TTrackingTagRec2Variant(const _record: TTrackingTagRec): variant;
+var i: integer;
+    res: TJSONVariantData;
+begin
+  res.Init;
+  res.SetPath('sid',_record.sid);
+  res.SetPath('name',_record.name);
+  res.SetPath('addr',_record.addr);
+  res.SetPath('un',_record.un);
+  res.SetPath('kind',_record.kind);
+  result := variant(res);
+end;
+
+function TIDDynArray2Variant(const _array: TIDDynArray): variant;
+var i: integer;
+    res: TJSONVariantData;
+begin
+  res.Init;
+  for i := 0 to high(_array) do
+    res.AddValue((_array[i]));
+  result := variant(res);
+end;
+
+
+
+
 
 
 {$HINTS ON} // for H2164 hints of unused variables
@@ -645,6 +793,41 @@ begin
     [TIntegerDynArray2Variant(IDs)],res);
 end;
 
+
+{ TServiceTracking }
+
+constructor TServiceTracking.Create(aClient: TSQLRestClientURI);
+begin
+  fServiceName := 'Tracking';
+  fServiceURI := 'Tracking';
+  fInstanceImplementation := sicClientDriven;
+  fContractExpected := '2FF6A08E0B28DB55';
+  inherited Create(aClient);
+end;
+
+function TServiceTracking.GetClients(): Variant;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'GetClients',1, // raise EServiceException on error
+    [],res);
+  Result := res[0];
+end;
+
+function TServiceTracking.GetDevices(const Clients: TIDDynArray): Variant;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'GetDevices',1, // raise EServiceException on error
+    [TIDDynArray2Variant(Clients)],res);
+  Result := res[0];
+end;
+
+function TServiceTracking.GetDevicesData(const Devices: TIDDynArray): Variant;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'GetDevicesData',1, // raise EServiceException on error
+    [TIDDynArray2Variant(Devices)],res);
+  Result := res[0];
+end;
 
 end.
 
