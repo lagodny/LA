@@ -14,11 +14,11 @@ type
     function InitFrom(const aAddr: string): TDCTcpAddr;
   end;
 
-  TDCTCPConnector = class(TDCCustomConnector)
+  TLATCPConnector = class(TLACustomConnector)
   private
     FLock: TCriticalSection;
     FClient: TIdTCPClient;
-    FIntercept: TDCTCPIntercept;
+    FIntercept: TLATCPIntercept;
 
     FEncrypt: Boolean;
     FCompressionLevel: Integer;
@@ -103,7 +103,7 @@ type
     procedure DoDisconnect; override;
 
 
-    property Intercept: TDCTCPIntercept read FIntercept;
+    property Intercept: TLATCPIntercept read FIntercept;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -156,13 +156,13 @@ const
 
 { TDCTCPConnector }
 
-procedure TDCTCPConnector.Authorize(const aUser, aPassword: string);
+procedure TLATCPConnector.Authorize(const aUser, aPassword: string);
 begin
-  DoCommandFmt('Login %s;%s;1', [aUser, TDCStrUtils.StrToHex(aPassword, '')]);
+  DoCommandFmt('Login %s;%s;1', [aUser, TLAStrUtils.StrToHex(aPassword, '')]);
   ReadLn; // вычитываем приветствие
 end;
 
-procedure TDCTCPConnector.CheckCommandResult;
+procedure TLATCPConnector.CheckCommandResult;
 var
   aStatus: string;
 begin
@@ -173,7 +173,7 @@ begin
     raise EDCConnectorUnknownAnswerException.Create('Нестандартый ответ на команду');
 end;
 
-procedure TDCTCPConnector.ClearIncomingData;
+procedure TLATCPConnector.ClearIncomingData;
 begin
   while not FClient.IOHandler.InputBufferIsEmpty do
   begin
@@ -182,7 +182,7 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.Connect;
+procedure TLATCPConnector.Connect;
 begin
   LockClient('Connect');
   try
@@ -192,12 +192,12 @@ begin
   end;
 end;
 
-constructor TDCTCPConnector.Create(AOwner: TComponent);
+constructor TLATCPConnector.Create(AOwner: TComponent);
 begin
   inherited;
 
   FLock := TCriticalSection.Create;
-  FIntercept := TDCTCPIntercept.Create(nil);
+  FIntercept := TLATCPIntercept.Create(nil);
 
   FClient := TIdTCPClient.Create(nil);
   FClient.ConnectTimeout := cDefConnectTimeout;
@@ -212,7 +212,7 @@ begin
   FLanguage := 'ru';
 end;
 
-destructor TDCTCPConnector.Destroy;
+destructor TLATCPConnector.Destroy;
 begin
   FClient.Free;
   FIntercept.Free;
@@ -220,7 +220,7 @@ begin
   inherited;
 end;
 
-procedure TDCTCPConnector.Disconnect;
+procedure TLATCPConnector.Disconnect;
 begin
   LockClient('Connect');
   try
@@ -230,19 +230,19 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.DoCommand(const aCommand: string);
+procedure TLATCPConnector.DoCommand(const aCommand: string);
 begin
   SendCommand(aCommand);
   CheckCommandResult;
 end;
 
-procedure TDCTCPConnector.DoCommandFmt(const aCommand: string; const Args: array of TVarRec);
+procedure TLATCPConnector.DoCommandFmt(const aCommand: string; const Args: array of TVarRec);
 begin
   SendCommandFmt(aCommand, Args);
   CheckCommandResult;
 end;
 
-procedure TDCTCPConnector.DoConnect;
+procedure TLATCPConnector.DoConnect;
 begin
   if not FClient.Connected then
     TryConnect
@@ -258,7 +258,7 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.DoDisconnect;
+procedure TLATCPConnector.DoDisconnect;
 begin
   FClient.Disconnect;
   if not (csDestroying in ComponentState) then
@@ -269,7 +269,7 @@ begin
 
 end;
 
-function TDCTCPConnector.ExtractValue(var aValues, aValue: string; var aErrorCode: integer; var aErrorStr: string;
+function TLATCPConnector.ExtractValue(var aValues, aValue: string; var aErrorCode: integer; var aErrorStr: string;
   var aMoment: TDateTime): Boolean;
 var
   i, p1: integer;
@@ -329,7 +329,7 @@ begin
 
 end;
 
-function TDCTCPConnector.GenerateCryptKey(const aCharCount: Integer): RawByteString;
+function TLATCPConnector.GenerateCryptKey(const aCharCount: Integer): RawByteString;
 var
   i: integer;
 begin
@@ -340,32 +340,32 @@ begin
     Result := Result + ByteChar(Random(256));
 end;
 
-function TDCTCPConnector.GetCompressionLevel: Integer;
+function TLATCPConnector.GetCompressionLevel: Integer;
 begin
   Result := FCompressionLevel;
 end;
 
-function TDCTCPConnector.GetConnected: Boolean;
+function TLATCPConnector.GetConnected: Boolean;
 begin
   Result := FClient.Connected;
 end;
 
-function TDCTCPConnector.GetConnectTimeOut: Integer;
+function TLATCPConnector.GetConnectTimeOut: Integer;
 begin
   Result := FClient.ConnectTimeout;
 end;
 
-function TDCTCPConnector.GetEncrypt: boolean;
+function TLATCPConnector.GetEncrypt: boolean;
 begin
   Result := FEncrypt;
 end;
 
-function TDCTCPConnector.GetReadTimeOut: Integer;
+function TLATCPConnector.GetReadTimeOut: Integer;
 begin
   Result := FClient.ReadTimeout;
 end;
 
-procedure TDCTCPConnector.GetServerSettings;
+procedure TLATCPConnector.GetServerSettings;
 var
   aCount: Integer;
   s: TStrings;
@@ -420,7 +420,7 @@ end;
 //
 //end;
 
-procedure TDCTCPConnector.LockAndDoCommand(const aCommand: string);
+procedure TLATCPConnector.LockAndDoCommand(const aCommand: string);
 begin
   LockClient('LockAndDoCommand: ' + aCommand);
   try
@@ -437,12 +437,12 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.LockAndDoCommandFmt(const aCommand: string; const Args: array of TVarRec);
+procedure TLATCPConnector.LockAndDoCommandFmt(const aCommand: string; const Args: array of TVarRec);
 begin
   LockAndDoCommand(Format(aCommand, Args));
 end;
 
-function TDCTCPConnector.LockAndGetStringsCommand(const aCommand: string): string;
+function TLATCPConnector.LockAndGetStringsCommand(const aCommand: string): string;
 var
   aByteCount: integer;
 begin
@@ -478,7 +478,7 @@ begin
   end;
 end;
 
-function TDCTCPConnector.LockClient(const aMessage: string): TIdTCPClient;
+function TLATCPConnector.LockClient(const aMessage: string): TIdTCPClient;
 begin
   //OPCLog.WriteToLogFmt('%d: LockClient %s', [GetCurrentThreadId, aMessage]);
   FLock.Enter;
@@ -486,7 +486,7 @@ begin
   //OPCLog.WriteToLogFmt('%d: LockClient OK. %s', [GetCurrentThreadId, aMessage]);
 end;
 
-function TDCTCPConnector.LockDoCommandReadLn(const aCommand: string): string;
+function TLATCPConnector.LockDoCommandReadLn(const aCommand: string): string;
 begin
   LockClient('LockDoCommandReadLn');
   try
@@ -504,7 +504,7 @@ begin
   end;
 end;
 
-function TDCTCPConnector.LockDoCommandReadLnFmt(const aCommand: string; const Args: array of TVarRec): string;
+function TLATCPConnector.LockDoCommandReadLnFmt(const aCommand: string; const Args: array of TVarRec): string;
 begin
   LockClient('LockDoCommandReadLnFmt');
   try
@@ -522,30 +522,30 @@ begin
   end;
 end;
 
-function TDCTCPConnector.ProcessTCPException(const e: EIdException): Boolean;
+function TLATCPConnector.ProcessTCPException(const e: EIdException): Boolean;
 begin
   Result := True;
   TDCLog.WriteToLog(e.Message);
   DoDisconnect;
 end;
 
-function TDCTCPConnector.ReadLn: string;
+function TLATCPConnector.ReadLn: string;
 begin
   Result := FClient.IOHandler.ReadLn;
 end;
 
-procedure TDCTCPConnector.SendCommand(const aCommand: string);
+procedure TLATCPConnector.SendCommand(const aCommand: string);
 begin
   ClearIncomingData;
   FClient.IOHandler.WriteLn(aCommand);
 end;
 
-procedure TDCTCPConnector.SendCommandFmt(const aCommand: string; const Args: array of TVarRec);
+procedure TLATCPConnector.SendCommandFmt(const aCommand: string; const Args: array of TVarRec);
 begin
   SendCommand(Format(aCommand, Args));
 end;
 
-function TDCTCPConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
+function TLATCPConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
 begin
 
 end;
@@ -575,7 +575,7 @@ end;
 //  end;
 //end;
 
-procedure TDCTCPConnector.SetCompressionLevel(const Value: Integer);
+procedure TLATCPConnector.SetCompressionLevel(const Value: Integer);
 begin
   if CompressionLevel <> Value then
   begin
@@ -585,7 +585,7 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.SetConnectionParams;
+procedure TLATCPConnector.SetConnectionParams;
 const
   cStringEncoding = '';  //'UTF8';
   { TODO : проверить, почему не работает передача списка пользователей, если задан UTF8 }
@@ -606,8 +606,8 @@ begin
 	      //CompressionLevel,
 	      Ord(EnableMessage),
 	      Description,
-	      TDCSystemUtils.GetLocalUserName,
-	      TDCSystemUtils.GetComputerName,
+	      TLASystemUtils.GetLocalUserName,
+	      TLASystemUtils.GetComputerName,
 	      FClient.IOHandler.MaxLineLength,
         Language,
         cStringEncoding
@@ -623,7 +623,7 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.SetConnectTimeOut(const Value: Integer);
+procedure TLATCPConnector.SetConnectTimeOut(const Value: Integer);
 begin
   if ConnectTimeOut <> Value then
   begin
@@ -632,7 +632,7 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.SetEnableMessage(const Value: Boolean);
+procedure TLATCPConnector.SetEnableMessage(const Value: Boolean);
 begin
   if EnableMessage <> Value then
   begin
@@ -641,7 +641,7 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.SetEncrypt(const Value: boolean);
+procedure TLATCPConnector.SetEncrypt(const Value: boolean);
 begin
   if Encrypt <> Value then
   begin
@@ -652,7 +652,7 @@ begin
 end;
 
 
-procedure TDCTCPConnector.SetLanguage(const Value: string);
+procedure TLATCPConnector.SetLanguage(const Value: string);
 begin
   if Language <> Value then
   begin
@@ -661,7 +661,7 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.SetProtocolVersion(const Value: Integer);
+procedure TLATCPConnector.SetProtocolVersion(const Value: Integer);
 begin
   if ProtocolVersion <> Value then
   begin
@@ -670,7 +670,7 @@ begin
   end;
 end;
 
-procedure TDCTCPConnector.SetReadTimeOut(const Value: Integer);
+procedure TLATCPConnector.SetReadTimeOut(const Value: Integer);
 begin
   if ReadTimeOut <> Value then
   begin
@@ -680,7 +680,7 @@ begin
 
 end;
 
-procedure TDCTCPConnector.TryConnectTo(const aAddrLine: string);
+procedure TLATCPConnector.TryConnectTo(const aAddrLine: string);
 var
   aAddrRec: TDCTcpAddr;
 begin
@@ -777,14 +777,14 @@ end;
 //  end;
 //end;
 
-procedure TDCTCPConnector.UnLockClient(const aMessage: string);
+procedure TLATCPConnector.UnLockClient(const aMessage: string);
 begin
   //OPCLog.WriteToLogFmt('%d: UnLockClient %s', [GetCurrentThreadId, aMessage]);
   FLock.Leave;
   //OPCLog.WriteToLogFmt('%d: UnLockClient OK. %s', [GetCurrentThreadId, aMessage]);
 end;
 
-procedure TDCTCPConnector.UpdateComressionLevel(const aLock: Boolean);
+procedure TLATCPConnector.UpdateComressionLevel(const aLock: Boolean);
 begin
   if Connected then
   begin
@@ -807,7 +807,7 @@ begin
   FIntercept.CompressionLevel := CompressionLevel;
 end;
 
-procedure TDCTCPConnector.UpdateEncrypted(const aLock: Boolean);
+procedure TLATCPConnector.UpdateEncrypted(const aLock: Boolean);
 var
   aCode: RawByteString;
   aCryptKey: RawByteString;
@@ -836,7 +836,7 @@ begin
         aCode := RSAEncryptStr(rsaetRSAES_PKCS1, aPub, aCryptKey);
         RSAPublicKeyFinalise(aPub);
 
-        DoCommandFmt('SetCryptKey2 %s', [TDCStrUtils.StrToHex(aCode, '')]);
+        DoCommandFmt('SetCryptKey2 %s', [TLAStrUtils.StrToHex(aCode, '')]);
       except
         on e: EIdException do
           if ProcessTCPException(e) then

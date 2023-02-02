@@ -1,4 +1,4 @@
-package LA;
+﻿package LA;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -25,28 +25,9 @@ package LA;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'LA'}
-{$LIBSUFFIX AUTO}
 {$IMPLICITBUILD ON}
 
 requires
-  rtl,
-  IndySystem,
-  IndyProtocols,
-  IndyCore,
-  DCPcrypt,
-  LA.Fundamentals.Utils,
-  LA.Fundamentals.Crypto,
-  LA.mORMot.Crossplatform;
-
-contains
-  LA.DC.CustomConnector in '..\Source\LA.DC.CustomConnector.pas',
-  LA.DC.HTTPConnector in '..\Source\LA.DC.HTTPConnector.pas',
-  LA.DC.mORMotClient in '..\Source\Extra\LA.DC.mORMotClient.pas',
-  LA.DC.TCPConnector in '..\Source\LA.DC.TCPConnector.pas',
-  LA.DC.TCPIntercept in '..\Source\LA.DC.TCPIntercept.pas',
-  LA.DC.Log in '..\Source\LA.DC.Log.pas',
-  LA.DC.StrUtils in '..\Source\LA.DC.StrUtils.pas',
-  LA.DC.SystemUtils in '..\Source\LA.DC.SystemUtils.pas';
+  rtl;
 
 end.

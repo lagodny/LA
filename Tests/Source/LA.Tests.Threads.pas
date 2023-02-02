@@ -9,9 +9,9 @@ uses
 
 type
   [TestFixture]
-  TTest_TDCIntervalThread = class
+  TTest_TLAIntervalThread = class
   private
-    CUT: TDCIntervalThread;
+    CUT: TLAIntervalThread;
     procedure DoTerminate(Sender: TObject);
   public
     [Setup]
@@ -24,22 +24,22 @@ type
 
 implementation
 
-procedure TTest_TDCIntervalThread.DoTerminate(Sender: TObject);
+procedure TTest_TLAIntervalThread.DoTerminate(Sender: TObject);
 begin
   CUT := nil;
 end;
 
-procedure TTest_TDCIntervalThread.Setup;
+procedure TTest_TLAIntervalThread.Setup;
 begin
 end;
 
-procedure TTest_TDCIntervalThread.TearDown;
+procedure TTest_TLAIntervalThread.TearDown;
 begin
 end;
 
-procedure TTest_TDCIntervalThread.TestStartStopThread;
+procedure TTest_TLAIntervalThread.TestStartStopThread;
 begin
-  CUT := TDCIntervalThread.CreateInterval(True, 100);
+  CUT := TLAIntervalThread.CreateInterval(True, 100);
   CUT.FreeOnTerminate := True;
   CUT.OnTerminate := DoTerminate;
   CUT.Start;
@@ -54,6 +54,6 @@ begin
 end;
 
 initialization
-  TDUnitX.RegisterTestFixture(TTest_TDCIntervalThread);
+  TDUnitX.RegisterTestFixture(TTest_TLAIntervalThread);
 
 end.

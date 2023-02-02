@@ -13,18 +13,11 @@ type
     LASensorList1: TLASensorList;
     LASensor1: TLASensor;
     Label1: TLabel;
-    BindingsList1: TBindingsList;
-    LinkControlToPropertyCaption: TLinkControlToProperty;
-    DCHttpConnector1: TDCHttpConnector;
-    DataUpdater1: TDataUpdater;
+    DCHttpConnector1: TLAHttpConnector;
+    DataUpdater1: TLADataUpdater;
     CheckBox1: TCheckBox;
-    LinkControlToPropertyActive: TLinkControlToProperty;
     Label2: TLabel;
-    LASensor2: TLASensor;
-    LinkControlToPropertyCaption2: TLinkControlToProperty;
-    LASensor3: TLASensor;
     Label3: TLabel;
-    LinkControlToPropertyCaption3: TLinkControlToProperty;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }

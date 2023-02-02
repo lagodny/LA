@@ -10,7 +10,7 @@ type
   [TestFixture]
   TTestTDCCustomConnector = class
   private
-    FConnector: TDCHttpConnector;
+    FConnector: TLAHttpConnector;
   public
     [Setup]
     procedure Setup;
@@ -31,7 +31,7 @@ uses
 
 procedure TTestTDCCustomConnector.Setup;
 begin
-  FConnector := TDCHttpConnector.Create(nil);
+  FConnector := TLAHttpConnector.Create(nil);
   FConnector.UserName := cUserName;
   FConnector.Password := cPassword;
 end;

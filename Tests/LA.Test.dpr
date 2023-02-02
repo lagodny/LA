@@ -17,10 +17,11 @@ uses
   LA.Tests.Net.Connector.Http in 'Source\LA.Tests.Net.Connector.Http.pas',
   LA.Tests.Net.Consts in 'Source\LA.Tests.Net.Consts.pas',
   LA.Tests.Data.Updater in 'Source\LA.Tests.Data.Updater.pas',
-  LA.Tests.Threads in 'Source\LA.Tests.Threads.pas';
+  LA.Tests.Threads in 'Source\LA.Tests.Threads.pas',
+  LA.Tests.Data.Sensor in 'Source\LA.Tests.Data.Sensor.pas',
+  LA.Tests.Net.Connector.Http.Tracking in 'Source\LA.Tests.Net.Connector.Http.Tracking.pas';
 
-
-{$IFNDEF TESTINSIGHT}
+{$IFDEF TESTINSIGHT}
 var
   runner: ITestRunner;
   results: IRunResults;

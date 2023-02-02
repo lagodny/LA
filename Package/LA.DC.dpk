@@ -50,11 +50,8 @@ contains
   LA.Utils.Str in '..\Source\LA.Utils.Str.pas',
   LA.Utils.System in '..\Source\LA.Utils.System.pas',
   LA.Data.Link.Intf in '..\Source\LA.Data.Link.Intf.pas',
-  LA.Data.Link in '..\Source\LA.Data.Link.pas',
   LA.Data.Link.Sensor in '..\Source\LA.Data.Link.Sensor.pas',
-  LA.Data.Link.Tracker in '..\Source\LA.Data.Link.Tracker.pas',
   LA.Data.Sensor in '..\Source\LA.Data.Sensor.pas',
-  LA.Data.Tracker in '..\Source\LA.Data.Tracker.pas',
   LA.Data.Source.Intf in '..\Source\LA.Data.Source.Intf.pas',
   LA.Data.Updater in '..\Source\LA.Data.Updater.pas',
   LA.Threads in '..\Source\LA.Threads.pas',
@@ -62,7 +59,14 @@ contains
   LA.Net.DC.Client in '..\Source\LA.Net.DC.Client.pas',
   LA.Types.Monitoring in '..\Source\LA.Types.Monitoring.pas',
   LA.Registration in '..\Source\LA.Registration.pas',
-  LA.Data.SensorList in '..\Source\LA.Data.SensorList.pas',
-  LA.Data.Source in '..\Source\LA.Data.Source.pas';
+  LA.Data.Source in '..\Source\LA.Data.Source.pas',
+  LA.Data.Types in '..\Source\LA.Data.Types.pas',
+  LA.Data.Sensor.Updater in '..\Source\LA.Data.Sensor.Updater.pas',
+  LA.Data.Tracker.Updater in '..\Source\LA.Data.Tracker.Updater.pas',
+  LA.Data.Link.Tracker in '..\Source\LA.Data.Link.Tracker.pas',
+  LA.Types.Tracker in '..\Source\LA.Types.Tracker.pas',
+  LA.Net.Connector.Utils in '..\Source\LA.Net.Connector.Utils.pas',
+  LA.Data.Tracking.Manager in '..\Source\LA.Data.Tracking.Manager.pas',
+  LA.Data.Tracking.Model in '..\Source\LA.Data.Tracking.Model.pas';
 
 end.

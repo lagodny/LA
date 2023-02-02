@@ -41,7 +41,7 @@ type
 
   /// класс подключения к серверу Мониторинга
   ///  его наследники реализуют различные протоколы взаимодейтвия с сервером
-  TDCCustomConnector = class(TComponent, IDCConnector)
+  TLACustomConnector = class(TComponent, ILAConnector)
   private
     FClientLock: TCriticalSection;
     FAddress: string;
@@ -119,7 +119,7 @@ type
     property Password: string read FPassword write SetPassword;
 
     // состояние подключения
-    property Connected: Boolean read GetConnected write SetConnected;
+    property Connected: Boolean read GetConnected write SetConnected stored False;
 
     /// как представиться серверу
     property Description: string read FDescription write SetDescription;
@@ -132,41 +132,41 @@ type
 implementation
 
 { TDCCustomConnector }
-procedure TDCCustomConnector.CheckConnection;
+procedure TLACustomConnector.CheckConnection;
 begin
   if not Connected then
     DoConnect;
 end;
 
-constructor TDCCustomConnector.Create(AOwner: TComponent);
+constructor TLACustomConnector.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FClientLock := TCriticalSection.Create;
 end;
 
-destructor TDCCustomConnector.Destroy;
+destructor TLACustomConnector.Destroy;
 begin
   FClientLock.Free;
   inherited;
 end;
 
-procedure TDCCustomConnector.DoPropChanged;
+procedure TLACustomConnector.DoPropChanged;
 begin
   if Connected then
     Disconnect;
 end;
 
-procedure TDCCustomConnector.DoServicesConnect;
+procedure TLACustomConnector.DoServicesConnect;
 begin
 
 end;
 
-procedure TDCCustomConnector.DoServicesDisconnect;
+procedure TLACustomConnector.DoServicesDisconnect;
 begin
 
 end;
 
-procedure TDCCustomConnector.SetAddress(const Value: string);
+procedure TLACustomConnector.SetAddress(const Value: string);
 begin
   if Address <> Value then
   begin
@@ -175,7 +175,7 @@ begin
   end;
 end;
 
-procedure TDCCustomConnector.SetConnected(const Value: Boolean);
+procedure TLACustomConnector.SetConnected(const Value: Boolean);
 begin
   if Value <> Connected then
   begin
@@ -186,7 +186,7 @@ begin
   end;
 end;
 
-procedure TDCCustomConnector.SetDescription(const Value: string);
+procedure TLACustomConnector.SetDescription(const Value: string);
 begin
   if Description <> Value then
   begin
@@ -195,7 +195,7 @@ begin
   end;
 end;
 
-procedure TDCCustomConnector.SetPassword(const Value: string);
+procedure TLACustomConnector.SetPassword(const Value: string);
 begin
   if Password <> Value then
   begin
@@ -204,7 +204,7 @@ begin
   end;
 end;
 
-procedure TDCCustomConnector.SetUserName(const Value: string);
+procedure TLACustomConnector.SetUserName(const Value: string);
 begin
   if UserName <> Value then
   begin
@@ -213,7 +213,7 @@ begin
   end;
 end;
 
-procedure TDCCustomConnector.TryConnect;
+procedure TLACustomConnector.TryConnect;
 var
   i: Integer;
   aAddressList: TStringList;

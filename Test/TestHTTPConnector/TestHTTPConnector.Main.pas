@@ -28,7 +28,7 @@ type
     procedure bSensorValueClick(Sender: TObject);
     procedure bGroupSensorValueClick(Sender: TObject);
   private
-    FConnector: TDCHTTPConnector;
+    FConnector: TLAHTTPConnector;
     procedure AddToLog(const aMessage: string);
   public
     { Public declarations }
@@ -59,7 +59,7 @@ end;
 
 procedure TMainForm.bCreateClick(Sender: TObject);
 begin
-  FConnector := TDCHTTPConnector.Create(Self);
+  FConnector := TLAHTTPConnector.Create(Self);
   FConnector.UserName := 'Лагодный';
   FConnector.Password := '314';
   FConnector.Address := 'dc.tdc.org.ua:80';

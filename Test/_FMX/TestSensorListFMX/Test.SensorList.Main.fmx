@@ -3,7 +3,7 @@ object Form3: TForm3
   Top = 0
   Caption = 'Form3'
   ClientHeight = 480
-  ClientWidth = 306
+  ClientWidth = 294
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -14,21 +14,8 @@ object Form3: TForm3
     Size.Width = 193.000000000000000000
     Size.Height = 25.000000000000000000
     Size.PlatformDefault = False
+    Text = '...'
     TextSettings.HorzAlign = Leading
-    object Text2: TText
-      Position.Y = 32.000000000000000000
-      Size.Width = 193.000000000000000000
-      Size.Height = 25.000000000000000000
-      Size.PlatformDefault = False
-      TextSettings.HorzAlign = Leading
-      object Text3: TText
-        Position.Y = 32.000000000000000000
-        Size.Width = 193.000000000000000000
-        Size.Height = 25.000000000000000000
-        Size.PlatformDefault = False
-        TextSettings.HorzAlign = Leading
-      end
-    end
   end
   object CheckBox1: TCheckBox
     Position.X = 24.000000000000000000
@@ -36,60 +23,84 @@ object Form3: TForm3
     TabOrder = 6
     Text = 'CheckBox1'
   end
+  object Text2: TText
+    Position.X = 24.000000000000000000
+    Position.Y = 90.000000000000000000
+    Size.Width = 193.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    Text = '...'
+    TextSettings.HorzAlign = Leading
+  end
+  object Text3: TText
+    Position.X = 24.000000000000000000
+    Position.Y = 123.000000000000000000
+    Size.Width = 193.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    Text = '...'
+    TextSettings.HorzAlign = Leading
+  end
   object LASensorList1: TLASensorList
     DataSource = DataUpdater1
-    Left = 144
-    Top = 32
+    Left = 56
+    Top = 216
     object LASensor1: TLASensor
+      Link.ID = '1'
+      Link.DataSource = DataUpdater1
+      Link.Value = '...'
       SensorList = LASensorList1
-      ID = '1'
-      Enabled = False
+      Value = '...'
     end
     object LASensor2: TLASensor
+      Link.ID = '2'
+      Link.DataSource = DataUpdater1
+      Link.Value = '...'
       SensorList = LASensorList1
-      ID = '3'
-      Enabled = False
+      Value = '...'
     end
     object LASensor3: TLASensor
+      Link.ID = '3'
+      Link.DataSource = DataUpdater1
+      Link.Value = '...'
       SensorList = LASensorList1
-      ID = '4'
-      Enabled = False
+      Value = '...'
     end
     object LASensor4: TLASensor
+      Link.DataSource = DataUpdater1
       SensorList = LASensorList1
-      Enabled = False
+    end
+    object LASensor5: TLASensor
+      Link.DataSource = DataUpdater1
+      SensorList = LASensorList1
+    end
+    object LASensor6: TLASensor
+      Link.DataSource = DataUpdater1
+      SensorList = LASensorList1
     end
   end
-  object DCHttpConnector1: TDCHttpConnector
-    Address = 'https://dc.tdc.org.ua'
+  object DCHttpConnector1: TLAHttpConnector
+    Address = 'localhost:89;https://dc.tdc.org.ua;'
     ConnectTimeOut = 0
     ReadTimeOut = 0
     CompressionLevel = 0
     UserName = 'demo'
     Password = 'demo'
-    Connected = False
     Https = False
     SendTimeOut = 0
-    Left = 184
-    Top = 96
+    Left = 168
+    Top = 296
   end
-  object DataUpdater1: TDataUpdater
+  object DataUpdater1: TLADataUpdater
     Connector = DCHttpConnector1
-    Interval = 1000
-    Left = 80
-    Top = 96
+    Left = 56
+    Top = 296
   end
   object BindingsList1: TBindingsList
     Methods = <>
     OutputConverters = <>
-    Left = 244
-    Top = 45
-    object LinkControlToPropertyText3: TLinkControlToProperty
-      Category = 'Quick Bindings'
-      Control = LASensor3
-      Component = Text3
-      ComponentProperty = 'Text'
-    end
+    Left = 156
+    Top = 213
     object LinkControlToPropertyActive: TLinkControlToProperty
       Category = 'Quick Bindings'
       Control = CheckBox1
@@ -107,6 +118,12 @@ object Form3: TForm3
       Category = 'Quick Bindings'
       Control = LASensor2
       Component = Text2
+      ComponentProperty = 'Text'
+    end
+    object LinkControlToPropertyText3: TLinkControlToProperty
+      Category = 'Quick Bindings'
+      Control = LASensor3
+      Component = Text3
       ComponentProperty = 'Text'
     end
   end

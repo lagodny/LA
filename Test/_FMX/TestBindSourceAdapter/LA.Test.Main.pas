@@ -25,8 +25,8 @@ type
     LabelMoment2: TLabel;
     LinkControlToFieldMoment: TLinkControlToField;
     NavigatorPrototypeBindSource1: TBindNavigator;
-    DCHttpConnector1: TDCHttpConnector;
-    DataUpdater1: TDataUpdater;
+    DCHttpConnector1: TLAHttpConnector;
+    DataUpdater1: TLADataUpdater;
     LASensorList1: TLASensorList;
     LASensor1: TLASensor;
     LASensor2: TLASensor;
@@ -54,6 +54,9 @@ var
 implementation
 
 {$R *.fmx}
+{$R *.iPhone4in.fmx IOS}
+{$R *.iPhone47in.fmx IOS}
+{$R *.LgXhdpiPh.fmx ANDROID}
 
 procedure TForm5.Button1Click(Sender: TObject);
 var
@@ -108,11 +111,11 @@ begin
   ListView1.BeginUpdate;
   try
     ListView1.Items.Clear;
-    for var i := 0 to LASensorList1.Senosrs.Count - 1 do
+    for var i := 0 to LASensorList1.Sensors.Count - 1 do
     begin
       ListView1.Items.Add; // Items[i].Text := LASensorList1.Senosrs[i].Data;
-      Listview1.Items.AppearanceItem[i].Data['Name'] := LASensorList1.Senosrs[i].Name;
-      Listview1.Items.AppearanceItem[i].Data['Value'] := LASensorList1.Senosrs[i].Value;
+      Listview1.Items.AppearanceItem[i].Data['Name'] := LASensorList1.Sensors[i].Name;
+      Listview1.Items.AppearanceItem[i].Data['Value'] := LASensorList1.Sensors[i].Value;
     end;
   finally
     ListView1.EndUpdate;
@@ -122,7 +125,7 @@ end;
 procedure TForm5.PrototypeBindSource1CreateAdapter(Sender: TObject; var ABindSourceAdapter: TBindSourceAdapter);
 begin
   //
-  ABindSourceAdapter := TListBindSourceAdapter<TLASensor>.Create(Self,LASensorList1.Senosrs, False);
+  ABindSourceAdapter := TListBindSourceAdapter<TLASensor>.Create(Self,LASensorList1.Sensors, False);
   //ABindSourceAdapter.Refresh;
 end;
 
@@ -132,7 +135,7 @@ begin
   try
     for var i := 0 to ListView1.Items.Count - 1 do
     begin
-      Listview1.Items.AppearanceItem[i].Data['Value'] := LASensorList1.Senosrs[i].Value;
+      Listview1.Items.AppearanceItem[i].Data['Value'] := LASensorList1.Sensors[i].Value;
     end;
   finally
     ListView1.EndUpdate;

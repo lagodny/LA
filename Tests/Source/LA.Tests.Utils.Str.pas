@@ -33,7 +33,7 @@ end;
 
 procedure TTestTDCStrUtils.TestStrToHex(const aStr, aResult: string);
 begin
-  Assert.AreEqual(aResult, TDCStrUtils.StrToHex(aStr, ' '));
+  Assert.AreEqual(aResult, TLAStrUtils.StrToHex(aStr, ' '));
 
 end;
 

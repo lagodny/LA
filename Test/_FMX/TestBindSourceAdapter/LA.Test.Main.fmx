@@ -52,6 +52,7 @@ object Form5: TForm5
         AppearanceObjectName = 'Text1'
         AppearanceClassName = 'TTextObjectAppearance'
       end>
+    StyleLookup = 'ListView1Style1'
     SearchVisible = True
     ControlType = Platform
   end
@@ -198,7 +199,7 @@ object Form5: TForm5
       FillBreakGroups = <>
     end
   end
-  object DCHttpConnector1: TDCHttpConnector
+  object DCHttpConnector1: TLAHttpConnector
     Address = 'https://dc.tdc.org.ua'
     ConnectTimeOut = 0
     ReadTimeOut = 0
@@ -211,9 +212,8 @@ object Form5: TForm5
     Left = 240
     Top = 352
   end
-  object DataUpdater1: TDataUpdater
+  object DataUpdater1: TLADataUpdater
     Connector = DCHttpConnector1
-    Interval = 1000
     OnUpdate = DataUpdater1Update
     Left = 128
     Top = 304

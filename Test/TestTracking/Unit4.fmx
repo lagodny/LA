@@ -1,0 +1,179 @@
+object Form4: TForm4
+  Left = 0
+  Top = 0
+  Caption = 'Form4'
+  ClientHeight = 438
+  ClientWidth = 486
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object TabControl1: TTabControl
+    Align = Client
+    Size.Width = 486.000000000000000000
+    Size.Height = 438.000000000000000000
+    Size.PlatformDefault = False
+    TabIndex = 2
+    TabOrder = 2
+    TabPosition = PlatformDefault
+    Sizes = (
+      486s
+      412s
+      486s
+      412s
+      486s
+      412s)
+    object TabItem1: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem1'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object Panel1: TPanel
+        Align = Top
+        Size.Width = 486.000000000000000000
+        Size.Height = 81.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object bTestVariantData: TButton
+          Position.X = 8.000000000000000000
+          Position.Y = 8.000000000000000000
+          Size.Width = 104.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'TestVariantData'
+          OnClick = bTestVariantDataClick
+        end
+        object bCreateTrackerLink: TButton
+          Position.X = 120.000000000000000000
+          Position.Y = 8.000000000000000000
+          Size.Width = 129.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          Text = 'CreateTrackerLink'
+          OnClick = bCreateTrackerLinkClick
+        end
+        object CheckBox1: TCheckBox
+          Position.X = 257.000000000000000000
+          Position.Y = 8.000000000000000000
+          TabOrder = 3
+          Text = 'Active'
+          OnChange = CheckBox1Change
+        end
+        object bTestManger: TButton
+          Position.X = 8.000000000000000000
+          Position.Y = 38.000000000000000000
+          Size.Width = 104.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 5
+          Text = 'TestManager'
+          OnClick = bTestMangerClick
+        end
+      end
+      object Memo1: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        Align = Client
+        Size.Width = 486.000000000000000000
+        Size.Height = 331.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Viewport.Width = 486.000000000000000000
+        Viewport.Height = 331.000000000000000000
+      end
+    end
+    object TabItem2: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem2'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object ListView1: TListView
+        ItemAppearanceClassName = 'TListItemAppearance'
+        ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
+        HeaderAppearanceClassName = 'TListHeaderObjects'
+        FooterAppearanceClassName = 'TListHeaderObjects'
+        Align = Top
+        Size.Width = 486.000000000000000000
+        Size.Height = 65.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        StyleLookup = 'ListView1Style1'
+        SearchVisible = True
+        object Button1: TButton
+          Position.X = 360.000000000000000000
+          Position.Y = 32.000000000000000000
+          TabOrder = 0
+          Text = 'Button1'
+          OnClick = Button1Click
+        end
+      end
+    end
+    object TabItem3: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem3'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object ComboBox1: TComboBox
+        Items.Strings = (
+          '123'
+          '2993'
+          '1234'
+          '5487'
+          '4578')
+        Position.X = 16.000000000000000000
+        Position.Y = 22.000000000000000000
+        Size.Width = 321.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+      end
+      object cb: TComboEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 1
+        ItemHeight = 19.000000000000000000
+        Items.Strings = (
+          '1234'
+          '5241'
+          '8596'
+          '4587'
+          '1245'
+          '4578'
+          '6584')
+        ItemIndex = -1
+        Position.X = 16.000000000000000000
+        Position.Y = 52.000000000000000000
+        Size.Width = 321.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        OnTyping = cbTyping
+      end
+    end
+  end
+end

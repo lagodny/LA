@@ -9,7 +9,7 @@ uses
 
 
 type
-  TDCTCPBlockCipherIntercept = class(TIdBlockCipherIntercept)
+  TLATCPBlockCipherIntercept = class(TIdBlockCipherIntercept)
   private
     FOnDecrypt: TIdInterceptStreamEvent;
     FOnEncrypt: TIdInterceptStreamEvent;
@@ -21,10 +21,10 @@ type
     property OnEncrypt: TIdInterceptStreamEvent read FOnEncrypt write FOnEncrypt;
   end;
 
-  TDCTCPIntercept = class(TIdConnectionIntercept)
+  TLATCPIntercept = class(TIdConnectionIntercept)
   private
     FCrypter: TDCP_blockcipher;
-    FBlockCipherIntercept: TDCTCPBlockCipherIntercept;
+    FBlockCipherIntercept: TLATCPBlockCipherIntercept;
     FCompressionIntercept: TIdCompressionIntercept;
 
     FCryptKey: RawByteString;
@@ -52,13 +52,13 @@ implementation
 
 { TDCTCPBlockCipherIntercept }
 
-procedure TDCTCPBlockCipherIntercept.Decrypt(var VData: TIdBytes);
+procedure TLATCPBlockCipherIntercept.Decrypt(var VData: TIdBytes);
 begin
   if Assigned(FOnDecrypt) then
     FOnDecrypt(Self, VData);
 end;
 
-procedure TDCTCPBlockCipherIntercept.Encrypt(var VData: TIdBytes);
+procedure TLATCPBlockCipherIntercept.Encrypt(var VData: TIdBytes);
 begin
   if Assigned(FOnEncrypt) then
     FOnEncrypt(Self, VData);
@@ -66,7 +66,7 @@ end;
 
 { TDCTCPIntercept }
 
-procedure TDCTCPIntercept.BlockCipherInterceptReceive(ASender: TIdConnectionIntercept; var VBuffer: TIdBytes);
+procedure TLATCPIntercept.BlockCipherInterceptReceive(ASender: TIdConnectionIntercept; var VBuffer: TIdBytes);
 var
   LCount: Byte;
   LCountPos: Byte;
@@ -82,7 +82,7 @@ begin
 {.$R+}
 end;
 
-procedure TDCTCPIntercept.BlockCipherInterceptSend(ASender: TIdConnectionIntercept; var VBuffer: TIdBytes);
+procedure TLATCPIntercept.BlockCipherInterceptSend(ASender: TIdConnectionIntercept; var VBuffer: TIdBytes);
 var
   LCount: Byte;
   LCountPos: Byte;
@@ -97,7 +97,7 @@ begin
 {.$R+}
 end;
 
-destructor TDCTCPIntercept.Destroy;
+destructor TLATCPIntercept.Destroy;
 begin
   FreeAndNil(FCompressionIntercept);
   FreeAndNil(FBlockCipherIntercept);
@@ -105,7 +105,7 @@ begin
   inherited Destroy;
 end;
 
-function TDCTCPIntercept.GetCompressionLevel: TIdCompressionLevel;
+function TLATCPIntercept.GetCompressionLevel: TIdCompressionLevel;
 begin
   if Assigned(FCompressionIntercept) then
     Result := FCompressionIntercept.CompressionLevel
@@ -113,7 +113,7 @@ begin
     Result := 0;
 end;
 
-procedure TDCTCPIntercept.Receive(var VBuffer: TIdBytes);
+procedure TLATCPIntercept.Receive(var VBuffer: TIdBytes);
 begin
   inherited Receive(VBuffer);
   // при приеме
@@ -126,7 +126,7 @@ begin
     FCompressionIntercept.Receive(VBuffer);
 end;
 
-procedure TDCTCPIntercept.Send(var VBuffer: TIdBytes);
+procedure TLATCPIntercept.Send(var VBuffer: TIdBytes);
 begin
   inherited Send(VBuffer);
   // при отправке
@@ -139,7 +139,7 @@ begin
     FBlockCipherIntercept.Send(VBuffer);
 end;
 
-procedure TDCTCPIntercept.SetCompressionLevel(const Value: TIdCompressionLevel);
+procedure TLATCPIntercept.SetCompressionLevel(const Value: TIdCompressionLevel);
 begin
   if Value = CompressionLevel then
     Exit;
@@ -152,7 +152,7 @@ begin
   FCompressionIntercept.CompressionLevel := Value;
 end;
 
-procedure TDCTCPIntercept.SetCryptKey(const Value: RawByteString);
+procedure TLATCPIntercept.SetCryptKey(const Value: RawByteString);
 begin
   if FCryptKey = Value then
     Exit;
@@ -167,7 +167,7 @@ begin
   FCrypter := TDCP_blowfish.Create(nil);
   FCrypter.InitStr(FCryptKey, TDCP_sha1);
 
-  FBlockCipherIntercept := TDCTCPBlockCipherIntercept.Create(nil);
+  FBlockCipherIntercept := TLATCPBlockCipherIntercept.Create(nil);
   FBlockCipherIntercept.BlockSize := (FCrypter.BlockSize div 8) + 1;
   FBlockCipherIntercept.OnDecrypt := BlockCipherInterceptReceive;
   FBlockCipherIntercept.OnEncrypt := BlockCipherInterceptSend;

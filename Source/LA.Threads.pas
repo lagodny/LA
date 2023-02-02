@@ -6,7 +6,7 @@ uses
   System.Classes, System.SyncObjs, System.Diagnostics;
 
 type
-  TDCIntervalThread = class(TThread)
+  TLAIntervalThread = class(TThread)
   strict private
     FInterval: Int64;
     FTimer: TStopwatch;
@@ -21,7 +21,7 @@ type
 
     // нужно переопределить для выполнения нужной работы
     procedure Initialize; virtual;
-    procedure ProcessTimer; virtual;
+    procedure Process; virtual;
     procedure Cleanup; virtual;
   public
     constructor CreateInterval(CreateSuspended: Boolean; aInterval: Int64);
@@ -35,7 +35,7 @@ implementation
 
 { TDCIntervalThread }
 
-function TDCIntervalThread.CalculateTimeout: Int64;
+function TLAIntervalThread.CalculateTimeout: Int64;
 begin
   if FInterval = 0 then
     Result := INFINITE
@@ -45,25 +45,25 @@ begin
     Result := FInterval - FTimer.ElapsedMilliseconds;
 end;
 
-procedure TDCIntervalThread.Cleanup;
+procedure TLAIntervalThread.Cleanup;
 begin
   // очистка после выхода из цикла
 end;
 
-constructor TDCIntervalThread.CreateInterval(CreateSuspended: Boolean; aInterval: Int64);
+constructor TLAIntervalThread.CreateInterval(CreateSuspended: Boolean; aInterval: Int64);
 begin
   inherited Create(CreateSuspended);
   FEvent := TEvent.Create;
   FInterval := aInterval;
 end;
 
-destructor TDCIntervalThread.Destroy;
+destructor TLAIntervalThread.Destroy;
 begin
   FEvent.Free;
   inherited;
 end;
 
-procedure TDCIntervalThread.Execute;
+procedure TLAIntervalThread.Execute;
 var
   aWaitResult: TWaitResult;
 begin
@@ -82,14 +82,14 @@ begin
               // старт или принудительный запуск
               FTimer.Reset;
               FTimer.Start;
-              ProcessTimer;
+              Process;
             end;
           end;
         wrTimeout:
           begin
             FTimer.Reset;
             FTimer.Start;
-            ProcessTimer;
+            Process;
           end
         else
           Break; //Terminate thread
@@ -100,28 +100,28 @@ begin
   end;
 end;
 
-function TDCIntervalThread.GetInterval: Int64;
+function TLAIntervalThread.GetInterval: Int64;
 begin
   Result := TInterlocked.Read(FInterval);
 end;
 
-procedure TDCIntervalThread.Initialize;
+procedure TLAIntervalThread.Initialize;
 begin
   // инициализация перед входом в цикл
 end;
 
-procedure TDCIntervalThread.ProcessTimer;
+procedure TLAIntervalThread.Process;
 begin
   // выполняем полезную работу каждые Interval мс
 end;
 
-procedure TDCIntervalThread.SetInterval(const Value: Int64);
+procedure TLAIntervalThread.SetInterval(const Value: Int64);
 begin
   TInterlocked.Exchange(FInterval, Value);
   FTimer := TStopwatch.StartNew;
 end;
 
-procedure TDCIntervalThread.TerminatedSet;
+procedure TLAIntervalThread.TerminatedSet;
 begin
   FEvent.SetEvent;
   inherited;

@@ -12,7 +12,7 @@ interface
 
 
 type
-  TDCSystemUtils = class
+  TLASystemUtils = class
   public
     class function GetLocalUserName: string;
     class function GetComputerName: string;
@@ -22,7 +22,7 @@ implementation
 
 { TDCSystemUtils }
 
-class function TDCSystemUtils.GetComputerName: string;
+class function TLASystemUtils.GetComputerName: string;
 {$IFDEF WIN32}
 var
   Size: UInt32;
@@ -40,7 +40,7 @@ begin
 {$ENDIF}
 end;
 
-class function TDCSystemUtils.GetLocalUserName: string;
+class function TLASystemUtils.GetLocalUserName: string;
 {$IFDEF WIN32}
 var
   Count: UInt32;

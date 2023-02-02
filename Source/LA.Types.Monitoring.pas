@@ -2,6 +2,9 @@
 
 interface
 
+uses
+  System.SysUtils;
+
 type
   TDataRec = record
     t: Int64;
@@ -37,7 +40,16 @@ type
   THistoryRecArr = array of THistoryRec;
   THistoryRecExtArr = array of THistoryRecExt;
 
+function SID2IDArr(aSIDArr: TSIDArr): TIDArr;
+
 
 implementation
+
+function SID2IDArr(aSIDArr: TSIDArr): TIDArr;
+begin
+  SetLength(Result, Length(aSIDArr));
+  for var i := Low(aSIDArr) to High(aSIDArr) do
+      Result[i] := StrToInt(aSIDArr[i]);
+end;
 
 end.

@@ -17,13 +17,13 @@ const
   cDefHttpsPort = '443';
 
 type
-  TDCHttpAddr = record
+  TLAHttpAddr = record
     Https: Boolean;
     Host, Port: string;
-    function InitFrom(const aAddr: string): TDCHttpAddr;
+    function InitFrom(const aAddr: string): TLAHttpAddr;
   end;
 
-  TDCHttpConnector = class(TDCCustomConnector, IDCMonitoring)
+  TLAHttpConnector = class(TLACustomConnector, IDCMonitoring)
   private
     FClient: TSQLRestClientHTTP;
     FMonitoring: IMonitoring;
@@ -75,7 +75,7 @@ type
     property SendTimeOut: Integer read FSendTimeout write SetSendTimeOut;
   end;
 
-  TDCHttpTrackingConnection = class(TDCHttpConnector, IDCTracking)
+  TLAHttpTrackingConnection = class(TLAHttpConnector, IDCTracking)
   private
     FTracking: ITracking;
   protected
@@ -93,29 +93,29 @@ implementation
 
 { TDCHTTPConnector }
 
-procedure TDCHttpConnector.Connect;
+procedure TLAHttpConnector.Connect;
 begin
   DoConnect;
 end;
 
-constructor TDCHttpConnector.Create(AOwner: TComponent);
+constructor TLAHttpConnector.Create(AOwner: TComponent);
 begin
   inherited;
 
 end;
 
-destructor TDCHttpConnector.Destroy;
+destructor TLAHttpConnector.Destroy;
 begin
   DoDisconnect;
   inherited;
 end;
 
-procedure TDCHttpConnector.Disconnect;
+procedure TLAHttpConnector.Disconnect;
 begin
   DoDisconnect;
 end;
 
-procedure TDCHttpConnector.DoConnect;
+procedure TLAHttpConnector.DoConnect;
 begin
   TryConnect;
 
@@ -123,7 +123,7 @@ begin
     OnConnect(Self);
 end;
 
-procedure TDCHttpConnector.DoDisconnect;
+procedure TLAHttpConnector.DoDisconnect;
 begin
   ClientLock.Enter;
   try
@@ -140,24 +140,24 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.DoServicesConnect;
+procedure TLAHttpConnector.DoServicesConnect;
 begin
   inherited;
   FMonitoring :=  TServiceMonitoring.Create(FClient);
 end;
 
-procedure TDCHttpConnector.DoServicesDisconnect;
+procedure TLAHttpConnector.DoServicesDisconnect;
 begin
   inherited;
   FMonitoring := nil;
 end;
 
-function TDCHttpConnector.GetCompressionLevel: Integer;
+function TLAHttpConnector.GetCompressionLevel: Integer;
 begin
   Result := FCompressionLevel;
 end;
 
-function TDCHttpConnector.GetConnected: Boolean;
+function TLAHttpConnector.GetConnected: Boolean;
 begin
   ClientLock.Enter;
   try
@@ -167,22 +167,22 @@ begin
   end;
 end;
 
-function TDCHttpConnector.GetConnectTimeOut: Integer;
+function TLAHttpConnector.GetConnectTimeOut: Integer;
 begin
   Result := FConnectTimeOut;
 end;
 
-function TDCHttpConnector.GetEncrypt: boolean;
+function TLAHttpConnector.GetEncrypt: boolean;
 begin
   Result := FEncrypt;
 end;
 
-function TDCHttpConnector.GetReadTimeOut: Integer;
+function TLAHttpConnector.GetReadTimeOut: Integer;
 begin
   Result := FReadTimeOut;
 end;
 
-function TDCHttpConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
+function TLAHttpConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
 begin
   if not Connected then
     Connect;
@@ -196,7 +196,7 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.SetCompressionLevel(const Value: Integer);
+procedure TLAHttpConnector.SetCompressionLevel(const Value: Integer);
 begin
   if FCompressionLevel <> Value then
   begin
@@ -205,7 +205,7 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.SetConnectTimeOut(const Value: Integer);
+procedure TLAHttpConnector.SetConnectTimeOut(const Value: Integer);
 begin
   if FConnectTimeOut <> Value then
   begin
@@ -214,7 +214,7 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.SetEncrypt(const Value: boolean);
+procedure TLAHttpConnector.SetEncrypt(const Value: boolean);
 begin
   if FEncrypt <> Value then
   begin
@@ -223,7 +223,7 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.SetHttps(const Value: boolean);
+procedure TLAHttpConnector.SetHttps(const Value: boolean);
 begin
   if FHttps <> Value then
   begin
@@ -232,7 +232,7 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.SetProxyByPass(const Value: string);
+procedure TLAHttpConnector.SetProxyByPass(const Value: string);
 begin
   if FProxyByPass <>Value then
   begin
@@ -241,7 +241,7 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.SetProxyName(const Value: string);
+procedure TLAHttpConnector.SetProxyName(const Value: string);
 begin
   if FProxyName <> Value then
   begin
@@ -250,7 +250,7 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.SetReadTimeOut(const Value: Integer);
+procedure TLAHttpConnector.SetReadTimeOut(const Value: Integer);
 begin
   if FReadTimeOut <> Value then
   begin
@@ -259,7 +259,7 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.SetSendTimeOut(const Value: Integer);
+procedure TLAHttpConnector.SetSendTimeOut(const Value: Integer);
 begin
   if FSendTimeOut <> Value then
   begin
@@ -268,9 +268,9 @@ begin
   end;
 end;
 
-procedure TDCHttpConnector.TryConnectTo(const aAddrLine: string);
+procedure TLAHttpConnector.TryConnectTo(const aAddrLine: string);
 var
-  aAddrRec: TDCHttpAddr;
+  aAddrRec: TLAHttpAddr;
 begin
   aAddrRec.InitFrom(aAddrLine);
 
@@ -292,7 +292,7 @@ end;
 
 { TDCHttpAddr }
 
-function TDCHttpAddr.InitFrom(const aAddr: string): TDCHttpAddr;
+function TLAHttpAddr.InitFrom(const aAddr: string): TLAHttpAddr;
 var
   aParams: TStrings;
 begin
@@ -355,19 +355,19 @@ end;
 
 { TDCHttpTrackingConnection }
 
-procedure TDCHttpTrackingConnection.DoServicesConnect;
+procedure TLAHttpTrackingConnection.DoServicesConnect;
 begin
   inherited;
   FTracking :=  TServiceTracking.Create(FClient);
 end;
 
-procedure TDCHttpTrackingConnection.DoServicesDisconnect;
+procedure TLAHttpTrackingConnection.DoServicesDisconnect;
 begin
   inherited;
   FTracking := nil;
 end;
 
-function TDCHttpTrackingConnection.GetClients: Variant;
+function TLAHttpTrackingConnection.GetClients: Variant;
 begin
   if not Connected then
     Connect;
@@ -382,7 +382,7 @@ begin
 end;
 
 
-function TDCHttpTrackingConnection.GetDevices(const Clients: TIDDynArray): Variant;
+function TLAHttpTrackingConnection.GetDevices(const Clients: TIDDynArray): Variant;
 begin
   if not Connected then
     Connect;
@@ -396,7 +396,7 @@ begin
   end;
 end;
 
-function TDCHttpTrackingConnection.GetDevicesData(const Devices: TIDDynArray): Variant;
+function TLAHttpTrackingConnection.GetDevicesData(const Devices: TIDDynArray): Variant;
 begin
   if not Connected then
     Connect;

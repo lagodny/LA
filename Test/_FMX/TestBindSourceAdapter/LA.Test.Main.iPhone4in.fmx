@@ -1,0 +1,9 @@
+inherited Form5_iPhone4in: TForm5_iPhone4in
+  ClientHeight = 548
+  ClientWidth = 320
+  DesignerMasterStyle = 0
+  inherited ListView1: TListView
+    Size.Width = 288.000000000000000000
+    Size.Height = 412.000000000000000000
+  end
+end

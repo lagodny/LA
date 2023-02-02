@@ -28,8 +28,8 @@ type
     procedure aLogDblClick(Sender: TObject);
     procedure bManyNoCacheClick(Sender: TObject);
   private
-    FConnector: TDCHttpConnector;
-    FUpdater: TDataUpdater;
+    FConnector: TLAHttpConnector;
+    FUpdater: TLADataUpdater;
     FSensor: TLASensor;
     procedure Log(const aMsg: string);
   public
@@ -54,11 +54,11 @@ end;
 
 procedure TForm1.bCreateClick(Sender: TObject);
 begin
-  FUpdater := TDataUpdater.Create(Self);
+  FUpdater := TLADataUpdater.Create(Self);
   FUpdater.OnUpdate := DoUpdate;
   FUpdater.Interval := 5000;
 
-  FConnector := TDCHttpConnector.Create(Self);
+  FConnector := TLAHttpConnector.Create(Self);
 //  FConnector.Address := 'https://dc.tdc.org.ua';
   FConnector.Address := 'localhost:89;https://dc.tdc.org.ua';
 //  FConnector.Address := 'elcomteh.ddns.mksat.net:5153';

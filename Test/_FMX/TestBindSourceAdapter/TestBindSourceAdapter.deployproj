@@ -4,9 +4,9 @@
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
     <PropertyGroup>
-        <DeviceId Condition="'$(Platform)'=='Android'">RF8M82DBQTR</DeviceId>
-        <DeviceId Condition="'$(Platform)'=='Android64'">RF8M82DBQTR</DeviceId>
-        <DeviceId Condition="'$(Platform)'=='iOSDevice64'">4370365ab1e0030b053c444d8f187dd1daf32dc3</DeviceId>
+        <DeviceId Condition="'$(Platform)'=='Android'"/>
+        <DeviceId Condition="'$(Platform)'=='Android64'"/>
+        <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
     </PropertyGroup>
     <ItemGroup Condition="'$(Platform)'=='OSX64'"/>
     <ItemGroup Condition="'$(Platform)'=='Win32'">

@@ -179,11 +179,8 @@
         <DCCReference Include="..\Source\LA.Utils.Str.pas"/>
         <DCCReference Include="..\Source\LA.Utils.System.pas"/>
         <DCCReference Include="..\Source\LA.Data.Link.Intf.pas"/>
-        <DCCReference Include="..\Source\LA.Data.Link.pas"/>
         <DCCReference Include="..\Source\LA.Data.Link.Sensor.pas"/>
-        <DCCReference Include="..\Source\LA.Data.Link.Tracker.pas"/>
         <DCCReference Include="..\Source\LA.Data.Sensor.pas"/>
-        <DCCReference Include="..\Source\LA.Data.Tracker.pas"/>
         <DCCReference Include="..\Source\LA.Data.Source.Intf.pas"/>
         <DCCReference Include="..\Source\LA.Data.Updater.pas"/>
         <DCCReference Include="..\Source\LA.Threads.pas"/>
@@ -191,8 +188,15 @@
         <DCCReference Include="..\Source\LA.Net.DC.Client.pas"/>
         <DCCReference Include="..\Source\LA.Types.Monitoring.pas"/>
         <DCCReference Include="..\Source\LA.Registration.pas"/>
-        <DCCReference Include="..\Source\LA.Data.SensorList.pas"/>
         <DCCReference Include="..\Source\LA.Data.Source.pas"/>
+        <DCCReference Include="..\Source\LA.Data.Types.pas"/>
+        <DCCReference Include="..\Source\LA.Data.Sensor.Updater.pas"/>
+        <DCCReference Include="..\Source\LA.Data.Tracker.Updater.pas"/>
+        <DCCReference Include="..\Source\LA.Data.Link.Tracker.pas"/>
+        <DCCReference Include="..\Source\LA.Types.Tracker.pas"/>
+        <DCCReference Include="..\Source\LA.Net.Connector.Utils.pas"/>
+        <DCCReference Include="..\Source\LA.Data.Tracking.Manager.pas"/>
+        <DCCReference Include="..\Source\LA.Data.Tracking.Model.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
