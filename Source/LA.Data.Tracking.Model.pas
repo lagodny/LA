@@ -3,7 +3,7 @@
 interface
 
 uses
-  System.SysUtils,
+  System.Classes, System.SysUtils,
   System.Generics.Collections, System.Generics.Defaults,
   SynCrossPlatformJSON,
   LA.Types.Tracker,
@@ -42,13 +42,15 @@ type
   TGroups = TObjectDictionary<Integer, TGroup>;
 
   /// объект наблюдения
-  TDevice = class
+  TDevice = class(TPersistent)
   private
     {$REGION 'Fields'}
     FID: Integer;
     FName: string;
     FGroup: TGroup;
     FLink: TLATrackerLink;
+    function GetFL: Double;
+    function GetSpeed: Double;
     {$ENDREGION}
   public
     constructor Create;
@@ -56,11 +58,13 @@ type
 
     procedure Init(v: Variant; aPrototypes: TLATagPrototypes);
 
+    property Link: TLATrackerLink read FLink;
+  published
     property ID: Integer read FID write FID;
     property Name: string read FName write FName;
     property Group: TGroup read FGroup write FGroup;
-
-    property Link: TLATrackerLink read FLink;
+    property Speed: Double read GetSpeed;
+    property FL: Double read GetFL;
   end;
   TDevices = TObjectDictionary<Integer, TDevice>;
 
@@ -78,6 +82,16 @@ destructor TDevice.Destroy;
 begin
   FLink.Free;
   inherited;
+end;
+
+function TDevice.GetFL: Double;
+begin
+  Result := FLink.FL;
+end;
+
+function TDevice.GetSpeed: Double;
+begin
+  Result := FLink.Speed;
 end;
 
 procedure TDevice.Init(v: Variant; aPrototypes: TLATagPrototypes);

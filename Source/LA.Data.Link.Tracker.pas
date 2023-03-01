@@ -28,6 +28,8 @@ type
     FStatus: string;
     procedure SetStatus(const Value: string);
     function GetCourse: Double;
+    function GetTime: string;
+    function GetFL: Double;
   protected
     procedure AssignTo(Dest: TPersistent); override;
     procedure EncodeData; override;
@@ -35,7 +37,7 @@ type
     constructor Create(const AOwner: TPersistent); override;
     destructor Destroy; override;
 
-    function TagValueByName(const aName: string; aDefault: Double = 0): Double;
+    function TagValueByName(const aName: string; aDefault: Variant): Variant;
 
     procedure FromJSON(const aJSON: string; aTagPrototypes: TLATagPrototypes);
 
@@ -45,10 +47,13 @@ type
     property Name: string read FName write SetName;
     property Status: string read FStatus write SetStatus;
 
+    property Time: string read GetTime;
     property Lat: Double read GetLat;
     property Lon: Double read GetLon;
     property Speed: Double read GetSpeed;
     property Course: Double read GetCourse;
+
+    property FL: Double read GetFL;
   end;
   TLATrackerLinks = TObjectDictionary<string, TLATrackerLink>;
 
@@ -205,22 +210,32 @@ end;
 
 function TLATrackerLink.GetCourse: Double;
 begin
-  Result := TagValueByName(TLATagNamesRec.Course);
+  Result := TagValueByName(TLATagNamesRec.Course, 0);
+end;
+
+function TLATrackerLink.GetFL: Double;
+begin
+  Result := TagValueByName(TLATagNamesRec.FuelLevel0, 0);
 end;
 
 function TLATrackerLink.GetLat: Double;
 begin
-  Result := TagValueByName(TLATagNamesRec.Lat);
+  Result := TagValueByName(TLATagNamesRec.Lat, 0);
 end;
 
 function TLATrackerLink.GetLon: Double;
 begin
-  Result := TagValueByName(TLATagNamesRec.Lon);
+  Result := TagValueByName(TLATagNamesRec.Lon, 0);
 end;
 
 function TLATrackerLink.GetSpeed: Double;
 begin
-  Result := TagValueByName(TLATagNamesRec.Speed);
+  Result := TagValueByName(TLATagNamesRec.Speed, 0);
+end;
+
+function TLATrackerLink.GetTime: string;
+begin
+  Result := TagValueByName(TLATagNamesRec.Time, '');
 end;
 
 procedure TLATrackerLink.SetName(const Value: string);
@@ -233,7 +248,7 @@ begin
   FStatus := Value;
 end;
 
-function TLATrackerLink.TagValueByName(const aName: string; aDefault: Double): Double;
+function TLATrackerLink.TagValueByName(const aName: string; aDefault: Variant): Variant;
 var
   aTag: TLATag;
 begin
