@@ -32,7 +32,7 @@ type
     [TestCase('EmpttyAddrRaiseException', '')]
     procedure TestBadAddrRaiseException(const AddrLine: string);
 //    [Test]
-    [TestCase('SensorsDataAsText', '41204,41204;d:\_services\DC\Data\UploadFile\Demo.scp;'#$D)]
+    [TestCase('SensorsDataAsText', '41204,41204;194;d:\_services\DC\Data\UploadFile\Demo.scp;'#$D)]
 //    [TestCase('TestSensorValue', '5,74332')]
     procedure SensorsDataAsText(const aSensorAddr, aSensorData: string);
 
