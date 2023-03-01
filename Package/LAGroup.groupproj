@@ -6,52 +6,31 @@
         <Projects Include="..\..\..\Lib\dcpcrypt\Packages\DCPcrypt.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="LA.Fundamentals.Utils.dproj">
+        <Projects Include="..\..\..\Lib\Fundamentals\Packages\Fundamentals.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="LA.Fundamentals.Crypto.dproj">
+        <Projects Include="..\..\..\Lib\mORMot\CrossPlatform\Packages\mORMotCrossplatform.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="LA.mORMot.Crossplatform.dproj">
+        <Projects Include="LAData.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="LA.DC.dproj">
+        <Projects Include="LADesigner.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="LA.Designer.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="LA.FMX.dproj">
+        <Projects Include="LAFMX.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="..\Tests\LA.Test.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\Test\TestDataUpdater\TestDataUpdater.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\TestDataComp\TestDataComp.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\TestSensorList\Test.SensorList.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\_FMX\TestSensorListFMX\TestSensorListFMX.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\_FMX\TestBindSourceAdapter\TestBindSourceAdapter.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\_FMX\TestSensorFMX\TestSensorFMX.dproj">
-            <Dependencies/>
-        </Projects>
         <Projects Include="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\..\..\Projects\Monitoring\Servers\DC\DCsrvc\DCSrvc.dproj">
+        <Projects Include="..\Test\TestTracking\TestTracking.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\Test\TestTracking\TestTracking.dproj">
+        <Projects Include="..\..\..\Projects\Samples\Login Screens\LoginProject1.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="..\..\TECNATIVEMAP\Demo\CartoTrack\D11\CartoTrack.dproj">
@@ -74,59 +53,50 @@
     <Target Name="DCPcrypt:Make">
         <MSBuild Projects="..\..\..\Lib\dcpcrypt\Packages\DCPcrypt.dproj" Targets="Make"/>
     </Target>
-    <Target Name="LA_Fundamentals_Utils">
-        <MSBuild Projects="LA.Fundamentals.Utils.dproj"/>
+    <Target Name="Fundamentals">
+        <MSBuild Projects="..\..\..\Lib\Fundamentals\Packages\Fundamentals.dproj"/>
     </Target>
-    <Target Name="LA_Fundamentals_Utils:Clean">
-        <MSBuild Projects="LA.Fundamentals.Utils.dproj" Targets="Clean"/>
+    <Target Name="Fundamentals:Clean">
+        <MSBuild Projects="..\..\..\Lib\Fundamentals\Packages\Fundamentals.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="LA_Fundamentals_Utils:Make">
-        <MSBuild Projects="LA.Fundamentals.Utils.dproj" Targets="Make"/>
+    <Target Name="Fundamentals:Make">
+        <MSBuild Projects="..\..\..\Lib\Fundamentals\Packages\Fundamentals.dproj" Targets="Make"/>
     </Target>
-    <Target Name="LA_Fundamentals_Crypto">
-        <MSBuild Projects="LA.Fundamentals.Crypto.dproj"/>
+    <Target Name="mORMotCrossplatform">
+        <MSBuild Projects="..\..\..\Lib\mORMot\CrossPlatform\Packages\mORMotCrossplatform.dproj"/>
     </Target>
-    <Target Name="LA_Fundamentals_Crypto:Clean">
-        <MSBuild Projects="LA.Fundamentals.Crypto.dproj" Targets="Clean"/>
+    <Target Name="mORMotCrossplatform:Clean">
+        <MSBuild Projects="..\..\..\Lib\mORMot\CrossPlatform\Packages\mORMotCrossplatform.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="LA_Fundamentals_Crypto:Make">
-        <MSBuild Projects="LA.Fundamentals.Crypto.dproj" Targets="Make"/>
+    <Target Name="mORMotCrossplatform:Make">
+        <MSBuild Projects="..\..\..\Lib\mORMot\CrossPlatform\Packages\mORMotCrossplatform.dproj" Targets="Make"/>
     </Target>
-    <Target Name="LA_mORMot_Crossplatform">
-        <MSBuild Projects="LA.mORMot.Crossplatform.dproj"/>
+    <Target Name="LAData">
+        <MSBuild Projects="LAData.dproj"/>
     </Target>
-    <Target Name="LA_mORMot_Crossplatform:Clean">
-        <MSBuild Projects="LA.mORMot.Crossplatform.dproj" Targets="Clean"/>
+    <Target Name="LAData:Clean">
+        <MSBuild Projects="LAData.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="LA_mORMot_Crossplatform:Make">
-        <MSBuild Projects="LA.mORMot.Crossplatform.dproj" Targets="Make"/>
+    <Target Name="LAData:Make">
+        <MSBuild Projects="LAData.dproj" Targets="Make"/>
     </Target>
-    <Target Name="LA_DC">
-        <MSBuild Projects="LA.DC.dproj"/>
+    <Target Name="LADesigner">
+        <MSBuild Projects="LADesigner.dproj"/>
     </Target>
-    <Target Name="LA_DC:Clean">
-        <MSBuild Projects="LA.DC.dproj" Targets="Clean"/>
+    <Target Name="LADesigner:Clean">
+        <MSBuild Projects="LADesigner.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="LA_DC:Make">
-        <MSBuild Projects="LA.DC.dproj" Targets="Make"/>
+    <Target Name="LADesigner:Make">
+        <MSBuild Projects="LADesigner.dproj" Targets="Make"/>
     </Target>
-    <Target Name="LA_Designer">
-        <MSBuild Projects="LA.Designer.dproj"/>
+    <Target Name="LAFMX">
+        <MSBuild Projects="LAFMX.dproj"/>
     </Target>
-    <Target Name="LA_Designer:Clean">
-        <MSBuild Projects="LA.Designer.dproj" Targets="Clean"/>
+    <Target Name="LAFMX:Clean">
+        <MSBuild Projects="LAFMX.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="LA_Designer:Make">
-        <MSBuild Projects="LA.Designer.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="LA_FMX">
-        <MSBuild Projects="LA.FMX.dproj"/>
-    </Target>
-    <Target Name="LA_FMX:Clean">
-        <MSBuild Projects="LA.FMX.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="LA_FMX:Make">
-        <MSBuild Projects="LA.FMX.dproj" Targets="Make"/>
+    <Target Name="LAFMX:Make">
+        <MSBuild Projects="LAFMX.dproj" Targets="Make"/>
     </Target>
     <Target Name="LA_Test">
         <MSBuild Projects="..\Tests\LA.Test.dproj"/>
@@ -137,60 +107,6 @@
     <Target Name="LA_Test:Make">
         <MSBuild Projects="..\Tests\LA.Test.dproj" Targets="Make"/>
     </Target>
-    <Target Name="TestDataUpdater">
-        <MSBuild Projects="..\Test\TestDataUpdater\TestDataUpdater.dproj"/>
-    </Target>
-    <Target Name="TestDataUpdater:Clean">
-        <MSBuild Projects="..\Test\TestDataUpdater\TestDataUpdater.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestDataUpdater:Make">
-        <MSBuild Projects="..\Test\TestDataUpdater\TestDataUpdater.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestDataComp">
-        <MSBuild Projects="..\Test\TestDataComp\TestDataComp.dproj"/>
-    </Target>
-    <Target Name="TestDataComp:Clean">
-        <MSBuild Projects="..\Test\TestDataComp\TestDataComp.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestDataComp:Make">
-        <MSBuild Projects="..\Test\TestDataComp\TestDataComp.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="Test_SensorList">
-        <MSBuild Projects="..\Test\TestSensorList\Test.SensorList.dproj"/>
-    </Target>
-    <Target Name="Test_SensorList:Clean">
-        <MSBuild Projects="..\Test\TestSensorList\Test.SensorList.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Test_SensorList:Make">
-        <MSBuild Projects="..\Test\TestSensorList\Test.SensorList.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestSensorListFMX">
-        <MSBuild Projects="..\Test\_FMX\TestSensorListFMX\TestSensorListFMX.dproj"/>
-    </Target>
-    <Target Name="TestSensorListFMX:Clean">
-        <MSBuild Projects="..\Test\_FMX\TestSensorListFMX\TestSensorListFMX.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestSensorListFMX:Make">
-        <MSBuild Projects="..\Test\_FMX\TestSensorListFMX\TestSensorListFMX.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestBindSourceAdapter">
-        <MSBuild Projects="..\Test\_FMX\TestBindSourceAdapter\TestBindSourceAdapter.dproj"/>
-    </Target>
-    <Target Name="TestBindSourceAdapter:Clean">
-        <MSBuild Projects="..\Test\_FMX\TestBindSourceAdapter\TestBindSourceAdapter.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestBindSourceAdapter:Make">
-        <MSBuild Projects="..\Test\_FMX\TestBindSourceAdapter\TestBindSourceAdapter.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestSensorFMX">
-        <MSBuild Projects="..\Test\_FMX\TestSensorFMX\TestSensorFMX.dproj"/>
-    </Target>
-    <Target Name="TestSensorFMX:Clean">
-        <MSBuild Projects="..\Test\_FMX\TestSensorFMX\TestSensorFMX.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestSensorFMX:Make">
-        <MSBuild Projects="..\Test\_FMX\TestSensorFMX\TestSensorFMX.dproj" Targets="Make"/>
-    </Target>
     <Target Name="SCS">
         <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj"/>
     </Target>
@@ -200,15 +116,6 @@
     <Target Name="SCS:Make">
         <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj" Targets="Make"/>
     </Target>
-    <Target Name="DCSrvc">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\Servers\DC\DCsrvc\DCSrvc.dproj"/>
-    </Target>
-    <Target Name="DCSrvc:Clean">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\Servers\DC\DCsrvc\DCSrvc.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="DCSrvc:Make">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\Servers\DC\DCsrvc\DCSrvc.dproj" Targets="Make"/>
-    </Target>
     <Target Name="TestTracking">
         <MSBuild Projects="..\Test\TestTracking\TestTracking.dproj"/>
     </Target>
@@ -217,6 +124,15 @@
     </Target>
     <Target Name="TestTracking:Make">
         <MSBuild Projects="..\Test\TestTracking\TestTracking.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="LoginProject1">
+        <MSBuild Projects="..\..\..\Projects\Samples\Login Screens\LoginProject1.dproj"/>
+    </Target>
+    <Target Name="LoginProject1:Clean">
+        <MSBuild Projects="..\..\..\Projects\Samples\Login Screens\LoginProject1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LoginProject1:Make">
+        <MSBuild Projects="..\..\..\Projects\Samples\Login Screens\LoginProject1.dproj" Targets="Make"/>
     </Target>
     <Target Name="CartoTrack">
         <MSBuild Projects="..\..\TECNATIVEMAP\Demo\CartoTrack\D11\CartoTrack.dproj"/>
@@ -228,13 +144,13 @@
         <MSBuild Projects="..\..\TECNATIVEMAP\Demo\CartoTrack\D11\CartoTrack.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;LA_Fundamentals_Utils;LA_Fundamentals_Crypto;LA_mORMot_Crossplatform;LA_DC;LA_Designer;LA_FMX;LA_Test;TestDataUpdater;TestDataComp;Test_SensorList;TestSensorListFMX;TestBindSourceAdapter;TestSensorFMX;SCS;DCSrvc;TestTracking;CartoTrack"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;SCS;TestTracking;LoginProject1;CartoTrack"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;LA_Fundamentals_Utils:Clean;LA_Fundamentals_Crypto:Clean;LA_mORMot_Crossplatform:Clean;LA_DC:Clean;LA_Designer:Clean;LA_FMX:Clean;LA_Test:Clean;TestDataUpdater:Clean;TestDataComp:Clean;Test_SensorList:Clean;TestSensorListFMX:Clean;TestBindSourceAdapter:Clean;TestSensorFMX:Clean;SCS:Clean;DCSrvc:Clean;TestTracking:Clean;CartoTrack:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;SCS:Clean;TestTracking:Clean;LoginProject1:Clean;CartoTrack:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;LA_Fundamentals_Utils:Make;LA_Fundamentals_Crypto:Make;LA_mORMot_Crossplatform:Make;LA_DC:Make;LA_Designer:Make;LA_FMX:Make;LA_Test:Make;TestDataUpdater:Make;TestDataComp:Make;Test_SensorList:Make;TestSensorListFMX:Make;TestBindSourceAdapter:Make;TestSensorFMX:Make;SCS:Make;DCSrvc:Make;TestTracking:Make;CartoTrack:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;SCS:Make;TestTracking:Make;LoginProject1:Make;CartoTrack:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -1,4 +1,4 @@
-package LA.DC;
+package LAData;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -25,7 +25,7 @@ package LA.DC;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'LA'}
+{$DESCRIPTION 'LA Data'}
 {$LIBSUFFIX AUTO}
 {$IMPLICITBUILD ON}
 
@@ -37,9 +37,8 @@ requires
   IndyProtocols,
   IndyCore,
   DCPcrypt,
-  LA.Fundamentals.Utils,
-  LA.Fundamentals.Crypto,
-  LA.mORMot.Crossplatform;
+  Fundamentals,
+  mORMotCrossplatform;
 
 contains
   LA.Net.Connector in '..\Source\LA.Net.Connector.pas',

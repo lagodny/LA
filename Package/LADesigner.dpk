@@ -1,4 +1,4 @@
-﻿package LA.Designer;
+﻿package LADesigner;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -33,7 +33,7 @@
 requires
   rtl,
   designIDE,
-  LA.DC;
+  LAData;
 
 contains
   LA.Designer.Regisration in '..\Source\LA.Designer.Regisration.pas';
