@@ -25,6 +25,8 @@ type
     FDevices: TDevices;
     procedure SetConnector(const Value: TLAHttpTrackingConnection);
     procedure SetUpdater(const Value: TLADataUpdater);
+    function GetConnected: Boolean;
+    procedure SetConnected(const Value: Boolean);
     {$ENDREGION}
   public
     constructor Create(AOwner: TComponent); override;
@@ -38,9 +40,12 @@ type
 
     procedure InitClients;
     procedure InitDevices;
+
   published
     property Connector: TLAHttpTrackingConnection read FConnector write SetConnector;
     property Updater: TLADataUpdater read FUpdater write SetUpdater;
+
+    property Connected: Boolean read GetConnected write SetConnected;
   end;
 
 implementation
@@ -63,6 +68,11 @@ begin
   FGroups.Free;
   FClients.Free;
   inherited;
+end;
+
+function TLATrackingManager.GetConnected: Boolean;
+begin
+  Result := Connector.Connected;
 end;
 
 procedure TLATrackingManager.InitClients;
@@ -114,6 +124,13 @@ begin
     aDevice.Link.DataSource := Updater;
     Devices.Add(aDevice.ID, aDevice)
   end;
+end;
+
+procedure TLATrackingManager.SetConnected(const Value: Boolean);
+begin
+  if not Value then
+    Updater.Active := False;
+  Connector.Connected := Value;
 end;
 
 procedure TLATrackingManager.SetConnector(const Value: TLAHttpTrackingConnection);
