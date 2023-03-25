@@ -82,6 +82,8 @@ type
     procedure DoServicesConnect; override;
     procedure DoServicesDisconnect; override;
   public
+    procedure InitServerCache; override;
+
     function GetClients: Variant;
     function GetDevices(const Clients: TIDDynArray): Variant;
     function GetDevicesData(const Devices: TIDDynArray): Variant;
@@ -408,6 +410,11 @@ begin
   finally
     ClientLock.Leave;
   end;
+end;
+
+procedure TLAHttpTrackingConnection.InitServerCache;
+begin
+  GetDevices([]);
 end;
 
 end.

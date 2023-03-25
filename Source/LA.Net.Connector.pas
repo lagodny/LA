@@ -95,6 +95,8 @@ type
     procedure Connect; virtual; abstract;
     procedure Disconnect; virtual; abstract;
 
+    procedure InitServerCache; virtual;
+
     function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; virtual; abstract;
 
     property ClientLock: TCriticalSection read FClientLock;
@@ -162,6 +164,11 @@ begin
 end;
 
 procedure TLACustomConnector.DoServicesDisconnect;
+begin
+
+end;
+
+procedure TLACustomConnector.InitServerCache;
 begin
 
 end;

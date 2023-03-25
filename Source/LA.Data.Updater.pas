@@ -49,6 +49,7 @@ type
     FInterval: Int64;
     FConnector: TLACustomConnector;
     FOnLinksUpdated: TNotifyEvent;
+    FOnException: TGetStrProc;
 
     // управление потоком обновления
     procedure Start;
@@ -80,6 +81,8 @@ type
     property Interval: Int64 read FInterval write SetInterval default DefInterval;
     // дополнительное событие, которое вызывается после обновления линков
     property OnLinksUpdated: TNotifyEvent read FOnLinksUpdated write FOnLinksUpdated;
+    // вызывается при ошибке во время обновления
+    property OnException: TGetStrProc read FOnException write FOnException;
   end;
 
 
@@ -311,7 +314,10 @@ begin
     ///  в случае ошибки, отключаемся и выходим - в следующей итерации повторим попытку подключения и запрос данных
     try
       if not FUpdater.Connector.Connected then
+      begin
         FUpdater.Connector.Connect;
+        FUpdater.Connector.InitServerCache;
+      end;
       //r := FUpdater.Connector.SensorsDataAsText(FIDs, True);
       r := FUpdater.GetDataFromServer(FIDs);
       // если запрос выполнен без ошибок, то нет необходимости повторно передавать IDs (сервер их запомнил)
@@ -319,6 +325,12 @@ begin
     except
       on e: Exception do
       begin
+        if Assigned(FUpdater.OnException) then
+          Queue(nil, procedure
+            begin
+              FUpdater.OnException(e.Message);
+            end);
+
         // в случае ошибки, нужно будет заново подключаться к серверу и передавать ID запрашиваемых датчиков
         FUpdater.Connector.Disconnect;
         FUpdater.FLinksChanged := True;
@@ -337,7 +349,11 @@ begin
       Queue(DoLinksUpdated);
   except
     on e: Exception do
-      ;
+      if Assigned(FUpdater.OnException) then
+        Queue(nil, procedure
+          begin
+            FUpdater.OnException(e.Message);
+          end);
   end;
 end;
 

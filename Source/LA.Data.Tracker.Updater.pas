@@ -39,8 +39,18 @@ begin
 end;
 
 function TLATrackerUpdater.GetDataFromServer(const IDs: TSIDArr): string;
+var
+  c: TLAHttpTrackingConnection;
 begin
-  Result := (Connector as TLAHttpTrackingConnection).GetDevicesData(TLANetConnectorUtils.SIDArr2IDDynArr(IDs));
+  c := Connector as TLAHttpTrackingConnection;
+//  /// при ошибке подключение будет разоврвано,
+//  ///  чтобы его корректно восстановить нужноо запросить список девайсов
+//  if not c.Connected then
+//  begin
+//    c.Connect;
+//    c.GetDevices([]);
+//  end;
+  Result := c.GetDevicesData(TLANetConnectorUtils.SIDArr2IDDynArr(IDs));
 end;
 
 {$REGION 'Sample to process'}
