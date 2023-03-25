@@ -18,18 +18,18 @@ type
   private
     {$REGION 'Fields'}
     FName: string;
+    FTime: TDateTime;
+    FStatus: string;
     FTags: TLATags;
     procedure SetName(const Value: string);
+    procedure SetTime(const Value: TDateTime);
+    procedure SetStatus(const Value: string);
     function GetLat: Double;
     function GetLon: Double;
     function GetSpeed: Double;
-    {$ENDREGION}
-  private
-    FStatus: string;
-    procedure SetStatus(const Value: string);
-    function GetCourse: Double;
-    function GetTime: string;
     function GetFL: Double;
+    function GetCourse: Double;
+    {$ENDREGION}
   protected
     procedure AssignTo(Dest: TPersistent); override;
     procedure EncodeData; override;
@@ -46,13 +46,12 @@ type
     /// наименование трекера
     property Name: string read FName write SetName;
     property Status: string read FStatus write SetStatus;
-
-    property Time: string read GetTime;
+    property Time: TDateTime read FTime write SetTime;
+    // быстрый доступ к значениям тегов
     property Lat: Double read GetLat;
     property Lon: Double read GetLon;
     property Speed: Double read GetSpeed;
     property Course: Double read GetCourse;
-
     property FL: Double read GetFL;
   end;
   TLATrackerLinks = TObjectDictionary<string, TLATrackerLink>;
@@ -74,6 +73,9 @@ begin
     var aDest: TLATrackerLink := TLATrackerLink(Dest);
 
     aDest.Name := Name;
+    aDest.Time := Time;
+    aDest.Status := Status;
+
     aDest.Tags.Clear;
     for var aItem in Tags do
     begin
@@ -114,6 +116,7 @@ var
 begin
   try
     vd.Init(Data);
+    Time := UnixToDateTime(vd.Value['time'], False);
     Status := vd.Value['status'];
     vTags.Init(vd.Value['tags']);
     for var i := 0 to vTags.Count - 1 do
@@ -233,11 +236,6 @@ begin
   Result := TagValueByName(TLATagNamesRec.Speed, 0);
 end;
 
-function TLATrackerLink.GetTime: string;
-begin
-  Result := TagValueByName(TLATagNamesRec.Time, '');
-end;
-
 procedure TLATrackerLink.SetName(const Value: string);
 begin
   FName := Value;
@@ -246,6 +244,11 @@ end;
 procedure TLATrackerLink.SetStatus(const Value: string);
 begin
   FStatus := Value;
+end;
+
+procedure TLATrackerLink.SetTime(const Value: TDateTime);
+begin
+  FTime := Value;
 end;
 
 function TLATrackerLink.TagValueByName(const aName: string; aDefault: Variant): Variant;

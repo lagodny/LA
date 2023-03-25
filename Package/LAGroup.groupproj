@@ -30,12 +30,6 @@
         <Projects Include="..\Test\TestTracking\TestTracking.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\..\..\Projects\Samples\Login Screens\LoginProject1.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\TECNATIVEMAP\Demo\CartoTrack\D11\CartoTrack.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -125,32 +119,14 @@
     <Target Name="TestTracking:Make">
         <MSBuild Projects="..\Test\TestTracking\TestTracking.dproj" Targets="Make"/>
     </Target>
-    <Target Name="LoginProject1">
-        <MSBuild Projects="..\..\..\Projects\Samples\Login Screens\LoginProject1.dproj"/>
-    </Target>
-    <Target Name="LoginProject1:Clean">
-        <MSBuild Projects="..\..\..\Projects\Samples\Login Screens\LoginProject1.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="LoginProject1:Make">
-        <MSBuild Projects="..\..\..\Projects\Samples\Login Screens\LoginProject1.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="CartoTrack">
-        <MSBuild Projects="..\..\TECNATIVEMAP\Demo\CartoTrack\D11\CartoTrack.dproj"/>
-    </Target>
-    <Target Name="CartoTrack:Clean">
-        <MSBuild Projects="..\..\TECNATIVEMAP\Demo\CartoTrack\D11\CartoTrack.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="CartoTrack:Make">
-        <MSBuild Projects="..\..\TECNATIVEMAP\Demo\CartoTrack\D11\CartoTrack.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;SCS;TestTracking;LoginProject1;CartoTrack"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;SCS;TestTracking"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;SCS:Clean;TestTracking:Clean;LoginProject1:Clean;CartoTrack:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;SCS:Clean;TestTracking:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;SCS:Make;TestTracking:Make;LoginProject1:Make;CartoTrack:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;SCS:Make;TestTracking:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
