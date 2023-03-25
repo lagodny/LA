@@ -30,6 +30,7 @@ type
     TabItem3: TTabItem;
     ComboBox1: TComboBox;
     cb: TComboEdit;
+    bClearLog: TButton;
     procedure bTestVariantDataClick(Sender: TObject);
     procedure CheckBox1Change(Sender: TObject);
     procedure bCreateTrackerLinkClick(Sender: TObject);
@@ -38,6 +39,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure cbChange(Sender: TObject);
     procedure cbTyping(Sender: TObject);
+    procedure bClearLogClick(Sender: TObject);
   private
     FManager: TLATrackingManager;
 
@@ -46,6 +48,7 @@ type
     FLink: TLATrackerLink;
 
     procedure DoDataChange(Sender: TObject);
+    procedure DoException(const aStr: string);
 
     procedure Init;
     procedure Deinit;
@@ -64,6 +67,11 @@ var
 implementation
 
 {$R *.fmx}
+
+procedure TForm4.bClearLogClick(Sender: TObject);
+begin
+  Memo1.Lines.Clear;
+end;
 
 procedure TForm4.bCreateTrackerLinkClick(Sender: TObject);
 begin
@@ -189,7 +197,15 @@ end;
 
 procedure TForm4.DoDataChange(Sender: TObject);
 begin
+  if not (TLATrackerLink(Sender).Name = 'N3') then
+    Exit;
+
   Log(TLATrackerLink(Sender).Name + ' data changed: ' + TLATrackerLink(Sender).Data);
+end;
+
+procedure TForm4.DoException(const aStr: string);
+begin
+  Memo1.Lines.Add('Ecxeption: ' + aStr);
 end;
 
 procedure TForm4.FormDestroy(Sender: TObject);
@@ -204,8 +220,8 @@ var
 begin
   FConnection := TLAHttpTrackingConnection.Create(Self);
   FConnection.Address := 'https://dc.tdc.org.ua';
-  FConnection.UserName := 'demo';
-  FConnection.Password := 'demo';
+  FConnection.UserName := 'Старовойт';
+  FConnection.Password := '1004';
   FConnection.Connect;
   r := FConnection.GetDevices([]);
   Log(r);
@@ -233,12 +249,13 @@ begin
 //  FManager.Connector.Password := 'demo';
 //  FManager.Connector.UserName := 'Лагодный';
 //  FManager.Connector.Password := '314';
-  FManager.Connector.UserName := 'Prometey';
-  FManager.Connector.Password := '2312';
+  FManager.Connector.UserName := 'Старовойт';
+  FManager.Connector.Password := '1004';
   FManager.Connector.Connect;
 
   FManager.Updater := TLATrackerUpdater.Create(nil);
   FManager.Updater.Connector := FManager.Connector;
+  FManager.Updater.OnException := DoException;
 
   FManager.InitClients;
   FManager.InitDevices;
