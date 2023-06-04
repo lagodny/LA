@@ -66,6 +66,8 @@ contains
   LA.Types.Tracker in '..\Source\LA.Types.Tracker.pas',
   LA.Net.Connector.Utils in '..\Source\LA.Net.Connector.Utils.pas',
   LA.Data.Tracking.Manager in '..\Source\LA.Data.Tracking.Manager.pas',
-  LA.Data.Tracking.Model in '..\Source\LA.Data.Tracking.Model.pas';
+  LA.Data.Tracking.Model in '..\Source\LA.Data.Tracking.Model.pas',
+  LA.Interval in '..\Source\LA.Interval.pas',
+  LA.Version in '..\Source\LA.Version.pas';
 
 end.

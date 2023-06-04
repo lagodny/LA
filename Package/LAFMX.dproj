@@ -3,7 +3,7 @@
         <ProjectGuid>{782A01ED-F415-4B3B-92BC-5737728A210D}</ProjectGuid>
         <MainSource>LAFMX.dpk</MainSource>
         <ProjectVersion>19.5</ProjectVersion>
-        <FrameworkType>None</FrameworkType>
+        <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
@@ -180,6 +180,15 @@
         <DCCReference Include="..\Source\FMX\LA.FMX.Objects.pas"/>
         <DCCReference Include="..\Source\FMX\LA.FMX.Registration.pas"/>
         <DCCReference Include="..\Source\FMX\LA.FMX.StdCtrls.pas"/>
+        <DCCReference Include="..\Source\FMX\LA.FMX.Frame.Interval.pas">
+            <Form>LAIntervalFrame</Form>
+            <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\Source\FMX\LA.FMX.Dialog.Interval.pas">
+            <Form>IntervalDlg</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

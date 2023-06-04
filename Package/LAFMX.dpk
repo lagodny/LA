@@ -37,6 +37,8 @@ requires
 contains
   LA.FMX.Objects in '..\Source\FMX\LA.FMX.Objects.pas',
   LA.FMX.Registration in '..\Source\FMX\LA.FMX.Registration.pas',
-  LA.FMX.StdCtrls in '..\Source\FMX\LA.FMX.StdCtrls.pas';
+  LA.FMX.StdCtrls in '..\Source\FMX\LA.FMX.StdCtrls.pas',
+  LA.FMX.Frame.Interval in '..\Source\FMX\LA.FMX.Frame.Interval.pas' {LAIntervalFrame: TFrame},
+  LA.FMX.Dialog.Interval in '..\Source\FMX\LA.FMX.Dialog.Interval.pas' {IntervalDlg};
 
 end.

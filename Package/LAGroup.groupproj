@@ -30,6 +30,30 @@
         <Projects Include="..\Test\TestTracking\TestTracking.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\..\..\Projects\Utils\Export Image from Style file\ExportImageFromStyle.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\..\Projects\Test\Bottom sheet\BottomSheet.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\TFrameStand\demos\BottomSheet\BottomSheetProject.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test TDC web\TestTDC_web.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\..\Projects\Test\Map\TestMap\TestMap.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\..\Projects\Test\Map\MapProblem\MapProblem.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test get DPI\TestGetDPI.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test Map Big tile\TestTiles.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -119,14 +143,86 @@
     <Target Name="TestTracking:Make">
         <MSBuild Projects="..\Test\TestTracking\TestTracking.dproj" Targets="Make"/>
     </Target>
+    <Target Name="ExportImageFromStyle">
+        <MSBuild Projects="..\..\..\Projects\Utils\Export Image from Style file\ExportImageFromStyle.dproj"/>
+    </Target>
+    <Target Name="ExportImageFromStyle:Clean">
+        <MSBuild Projects="..\..\..\Projects\Utils\Export Image from Style file\ExportImageFromStyle.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ExportImageFromStyle:Make">
+        <MSBuild Projects="..\..\..\Projects\Utils\Export Image from Style file\ExportImageFromStyle.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BottomSheet">
+        <MSBuild Projects="..\..\..\Projects\Test\Bottom sheet\BottomSheet.dproj"/>
+    </Target>
+    <Target Name="BottomSheet:Clean">
+        <MSBuild Projects="..\..\..\Projects\Test\Bottom sheet\BottomSheet.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BottomSheet:Make">
+        <MSBuild Projects="..\..\..\Projects\Test\Bottom sheet\BottomSheet.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BottomSheetProject">
+        <MSBuild Projects="..\..\TFrameStand\demos\BottomSheet\BottomSheetProject.dproj"/>
+    </Target>
+    <Target Name="BottomSheetProject:Clean">
+        <MSBuild Projects="..\..\TFrameStand\demos\BottomSheet\BottomSheetProject.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BottomSheetProject:Make">
+        <MSBuild Projects="..\..\TFrameStand\demos\BottomSheet\BottomSheetProject.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestTDC_web">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test TDC web\TestTDC_web.dproj"/>
+    </Target>
+    <Target Name="TestTDC_web:Clean">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test TDC web\TestTDC_web.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestTDC_web:Make">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test TDC web\TestTDC_web.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestMap">
+        <MSBuild Projects="..\..\..\Projects\Test\Map\TestMap\TestMap.dproj"/>
+    </Target>
+    <Target Name="TestMap:Clean">
+        <MSBuild Projects="..\..\..\Projects\Test\Map\TestMap\TestMap.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestMap:Make">
+        <MSBuild Projects="..\..\..\Projects\Test\Map\TestMap\TestMap.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MapProblem">
+        <MSBuild Projects="..\..\..\Projects\Test\Map\MapProblem\MapProblem.dproj"/>
+    </Target>
+    <Target Name="MapProblem:Clean">
+        <MSBuild Projects="..\..\..\Projects\Test\Map\MapProblem\MapProblem.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MapProblem:Make">
+        <MSBuild Projects="..\..\..\Projects\Test\Map\MapProblem\MapProblem.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestGetDPI">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test get DPI\TestGetDPI.dproj"/>
+    </Target>
+    <Target Name="TestGetDPI:Clean">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test get DPI\TestGetDPI.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestGetDPI:Make">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test get DPI\TestGetDPI.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestTiles">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test Map Big tile\TestTiles.dproj"/>
+    </Target>
+    <Target Name="TestTiles:Clean">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test Map Big tile\TestTiles.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestTiles:Make">
+        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test Map Big tile\TestTiles.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;SCS;TestTracking"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;SCS;TestTracking;ExportImageFromStyle;BottomSheet;BottomSheetProject;TestTDC_web;TestMap;MapProblem;TestGetDPI;TestTiles"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;SCS:Clean;TestTracking:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;SCS:Clean;TestTracking:Clean;ExportImageFromStyle:Clean;BottomSheet:Clean;BottomSheetProject:Clean;TestTDC_web:Clean;TestMap:Clean;MapProblem:Clean;TestGetDPI:Clean;TestTiles:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;SCS:Make;TestTracking:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;SCS:Make;TestTracking:Make;ExportImageFromStyle:Make;BottomSheet:Make;BottomSheetProject:Make;TestTDC_web:Make;TestMap:Make;MapProblem:Make;TestGetDPI:Make;TestTiles:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

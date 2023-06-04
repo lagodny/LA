@@ -241,6 +241,8 @@
         <DCCReference Include="..\Source\LA.Net.Connector.Utils.pas"/>
         <DCCReference Include="..\Source\LA.Data.Tracking.Manager.pas"/>
         <DCCReference Include="..\Source\LA.Data.Tracking.Model.pas"/>
+        <DCCReference Include="..\Source\LA.Interval.pas"/>
+        <DCCReference Include="..\Source\LA.Version.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
