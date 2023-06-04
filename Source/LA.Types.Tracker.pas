@@ -3,7 +3,7 @@
 interface
 
 uses
-  System.SysUtils,
+  System.SysUtils, System.Variants,
   System.Generics.Collections, System.Generics.Defaults,
   SynCrossPlatformJSON;
 
@@ -20,6 +20,9 @@ type
     FUN: string;
     FKind: Integer;
     FID: Integer;
+    FLookup: string;
+    FDisplayFormat: string;
+    FDisplayOrder: Integer;
     {$ENDREGION}
   public
     procedure Init(v: Variant);
@@ -29,6 +32,9 @@ type
     property Name: string read FName write FName;
     property UN: string read FUN write FUN;
     property Kind: Integer read FKind write FKind;
+    property Lookup: string read FLookup write FLookup;
+    property DisplayFormat: string read FDisplayFormat write FDisplayFormat;
+    property DisplayOrder: Integer read FDisplayOrder write FDisplayOrder;
   end;
   TLATagPrototypes = TObjectDictionary<Integer,TLATagPrototype>;
 
@@ -49,6 +55,8 @@ type
   public
     procedure FromJson(const aJson: string;  aPrototypes: TLATagPrototypes);
     procedure Init(v: Variant; aPrototypes: TLATagPrototypes);
+
+    function ValueAsText: string;
 
     // прототип тега
     property Proto: TLATagPrototype read FProto write FProto;
@@ -110,6 +118,9 @@ begin
   FName := v.name;
   FUN := v.un;
   FKind := v.kind;
+  FLookup := v.lookup;
+  FDisplayFormat := v.format;
+  FDisplayOrder := v.order;
 end;
 
 { TTag }
@@ -139,5 +150,16 @@ begin
     aPrototypes.TryGetValue(v.proto, FProto);
 end;
 
+
+function TLATag.ValueAsText: string;
+begin
+  Result := '';
+  if not Assigned(Proto)
+    or (Proto.Lookup <> '')
+    or Proto.DisplayFormat.StartsWith('date') or (Proto.DisplayFormat = '') then
+    Result := VarToStr(Value)
+  else
+    Result := FormatFloat(Proto.DisplayFormat, Value);
+end;
 
 end.
