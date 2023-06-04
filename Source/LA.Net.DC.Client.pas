@@ -143,6 +143,7 @@ type
     function GetClients(): Variant;
     function GetDevices(const Clients: TIDDynArray): Variant;
     function GetDevicesData(const Devices: TIDDynArray): Variant;
+    function GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
   end;
 
   /// implements ITracking from http://localhost:89/DC/Tracking
@@ -153,6 +154,7 @@ type
     function GetClients(): Variant;
     function GetDevices(const Clients: TIDDynArray): Variant;
     function GetDevicesData(const Devices: TIDDynArray): Variant;
+    function GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
   end;
 
 
@@ -801,7 +803,8 @@ begin
   fServiceName := 'Tracking';
   fServiceURI := 'Tracking';
   fInstanceImplementation := sicClientDriven;
-  fContractExpected := '2FF6A08E0B28DB55';
+//  fContractExpected := 'E1BDF348B7324919'; //'2FF6A08E0B28DB55';
+  fContractExpected := 'TrackingService 1.0'; //'2FF6A08E0B28DB55';
   inherited Create(aClient);
 end;
 
@@ -829,5 +832,12 @@ begin
   Result := res[0];
 end;
 
-end.
+function TServiceTracking.GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+var
+  res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self, 'GetTrack', 1, [DeviceID, Date1, Date2], res);
+  result := res[0];
+end;
 
+end.

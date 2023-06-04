@@ -87,6 +87,7 @@ type
     function GetClients: Variant;
     function GetDevices(const Clients: TIDDynArray): Variant;
     function GetDevicesData(const Devices: TIDDynArray): Variant;
+    function GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
   end;
 
 
@@ -407,6 +408,20 @@ begin
   try
     if Assigned(FTracking) then
       Result := FTracking.GetDevicesData(Devices);
+  finally
+    ClientLock.Leave;
+  end;
+end;
+
+function TLAHttpTrackingConnection.GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if Assigned(FTracking) then
+      Result := FTracking.GetTrack(DeviceID, Date1, Date2);
   finally
     ClientLock.Leave;
   end;
