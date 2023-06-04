@@ -4,6 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  System.DateUtils,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Memo.Types,
   FMX.StdCtrls, FMX.ScrollBox, FMX.Memo, FMX.Controls.Presentation,
   FMX.SearchBox,
@@ -12,7 +13,7 @@ uses
   LA.Data.Link.Tracker,
   LA.Data.Tracker.Updater,
   La.Data.Tracking.Manager, FMX.TabControl, FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.ListView, FMX.ListBox, FMX.Edit,
-  FMX.ComboEdit;
+  FMX.ComboEdit, FMX.DateTimeCtrls, FMX.Objects, FMX.Layouts;
 
 type
   TForm4 = class(TForm)
@@ -31,6 +32,13 @@ type
     ComboBox1: TComboBox;
     cb: TComboEdit;
     bClearLog: TButton;
+    Button2: TButton;
+    eDeviceID: TEdit;
+    dDate1: TDateEdit;
+    dDate2: TDateEdit;
+    ComboEdit1: TComboEdit;
+    Image1: TImage;
+    ListBox1: TListBox;
     procedure bTestVariantDataClick(Sender: TObject);
     procedure CheckBox1Change(Sender: TObject);
     procedure bCreateTrackerLinkClick(Sender: TObject);
@@ -40,6 +48,7 @@ type
     procedure cbChange(Sender: TObject);
     procedure cbTyping(Sender: TObject);
     procedure bClearLogClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     FManager: TLATrackingManager;
 
@@ -67,6 +76,8 @@ var
 implementation
 
 {$R *.fmx}
+
+uses uDM;
 
 procedure TForm4.bClearLogClick(Sender: TObject);
 begin
@@ -123,6 +134,40 @@ procedure TForm4.Button1Click(Sender: TObject);
 begin
   var aItem := ListView1.Items.AddItem;
   aItem.Text := ListView1.Items.Count.ToString;
+end;
+
+procedure TForm4.Button2Click(Sender: TObject);
+var
+  r: string;
+  v: Variant;
+  vd: TJSONVariantData;
+begin
+  var aConnection: TLAHttpTrackingConnection := TLAHttpTrackingConnection.Create(Self);
+//  aConnection.Address := '192.168.126.1:89';
+  aConnection.Address :='https://dc.tdc.org.ua';
+  aConnection.UserName := 'Старовойт';
+  aConnection.Password := '1004';
+  aConnection.Connect;
+  Log(aConnection.GetClients);
+  Log(aConnection.GetDevices([]));
+  r := aConnection.GetDevicesData([]);
+  Log(r);
+
+  r := aConnection.GetTrack(eDeviceID.Text.ToInteger, DateTimeToUnix(dDate1.Date, False), DateTimeToUnix(dDate2.Date, False));
+  r := StringReplace(r, '}', '}'#13, [rfReplaceAll]);
+  Memo1.Text := r;
+//  Log(r);
+
+//  vd.Init(r);
+//  if VarIsEmpty(vd.Value['_']) then
+////  if vd.Value['_'] = null then
+//    Log('_  = null')
+//  else
+//    Log(vd.Value['_']);
+//
+//  Log(vd.Value['_3475']);
+
+  aConnection.Free;
 end;
 
 procedure TForm4.CheckBox1Change(Sender: TObject);
@@ -244,7 +289,8 @@ procedure TForm4.InitManager;
 begin
   FManager := TLATrackingManager.Create(nil);
   FManager.Connector := TLAHttpTrackingConnection.Create(nil);
-  FManager.Connector.Address := 'https://dc.tdc.org.ua';
+//  FManager.Connector.Address := 'https://dc.tdc.org.ua';
+  FManager.Connector.Address := '192.168.126.1:89';
 //  FManager.Connector.UserName := 'demo';
 //  FManager.Connector.Password := 'demo';
 //  FManager.Connector.UserName := 'Лагодный';
