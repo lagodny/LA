@@ -1,0 +1,91 @@
+object IntervalDlg: TIntervalDlg
+  Left = 0
+  Top = 0
+  Caption = 'Select interval'
+  ClientHeight = 296
+  ClientWidth = 288
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnClose = FormClose
+  DesignerMasterStyle = 3
+  inline frInterval: TLAIntervalFrame
+    Align = Client
+    Size.Width = 288.000000000000000000
+    Size.Height = 251.000000000000000000
+    Size.PlatformDefault = False
+    inherited CenterLayout: TLayout
+      inherited LastLayout: TLayout
+        inherited nbNumber: TNumberBox
+          Size.Height = 32.000000000000000000
+        end
+        inherited cbHours: TComboBox
+          Size.Height = 32.000000000000000000
+        end
+      end
+      inherited DayLayout: TLayout
+        inherited deDay: TDateEdit
+          Size.Height = 32.000000000000000000
+        end
+      end
+      inherited MonthLayout: TLayout
+        inherited deMonth: TDateEdit
+          Size.Height = 32.000000000000000000
+        end
+      end
+      inherited PeriodLayout: TLayout
+        inherited cbKind: TComboBox
+          Size.Height = 32.000000000000000000
+        end
+      end
+      inherited FromLayout: TLayout
+        inherited deFrom: TDateEdit
+          Size.Height = 32.000000000000000000
+        end
+        inherited teFrom: TTimeEdit
+          Size.Height = 32.000000000000000000
+        end
+      end
+      inherited ToLayout: TLayout
+        inherited deTo: TDateEdit
+          Size.Height = 32.000000000000000000
+        end
+        inherited teTo: TTimeEdit
+          Size.Height = 32.000000000000000000
+        end
+      end
+    end
+  end
+  object pButton: TPanel
+    Align = Bottom
+    Position.Y = 251.000000000000000000
+    Size.Width = 288.000000000000000000
+    Size.Height = 45.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object bOK: TButton
+      Default = True
+      ModalResult = 1
+      Position.X = 34.000000000000000000
+      Position.Y = 3.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'OK'
+      OnClick = bOKClick
+    end
+    object bCancel: TButton
+      ModalResult = 2
+      Position.X = 160.000000000000000000
+      Position.Y = 3.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Cancel'
+      OnClick = bCancelClick
+    end
+  end
+end

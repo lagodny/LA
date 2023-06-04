@@ -1,0 +1,251 @@
+object LAIntervalFrame: TLAIntervalFrame
+  Align = Contents
+  Size.Width = 381.000000000000000000
+  Size.Height = 489.000000000000000000
+  Size.PlatformDefault = False
+  object CenterLayout: TLayout
+    Align = Center
+    Size.Width = 272.000000000000000000
+    Size.Height = 220.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object LastLayout: TLayout
+      Align = Top
+      Padding.Left = 5.000000000000000000
+      Padding.Top = 5.000000000000000000
+      Padding.Right = 5.000000000000000000
+      Padding.Bottom = 5.000000000000000000
+      Size.Width = 272.000000000000000000
+      Size.Height = 37.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object rbLast: TRadioButton
+        Align = Left
+        IsChecked = True
+        Position.X = 5.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 113.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Last'
+        OnChange = rbLastChange
+      end
+      object nbNumber: TNumberBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Left
+        TabOrder = 1
+        Cursor = crIBeam
+        ValueType = Float
+        KeyboardType = NumbersAndPunctuation
+        Position.X = 118.000000000000000000
+        Position.Y = 5.000000000000000000
+        HorzIncrement = 0.100000001490116100
+        VertIncrement = 1.000000000000000000
+        Size.Width = 76.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object cbHours: TComboBox
+        Align = Left
+        Items.Strings = (
+          'hours'
+          'days')
+        ItemIndex = 0
+        Margins.Left = 3.000000000000000000
+        Position.X = 197.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 71.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+    end
+    object DayLayout: TLayout
+      Align = Top
+      Padding.Left = 5.000000000000000000
+      Padding.Top = 5.000000000000000000
+      Padding.Right = 5.000000000000000000
+      Padding.Bottom = 5.000000000000000000
+      Position.Y = 37.000000000000000000
+      Size.Width = 272.000000000000000000
+      Size.Height = 37.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object rbDay: TRadioButton
+        Align = Left
+        Position.X = 5.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 113.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Day'
+        OnChange = rbLastChange
+      end
+      object deDay: TDateEdit
+        Date = 45013.000000000000000000
+        Align = Left
+        Position.X = 118.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 150.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+    end
+    object MonthLayout: TLayout
+      Align = Top
+      Padding.Left = 5.000000000000000000
+      Padding.Top = 5.000000000000000000
+      Padding.Right = 5.000000000000000000
+      Padding.Bottom = 5.000000000000000000
+      Position.Y = 74.000000000000000000
+      Size.Width = 272.000000000000000000
+      Size.Height = 37.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object rbMonth: TRadioButton
+        Align = Left
+        Position.X = 5.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 113.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Month'
+        OnChange = rbLastChange
+      end
+      object deMonth: TDateEdit
+        Date = 45013.000000000000000000
+        Format = 'mmmm yyyy'
+        Align = Left
+        Position.X = 118.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 150.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+    end
+    object PeriodLayout: TLayout
+      Align = Top
+      Padding.Left = 5.000000000000000000
+      Padding.Top = 5.000000000000000000
+      Padding.Right = 5.000000000000000000
+      Padding.Bottom = 5.000000000000000000
+      Position.Y = 111.000000000000000000
+      Size.Width = 272.000000000000000000
+      Size.Height = 37.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      object rbPeriod: TRadioButton
+        Align = Left
+        Position.X = 5.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 113.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Period'
+        OnChange = rbLastChange
+      end
+      object cbKind: TComboBox
+        Align = Left
+        Position.X = 118.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 150.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        OnChange = cbKindChange
+      end
+    end
+    object FromLayout: TLayout
+      Align = Top
+      Padding.Left = 10.000000000000000000
+      Padding.Top = 5.000000000000000000
+      Padding.Right = 5.000000000000000000
+      Padding.Bottom = 5.000000000000000000
+      Position.Y = 148.000000000000000000
+      Size.Width = 272.000000000000000000
+      Size.Height = 37.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      object lFrom: TLabel
+        Align = Left
+        Position.X = 10.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 55.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'From'
+        TabOrder = 0
+      end
+      object deFrom: TDateEdit
+        Date = 45013.000000000000000000
+        Align = Left
+        Position.X = 65.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 113.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+      object teFrom: TTimeEdit
+        Time = 0.605473495370370300
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Position.X = 188.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+    end
+    object ToLayout: TLayout
+      Align = Top
+      Padding.Left = 10.000000000000000000
+      Padding.Top = 5.000000000000000000
+      Padding.Right = 5.000000000000000000
+      Padding.Bottom = 5.000000000000000000
+      Position.Y = 185.000000000000000000
+      Size.Width = 272.000000000000000000
+      Size.Height = 37.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+      object lTo: TLabel
+        Align = Left
+        Position.X = 10.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 55.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'To'
+        TabOrder = 0
+      end
+      object deTo: TDateEdit
+        Date = 45013.000000000000000000
+        Align = Left
+        Position.X = 65.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 113.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+      object teTo: TTimeEdit
+        Time = 0.605473495370370300
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Position.X = 188.000000000000000000
+        Position.Y = 5.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+    end
+  end
+end
