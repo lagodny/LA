@@ -58,6 +58,8 @@ type
   public
     constructor Create(const AOwner: TPersistent); virtual;
     destructor Destroy; override;
+
+    procedure Clear; virtual;
     // событие изменения данных для компонента владельца
     property OnOwnerNotify: TNotifyEvent read FOnOwnerNotify write FOnOwnerNotify;
   public
@@ -215,6 +217,11 @@ end;
 //begin
 //  FLinks.Add(aLink)
 //end;
+
+procedure TLADataLink.Clear;
+begin
+  DataSource := nil;
+end;
 
 constructor TLADataLink.Create(const AOwner: TPersistent);
 begin
