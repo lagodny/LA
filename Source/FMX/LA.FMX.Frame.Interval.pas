@@ -33,11 +33,14 @@ type
     cbKind: TComboBox;
     procedure rbLastChange(Sender: TObject);
     procedure cbKindChange(Sender: TObject);
+    procedure deFromChange(Sender: TObject);
   private
+    FViewUpdating: Boolean;
     FInterval: TLAInterval;
     procedure SetInterval(const Value: TLAInterval);
 
     procedure InitIntervalKind;
+    procedure SetAbsolute;
     procedure UpdateUI;
   public
     constructor Create(AOwner: TComponent); override;
@@ -61,7 +64,8 @@ uses
 procedure TLAIntervalFrame.cbKindChange(Sender: TObject);
 begin
   Interval.Kind := TLAIntervalKind(cbKind.ItemIndex);
-  IntervalToView;
+  if not FViewUpdating then
+    IntervalToView;
 end;
 
 constructor TLAIntervalFrame.Create(AOwner: TComponent);
@@ -71,6 +75,11 @@ begin
 
   FInterval := TLAInterval.Create;
   Interval := TLAInterval.LastInterval;
+end;
+
+procedure TLAIntervalFrame.deFromChange(Sender: TObject);
+begin
+  SetAbsolute;
 end;
 
 destructor TLAIntervalFrame.Destroy;
@@ -101,6 +110,14 @@ begin
   UpdateUI;
 end;
 
+procedure TLAIntervalFrame.SetAbsolute;
+begin
+  FViewUpdating := True;
+  cbKind.ItemIndex := 0;
+  FViewUpdating := False;
+//  FInterval.Kind := ikAbsolute;
+end;
+
 procedure TLAIntervalFrame.SetInterval(const Value: TLAInterval);
 begin
   FInterval.Assign(Value);
@@ -109,54 +126,59 @@ end;
 
 procedure TLAIntervalFrame.IntervalToView;
 begin
-  case Interval.Kind of
-    ikAbsolute,
-    ikToday,
-    ikYesterday,
-    ikThisWeek,
-    ikPreviousWeek,
-    ikThisMonth,
-    ikPreviousMonth,
-    ikThisYear:
-    begin
-      rbPeriod.IsChecked := True;
-      cbKind.ItemIndex := Ord(Interval.Kind);
+  FViewUpdating := True;
+  try
+    case Interval.Kind of
+      ikAbsolute,
+      ikToday,
+      ikYesterday,
+      ikThisWeek,
+      ikPreviousWeek,
+      ikThisMonth,
+      ikPreviousMonth,
+      ikThisYear:
+      begin
+        rbPeriod.IsChecked := True;
+        cbKind.ItemIndex := Ord(Interval.Kind);
+      end;
+
+      ikLastNHours:
+      begin
+        rbLast.IsChecked := True;
+        cbHours.ItemIndex := 0;
+        cbKind.ItemIndex := Ord(Interval.Kind);
+      end;
+
+      ikLastNDays:
+      begin
+        rbLast.IsChecked := True;
+        cbHours.ItemIndex := 1;
+        cbKind.ItemIndex := Ord(Interval.Kind);
+      end;
     end;
 
-    ikLastNHours:
-    begin
-      rbLast.IsChecked := True;
-      cbHours.ItemIndex := 0;
-      cbKind.ItemIndex := Ord(Interval.Kind);
-    end;
+    rbLast.IsChecked := Interval.Kind in [ikLastNHours, ikLastNDays];
+    rbDay.IsChecked := (Interval.Kind = ikAbsolute) and SameValue(Interval.Date1 + 1, Interval.Date2);
+    rbMonth.IsChecked := (Interval.Kind = ikAbsolute)
+      and SameValue(Interval.Date1, Trunc(StartOfTheMonth(Interval.Date1)))
+      and SameValue(Interval.Date2, Trunc(StartOfTheMonth(Interval.Date2)))
+      and (MonthsBetween(Interval.Date1, Interval.Date2) = 1);
+    rbPeriod.IsChecked := not (rbLast.IsChecked or rbDay.IsChecked or rbMonth.IsChecked);
 
-    ikLastNDays:
-    begin
-      rbLast.IsChecked := True;
-      cbHours.ItemIndex := 1;
-      cbKind.ItemIndex := Ord(Interval.Kind);
-    end;
+    nbNumber.Value := Interval.Shift;
+
+    deDay.Date := Interval.Date1;
+    deMonth.Date := Interval.Date1;
+
+    deFrom.Date := Trunc(Interval.Date1);
+    teFrom.Time := Frac(Interval.Date1);
+    deTo.Date := Trunc(Interval.Date2);
+    teTo.Time := Frac(Interval.Date2);
+
+    UpdateUI;
+  finally
+    FViewUpdating := False;
   end;
-
-  rbLast.IsChecked := Interval.Kind in [ikLastNHours, ikLastNDays];
-  rbDay.IsChecked := (Interval.Kind = ikAbsolute) and SameValue(Interval.Date1 + 1, Interval.Date2);
-  rbMonth.IsChecked := (Interval.Kind = ikAbsolute)
-    and SameValue(Interval.Date1, Trunc(StartOfTheMonth(Interval.Date1)))
-    and SameValue(Interval.Date2, Trunc(StartOfTheMonth(Interval.Date2)))
-    and (MonthsBetween(Interval.Date1, Interval.Date2) = 1);
-  rbPeriod.IsChecked := not (rbLast.IsChecked or rbDay.IsChecked or rbMonth.IsChecked);
-
-  nbNumber.Value := Interval.Shift;
-
-  deDay.Date := Interval.Date1;
-  deMonth.Date := Interval.Date1;
-
-  deFrom.Date := Trunc(Interval.Date1);
-  teFrom.Time := Frac(Interval.Date1);
-  deTo.Date := Trunc(Interval.Date2);
-  teTo.Time := Frac(Interval.Date2);
-
-  UpdateUI;
 end;
 
 procedure TLAIntervalFrame.UpdateUI;

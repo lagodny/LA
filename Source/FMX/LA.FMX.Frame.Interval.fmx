@@ -20,11 +20,10 @@ object LAIntervalFrame: TLAIntervalFrame
       Size.PlatformDefault = False
       TabOrder = 0
       object rbLast: TRadioButton
-        Align = Left
         IsChecked = True
         Position.X = 5.000000000000000000
         Position.Y = 5.000000000000000000
-        Size.Width = 113.000000000000000000
+        Size.Width = 268.000000000000000000
         Size.Height = 27.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
@@ -33,7 +32,6 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object nbNumber: TNumberBox
         Touch.InteractiveGestures = [LongTap, DoubleTap]
-        Align = Left
         TabOrder = 1
         Cursor = crIBeam
         ValueType = Float
@@ -47,7 +45,6 @@ object LAIntervalFrame: TLAIntervalFrame
         Size.PlatformDefault = False
       end
       object cbHours: TComboBox
-        Align = Left
         Items.Strings = (
           'hours'
           'days')
@@ -73,10 +70,9 @@ object LAIntervalFrame: TLAIntervalFrame
       Size.PlatformDefault = False
       TabOrder = 1
       object rbDay: TRadioButton
-        Align = Left
         Position.X = 5.000000000000000000
         Position.Y = 5.000000000000000000
-        Size.Width = 113.000000000000000000
+        Size.Width = 268.000000000000000000
         Size.Height = 27.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
@@ -85,7 +81,6 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object deDay: TDateEdit
         Date = 45013.000000000000000000
-        Align = Left
         Position.X = 118.000000000000000000
         Position.Y = 5.000000000000000000
         Size.Width = 150.000000000000000000
@@ -106,10 +101,9 @@ object LAIntervalFrame: TLAIntervalFrame
       Size.PlatformDefault = False
       TabOrder = 2
       object rbMonth: TRadioButton
-        Align = Left
         Position.X = 5.000000000000000000
         Position.Y = 5.000000000000000000
-        Size.Width = 113.000000000000000000
+        Size.Width = 268.000000000000000000
         Size.Height = 27.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
@@ -119,7 +113,6 @@ object LAIntervalFrame: TLAIntervalFrame
       object deMonth: TDateEdit
         Date = 45013.000000000000000000
         Format = 'mmmm yyyy'
-        Align = Left
         Position.X = 118.000000000000000000
         Position.Y = 5.000000000000000000
         Size.Width = 150.000000000000000000
@@ -140,10 +133,9 @@ object LAIntervalFrame: TLAIntervalFrame
       Size.PlatformDefault = False
       TabOrder = 3
       object rbPeriod: TRadioButton
-        Align = Left
         Position.X = 5.000000000000000000
         Position.Y = 5.000000000000000000
-        Size.Width = 113.000000000000000000
+        Size.Width = 268.000000000000000000
         Size.Height = 27.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
@@ -151,7 +143,6 @@ object LAIntervalFrame: TLAIntervalFrame
         OnChange = rbLastChange
       end
       object cbKind: TComboBox
-        Align = Left
         Position.X = 118.000000000000000000
         Position.Y = 5.000000000000000000
         Size.Width = 150.000000000000000000
@@ -173,7 +164,6 @@ object LAIntervalFrame: TLAIntervalFrame
       Size.PlatformDefault = False
       TabOrder = 4
       object lFrom: TLabel
-        Align = Left
         Position.X = 10.000000000000000000
         Position.Y = 5.000000000000000000
         Size.Width = 55.000000000000000000
@@ -184,7 +174,7 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object deFrom: TDateEdit
         Date = 45013.000000000000000000
-        Align = Left
+        OnChange = deFromChange
         Position.X = 65.000000000000000000
         Position.Y = 5.000000000000000000
         Size.Width = 113.000000000000000000
@@ -194,7 +184,6 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object teFrom: TTimeEdit
         Time = 0.605473495370370300
-        Align = Left
         Margins.Left = 10.000000000000000000
         Position.X = 188.000000000000000000
         Position.Y = 5.000000000000000000
@@ -216,7 +205,6 @@ object LAIntervalFrame: TLAIntervalFrame
       Size.PlatformDefault = False
       TabOrder = 5
       object lTo: TLabel
-        Align = Left
         Position.X = 10.000000000000000000
         Position.Y = 5.000000000000000000
         Size.Width = 55.000000000000000000
@@ -227,7 +215,6 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object deTo: TDateEdit
         Date = 45013.000000000000000000
-        Align = Left
         Position.X = 65.000000000000000000
         Position.Y = 5.000000000000000000
         Size.Width = 113.000000000000000000
@@ -237,7 +224,6 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object teTo: TTimeEdit
         Time = 0.605473495370370300
-        Align = Left
         Margins.Left = 10.000000000000000000
         Position.X = 188.000000000000000000
         Position.Y = 5.000000000000000000
