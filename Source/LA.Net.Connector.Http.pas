@@ -87,7 +87,12 @@ type
     function GetClients: Variant;
     function GetDevices(const Clients: TIDDynArray): Variant;
     function GetDevicesData(const Devices: TIDDynArray): Variant;
+
     function GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+    function GetReport(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+
+    procedure SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
+
   end;
 
 
@@ -413,6 +418,20 @@ begin
   end;
 end;
 
+function TLAHttpTrackingConnection.GetReport(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if Assigned(FTracking) then
+      Result := FTracking.GetReport(DeviceID, Date1, Date2);
+  finally
+    ClientLock.Leave;
+  end;
+end;
+
 function TLAHttpTrackingConnection.GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
 begin
   if not Connected then
@@ -430,6 +449,21 @@ end;
 procedure TLAHttpTrackingConnection.InitServerCache;
 begin
   GetDevices([]);
+end;
+
+procedure TLAHttpTrackingConnection.SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if Assigned(FTracking) then
+      FTracking.SetTagValue(DeviceID, TagSID, Value);
+  finally
+    ClientLock.Leave;
+  end;
+
 end;
 
 end.

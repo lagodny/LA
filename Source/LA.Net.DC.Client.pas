@@ -143,7 +143,12 @@ type
     function GetClients(): Variant;
     function GetDevices(const Clients: TIDDynArray): Variant;
     function GetDevicesData(const Devices: TIDDynArray): Variant;
+
     function GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+    function GetReport(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+
+    procedure SetDevice(const Device: Variant);
+    procedure SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
   end;
 
   /// implements ITracking from http://localhost:89/DC/Tracking
@@ -154,7 +159,12 @@ type
     function GetClients(): Variant;
     function GetDevices(const Clients: TIDDynArray): Variant;
     function GetDevicesData(const Devices: TIDDynArray): Variant;
+
     function GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+    function GetReport(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+
+    procedure SetDevice(const Device: Variant);
+    procedure SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
   end;
 
 
@@ -832,12 +842,34 @@ begin
   Result := res[0];
 end;
 
+function TServiceTracking.GetReport(const DeviceID: TID; const Date1, Date2: Int64): Variant;
+var
+  res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self, 'GetReport', 1, [DeviceID, Date1, Date2], res);
+  result := res[0];
+end;
+
 function TServiceTracking.GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
 var
   res: TVariantDynArray;
 begin
   fClient.CallRemoteService(self, 'GetTrack', 1, [DeviceID, Date1, Date2], res);
   result := res[0];
+end;
+
+procedure TServiceTracking.SetDevice(const Device: Variant);
+var
+  res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'SetDevice', 0, [Device], res);
+end;
+
+procedure TServiceTracking.SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
+var
+  res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'SetTagValue', 0, [DeviceID, TagSID, Value], res);
 end;
 
 end.
