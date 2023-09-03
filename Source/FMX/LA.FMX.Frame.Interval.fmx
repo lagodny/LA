@@ -45,10 +45,6 @@ object LAIntervalFrame: TLAIntervalFrame
         Size.PlatformDefault = False
       end
       object cbHours: TComboBox
-        Items.Strings = (
-          'hours'
-          'days')
-        ItemIndex = 0
         Margins.Left = 3.000000000000000000
         Position.X = 197.000000000000000000
         Position.Y = 5.000000000000000000
@@ -174,7 +170,7 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object deFrom: TDateEdit
         Date = 45013.000000000000000000
-        OnChange = deFromChange
+        OnChange = PeriodChange
         Position.X = 65.000000000000000000
         Position.Y = 5.000000000000000000
         Size.Width = 113.000000000000000000
@@ -184,6 +180,7 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object teFrom: TTimeEdit
         Time = 0.605473495370370300
+        OnChange = PeriodChange
         Margins.Left = 10.000000000000000000
         Position.X = 188.000000000000000000
         Position.Y = 5.000000000000000000
@@ -215,6 +212,7 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object deTo: TDateEdit
         Date = 45013.000000000000000000
+        OnChange = PeriodChange
         Position.X = 65.000000000000000000
         Position.Y = 5.000000000000000000
         Size.Width = 113.000000000000000000
@@ -224,6 +222,7 @@ object LAIntervalFrame: TLAIntervalFrame
       end
       object teTo: TTimeEdit
         Time = 0.605473495370370300
+        OnChange = PeriodChange
         Margins.Left = 10.000000000000000000
         Position.X = 188.000000000000000000
         Position.Y = 5.000000000000000000

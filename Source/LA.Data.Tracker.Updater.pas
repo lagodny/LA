@@ -14,6 +14,7 @@ type
   protected
     function GetDataFromServer(const IDs: TSIDArr): string; override;
     procedure ProcessServerResponse(const aResponse: string); override;
+    procedure ProcessServerException(e: Exception); override;
   public
     procedure Attach(const aLink: TLADataLink); override;
   end;
@@ -113,6 +114,19 @@ end;
   }
   *)
 {$ENDREGION}
+procedure TLATrackerUpdater.ProcessServerException(e: Exception);
+begin
+  FLock.BeginRead;
+  try
+    for var i := 0 to Links.Count - 1 do
+    begin
+      Links[i].Data := e.Message;
+    end;
+  finally
+    FLock.EndRead;
+  end;
+end;
+
 procedure TLATrackerUpdater.ProcessServerResponse(const aResponse: string);
 var
   vd: TJSONVariantData;

@@ -108,19 +108,22 @@ resourcestring
 
 implementation
 
-const
-  cKindArr: array of string = [
-    rsAbsolute,
-    rsToday,
-    rsYesterday,
-    rsThisWeek,
-    rsPreviousWeek,
-    rsThisMonth,
-    rsPreviousMonth,
-    rsThisYear,
-    rsLastNHoursFmt,
-    rsLastNDaysFmt
-  ];
+uses
+  DKLang;
+
+//const
+//  cKindArr: array of string = [
+//    rsAbsolute,
+//    rsToday,
+//    rsYesterday,
+//    rsThisWeek,
+//    rsPreviousWeek,
+//    rsThisMonth,
+//    rsPreviousMonth,
+//    rsThisYear,
+//    rsLastNHoursFmt,
+//    rsLastNDaysFmt
+//  ];
 //
 //
 //  cKindArr: array of string = [
@@ -182,7 +185,8 @@ begin
     ikThisMonth,
     ikPreviousMonth,
     ikThisYear:
-      Result := cKindArr[Ord(FKind)];
+//      Result := cKindArr[Ord(FKind)];
+      Result := TLAInterval.IntervalKindToStr(FKind);
   end;
 end;
 
@@ -254,9 +258,9 @@ begin
     ikYesterday:
       FDate1 := Trunc(Now) - 1;
     ikThisWeek:
-      FDate1 := Trunc(Now - DayOfTheWeek(Now));
+      FDate1 := Trunc(Now - DayOfTheWeek(Now)) + 1;
     ikPreviousWeek:
-      FDate1 := (Trunc(Now) - DayOfTheWeek(Now)) - 7;
+      FDate1 := (Trunc(Now) - DayOfTheWeek(Now)) - 7 + 1;
     ikThisMonth:
       FDate1 := Trunc(StartOfTheMonth(Now));
     ikPreviousMonth:
@@ -280,7 +284,7 @@ begin
     ikYesterday:
       FDate2 := Trunc(Now);
     ikPreviousWeek:
-      FDate2 := Trunc(Now) - DayOfTheWeek(Now);
+      FDate2 := Trunc(Now) - DayOfTheWeek(Now) + 1;
     ikPreviousMonth:
       FDate2 := Trunc(StartOfTheMonth(Now));
     else
@@ -296,31 +300,58 @@ begin
   Result := FLastInterval;
 end;
 
+//class function TLAInterval.IntervalKindToStr(aKind: TLAIntervalKind): string;
+//begin
+//  case aKind of
+//    ikAbsolute:
+//      Result := rsAbsolute;
+//    ikLastNHours:
+//      Result := rsLastNHoursFmt;
+//    ikLastNDays:
+//      Result := rsLastNDaysFmt;
+//    ikToday:
+//      Result := rsToday;
+//    ikYesterday:
+//      Result := rsYesterday;
+//    ikThisWeek:
+//      Result := rsThisWeek;
+//    ikPreviousWeek:
+//      Result := rsPreviousWeek;
+//    ikThisMonth:
+//      Result := rsThisMonth;
+//    ikPreviousMonth:
+//      Result := rsPreviousMonth;
+//    ikThisYear:
+//      Result := rsThisYear;
+//  end;
+//end;
+
 class function TLAInterval.IntervalKindToStr(aKind: TLAIntervalKind): string;
 begin
   case aKind of
     ikAbsolute:
-      Result := rsAbsolute;
+      Result := DKLangConstW('sAbsolute');// rsAbsolute;
     ikLastNHours:
-      Result := rsLastNHoursFmt;
+      Result := DKLangConstW('sLastNHoursFmt');// rsLastNHoursFmt;
     ikLastNDays:
-      Result := rsLastNDaysFmt;
+      Result := DKLangConstW('sLastNDaysFmt');// rsLastNDaysFmt;
     ikToday:
-      Result := rsToday;
+      Result := DKLangConstW('sToday');// rsToday;
     ikYesterday:
-      Result := rsYesterday;
+      Result := DKLangConstW('sYesterday');// rsYesterday;
     ikThisWeek:
-      Result := rsThisWeek;
+      Result := DKLangConstW('sThisWeek');// rsThisWeek;
     ikPreviousWeek:
-      Result := rsPreviousWeek;
+      Result := DKLangConstW('sPreviousWeek');// rsPreviousWeek;
     ikThisMonth:
-      Result := rsThisMonth;
+      Result := DKLangConstW('sThisMonth');// rsThisMonth;
     ikPreviousMonth:
-      Result := rsPreviousMonth;
+      Result := DKLangConstW('sPreviousMonth');// rsPreviousMonth;
     ikThisYear:
-      Result := rsThisYear;
+      Result := DKLangConstW('sThisYear');// rsThisYear;
   end;
 end;
+
 
 procedure TLAInterval.Lock;
 begin

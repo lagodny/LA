@@ -26,7 +26,9 @@ type
   TLAHttpConnector = class(TLACustomConnector, IDCMonitoring)
   private
     FClient: TSQLRestClientHTTP;
+    FSession: IDCSession;
     FMonitoring: IMonitoring;
+    FSignUp: IDCSignUp;
     FEncrypt: boolean;
     FCompressionLevel: Integer;
     FHttps: boolean;
@@ -57,6 +59,8 @@ type
     procedure DoConnect; override;
     procedure DoDisconnect; override;
 
+    procedure Authorize; override;
+
     procedure DoServicesConnect; override;
     procedure DoServicesDisconnect; override;
   public
@@ -68,6 +72,10 @@ type
 
     // взаимодействие с Мониторингом
     function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; override;
+
+    // регистрация
+    procedure RequestSignUp(const Login: String; const EMail: String; const Password: String);
+
   published
     property Https: boolean read FHttps write SetHttps;
     property ProxyName: string read FProxyName write SetProxyName;
@@ -92,6 +100,10 @@ type
     function GetReport(const DeviceID: TID; const Date1, Date2: Int64): Variant;
 
     procedure SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
+    procedure SetDevice(const Device: Variant);
+
+    procedure CreateDevice(const aName, aLogin, aPhone, aProto: string);
+    procedure ShareDevice(const aDeviceID: TID; const aLogin: string; const aRight: string);
 
   end;
 
@@ -99,7 +111,20 @@ type
 
 implementation
 
+uses
+  LA.Utils.System;
+
 { TDCHTTPConnector }
+
+procedure TLAHttpConnector.Authorize;
+begin
+  if not Connected then
+    DoConnect;
+
+  FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
+  FAuthorized := True;
+  FSession.SetSessionInfo(TLASystemUtils.ProgramFullSpec);
+end;
 
 procedure TLAHttpConnector.Connect;
 begin
@@ -109,7 +134,9 @@ end;
 constructor TLAHttpConnector.Create(AOwner: TComponent);
 begin
   inherited;
-
+  FConnectTimeOut := 5000;
+  FReadTimeOut := 10000;
+  FSendTimeOut := 5000;
 end;
 
 destructor TLAHttpConnector.Destroy;
@@ -133,6 +160,7 @@ end;
 
 procedure TLAHttpConnector.DoDisconnect;
 begin
+  FAuthorized := False;
   ClientLock.Enter;
   try
     if Assigned(FClient) then
@@ -151,13 +179,17 @@ end;
 procedure TLAHttpConnector.DoServicesConnect;
 begin
   inherited;
+  FSession := TServiceDCSession.Create(FClient);
   FMonitoring :=  TServiceMonitoring.Create(FClient);
+  FSignUp := TServiceDCSignUp.Create(FClient);
 end;
 
 procedure TLAHttpConnector.DoServicesDisconnect;
 begin
   inherited;
+  FSignUp := nil;
   FMonitoring := nil;
+  FSession := nil;
 end;
 
 function TLAHttpConnector.GetCompressionLevel: Integer;
@@ -190,6 +222,20 @@ begin
   Result := FReadTimeOut;
 end;
 
+procedure TLAHttpConnector.RequestSignUp(const Login, EMail, Password: String);
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if Assigned(FSignUp) then
+      FSignUp.RequestSignUp(Login, EMail, Password);
+  finally
+    ClientLock.Leave;
+  end;
+end;
+
 function TLAHttpConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
 begin
   if not Connected then
@@ -197,6 +243,9 @@ begin
 
   ClientLock.Enter;
   try
+    if not Authorized then
+      Authorize;
+
     if Assigned(FMonitoring) then
       Result := FMonitoring.SensorsDataAsText(IDs, aUseCache);
   finally
@@ -286,10 +335,11 @@ begin
 
   ClientLock.Enter;
   try
-    FClient := GetClient(aAddrRec.Host, UserName, Password, StrToInt(aAddrRec.Port), SERVER_ROOT, aAddrRec.Https,
+//    FClient := GetClient(aAddrRec.Host, UserName, Password, StrToInt(aAddrRec.Port), SERVER_ROOT, aAddrRec.Https,
+    FClient := GetClientNoUser(aAddrRec.Host, {UserName, Password,} StrToInt(aAddrRec.Port), SERVER_ROOT, aAddrRec.Https,
       ProxyName, ProxyByPass,
       SendTimeOut, ReadTimeout, ConnectTimeout);
-    FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
+//    FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
 
     DoServicesConnect;
 //    FMonitoring :=  TServiceMonitoring.Create(FClient);
@@ -363,6 +413,23 @@ end;
 
 { TDCHttpTrackingConnection }
 
+procedure TLAHttpTrackingConnection.CreateDevice(const aName, aLogin, aPhone, aProto: string);
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if not Authorized then
+      Authorize;
+
+    if Assigned(FTracking) then
+      FTracking.CreateDevice(aName, aLogin, aPhone, aProto);
+  finally
+    ClientLock.Leave;
+  end;
+end;
+
 procedure TLAHttpTrackingConnection.DoServicesConnect;
 begin
   inherited;
@@ -382,6 +449,9 @@ begin
 
   ClientLock.Enter;
   try
+    if not Authorized then
+      Authorize;
+
     if Assigned(FTracking) then
       Result := FTracking.GetClients;
   finally
@@ -397,6 +467,9 @@ begin
 
   ClientLock.Enter;
   try
+    if not Authorized then
+      Authorize;
+
     if Assigned(FTracking) then
       Result := FTracking.GetDevices(Clients);
   finally
@@ -411,6 +484,9 @@ begin
 
   ClientLock.Enter;
   try
+    if not Authorized then
+      Authorize;
+
     if Assigned(FTracking) then
       Result := FTracking.GetDevicesData(Devices);
   finally
@@ -425,6 +501,9 @@ begin
 
   ClientLock.Enter;
   try
+    if not Authorized then
+      Authorize;
+
     if Assigned(FTracking) then
       Result := FTracking.GetReport(DeviceID, Date1, Date2);
   finally
@@ -439,6 +518,9 @@ begin
 
   ClientLock.Enter;
   try
+    if not Authorized then
+      Authorize;
+
     if Assigned(FTracking) then
       Result := FTracking.GetTrack(DeviceID, Date1, Date2);
   finally
@@ -451,6 +533,23 @@ begin
   GetDevices([]);
 end;
 
+procedure TLAHttpTrackingConnection.SetDevice(const Device: Variant);
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if not Authorized then
+      Authorize;
+
+    if Assigned(FTracking) then
+      FTracking.SetDevice(Device);
+  finally
+    ClientLock.Leave;
+  end;
+end;
+
 procedure TLAHttpTrackingConnection.SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
 begin
   if not Connected then
@@ -458,12 +557,32 @@ begin
 
   ClientLock.Enter;
   try
+    if not Authorized then
+      Authorize;
+
     if Assigned(FTracking) then
       FTracking.SetTagValue(DeviceID, TagSID, Value);
   finally
     ClientLock.Leave;
   end;
 
+end;
+
+procedure TLAHttpTrackingConnection.ShareDevice(const aDeviceID: TID; const aLogin, aRight: string);
+begin
+  if not Connected then
+    Connect;
+
+  ClientLock.Enter;
+  try
+    if not Authorized then
+      Authorize;
+
+    if Assigned(FTracking) then
+      FTracking.ShareDevice(aDeviceID, aLogin, aRight);
+  finally
+    ClientLock.Leave;
+  end;
 end;
 
 end.

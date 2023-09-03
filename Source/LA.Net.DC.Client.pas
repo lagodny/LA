@@ -81,6 +81,8 @@ type
   TServiceMonitoring = class(TServiceClientAbstractClientDriven,IMonitoring)
   public
     constructor Create(aClient: TSQLRestClientURI); override;
+    destructor Destroy; override;
+
     function DateTimeToMoment(const aDateTime: TDateTime): Int64;
     function MomentToDateTime(const aMoment: Int64): TDateTime;
     function SensorValue(const SID: String): String;
@@ -104,6 +106,27 @@ type
     procedure InitGroupsByID(const IDs: TIntegerDynArray);
     procedure InitDevicesByID(const IDs: TIntegerDynArray);
   end;
+
+  /// service implemented by TServiceDCSession
+  // - you can access this service as such:
+  // !var aDCSession: IDCSession;
+  // !begin
+  // !   aDCSession := TServiceDCSession.Create(aClient);
+  // !   // now you can use aDCSession methods
+  // !...
+  IDCSession = interface(IServiceAbstract)
+    ['{9073D395-66DE-4FFE-B242-D3755E9BA223}']
+    procedure SetSessionInfo(const Client: String);
+  end;
+
+  /// implements IDCSession from http://localhost:89/DC/DCSession
+  // - this service will run in sicClientDriven mode
+  TServiceDCSession = class(TServiceClientAbstractClientDriven,IDCSession)
+  public
+    constructor Create(aClient: TSQLRestClientURI); override;
+    procedure SetSessionInfo(const Client: String);
+  end;
+
 
   /// service implemented by TServiceTracking
   // - you can access this service as such:
@@ -149,6 +172,9 @@ type
 
     procedure SetDevice(const Device: Variant);
     procedure SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
+
+    procedure CreateDevice(const aName, aLogin, aPhone, aProto: string);
+    procedure ShareDevice(const aDeviceID: TID; const aLogin: string; const aRight: string);
   end;
 
   /// implements ITracking from http://localhost:89/DC/Tracking
@@ -156,6 +182,8 @@ type
   TServiceTracking = class(TServiceClientAbstractClientDriven,ITracking)
   public
     constructor Create(aClient: TSQLRestClientURI); override;
+    destructor Destroy; override;
+
     function GetClients(): Variant;
     function GetDevices(const Clients: TIDDynArray): Variant;
     function GetDevicesData(const Devices: TIDDynArray): Variant;
@@ -165,7 +193,39 @@ type
 
     procedure SetDevice(const Device: Variant);
     procedure SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
+
+    procedure CreateDevice(const aName, aLogin, aPhone, aProto: string);
+    procedure ShareDevice(const aDeviceID: TID; const aLogin: string; const aRight: string);
   end;
+
+  /// service implemented by TServiceDCSignUp
+  // - you can access this service as such:
+  // !var aDCSignUp: IDCSignUp;
+  // !begin
+  // !   aDCSignUp := TServiceDCSignUp.Create(aClient);
+  // !   // now you can use aDCSignUp methods
+  // !...
+  IDCSignUp = interface(IServiceAbstract)
+    ['{7F476721-43BC-4D8E-9C3F-A3935284BDB6}']
+    function Help(): String;
+    procedure RequestSignUp(const Login: String; const EMail: String; const Password: String);
+    function ConfirmSignUp(const Key: String): THttpBody;
+    procedure RequestResetPassword(const Login: String; const EMail: String);
+    procedure ConfirmResetPassword(const Key: String);
+  end;
+
+  /// implements IDCSignUp from http://localhost:89/DC/DCSignUp
+  // - this service will run in sicClientDriven mode
+  TServiceDCSignUp = class(TServiceClientAbstractClientDriven,IDCSignUp)
+  public
+    constructor Create(aClient: TSQLRestClientURI); override;
+    function Help(): String;
+    procedure RequestSignUp(const Login: String; const EMail: String; const Password: String);
+    function ConfirmSignUp(const Key: String): THttpBody;
+    procedure RequestResetPassword(const Login: String; const EMail: String);
+    procedure ConfirmResetPassword(const Key: String);
+  end;
+
 
 
 
@@ -192,6 +252,13 @@ function GetClient(const aServerAddress, aUserName, aPassword: string;
   aHttps: boolean = false; const aProxyName: string = ''; const aProxyByPass: string = '';
   aSendTimeout: Cardinal = cSendTimeout; aReceiveTimeout: Cardinal = cReceiveTimeout;
   aConnectionTimeOut: Cardinal = cConnectionTimeOut): TSQLRestClientHTTP;
+
+function GetClientNoUser(const aServerAddress: string; aServerPort: integer = SERVER_PORT;
+  const aServerRoot: string = SERVER_ROOT;
+  aHttps: boolean = false; const aProxyName: string = ''; const aProxyByPass: string = '';
+  aSendTimeout: Cardinal = cSendTimeout; aReceiveTimeout: Cardinal = cReceiveTimeout;
+  aConnectionTimeOut: Cardinal = cConnectionTimeOut): TSQLRestClientHTTP;
+
 
 // publish some low-level helpers for variant conversion
 // - used internally: you should not need those functions in your end-user code
@@ -620,6 +687,22 @@ begin
   end;
 end;
 
+function GetClientNoUser(const aServerAddress: string; aServerPort: integer; const aServerRoot: string; aHttps: boolean; const aProxyName, aProxyByPass: string; aSendTimeout, aReceiveTimeout, aConnectionTimeOut: Cardinal): TSQLRestClientHTTP;
+begin
+  result := TSQLRestClientHTTP.Create(aServerAddress, aServerPort,    //nil,
+    GetModel(aServerRoot), true, aHttps, aProxyName, aProxyByPass, aSendTimeout, aReceiveTimeout, aConnectionTimeOut);
+  try
+    if (not result.Connect) or (result.ServerTimeStamp = 0) then
+      raise ERestException.CreateFmt('Impossible to connect to %s:%d server', [aServerAddress, aServerPort]);
+//    if not result.SetUser(TSQLRestServerAuthenticationDefault, aUserName, aPassword) then
+//      raise ERestException.CreateFmt('%s:%d server rejected "%s" credentials', [aServerAddress, aServerPort, aUserName]);
+  except
+    result.Free;
+    raise;
+  end;
+end;
+
+
 
 { TServiceMonitoring }
 
@@ -628,7 +711,7 @@ begin
   fServiceName := 'Monitoring';
   fServiceURI := 'Monitoring';
   fInstanceImplementation := sicClientDriven;
-  fContractExpected := '1284AACBA83DEC79';
+  fContractExpected := '*'; //'Monitoring 1.0'; //'1284AACBA83DEC79';
   inherited Create(aClient);
 end;
 
@@ -638,6 +721,11 @@ begin
   fClient.CallRemoteService(self,'DateTimeToMoment',1, // raise EServiceException on error
     [DateTimeToIso8601(aDateTime)],res);
   Result := res[0];
+end;
+
+destructor TServiceMonitoring.Destroy;
+begin
+  inherited;
 end;
 
 function TServiceMonitoring.MomentToDateTime(const aMoment: Int64): TDateTime;
@@ -818,6 +906,18 @@ begin
   inherited Create(aClient);
 end;
 
+procedure TServiceTracking.CreateDevice(const aName, aLogin, aPhone, aProto: string);
+var
+  res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'CreateDevice',0, [aName, aLogin, aPhone, aProto], res);
+end;
+
+destructor TServiceTracking.Destroy;
+begin
+  inherited;
+end;
+
 function TServiceTracking.GetClients(): Variant;
 var res: TVariantDynArray;
 begin
@@ -870,6 +970,80 @@ var
   res: TVariantDynArray;
 begin
   fClient.CallRemoteService(self,'SetTagValue', 0, [DeviceID, TagSID, Value], res);
+end;
+
+procedure TServiceTracking.ShareDevice(const aDeviceID: TID; const aLogin, aRight: string);
+var
+  res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'ShareDevice', 0, [aDeviceID, aLogin, aRight], res);
+end;
+
+{ TServiceDCSignUp }
+
+constructor TServiceDCSignUp.Create(aClient: TSQLRestClientURI);
+begin
+  fServiceName := 'DCSignUp';
+  fServiceURI := 'DCSignUp';
+  fInstanceImplementation := sicClientDriven;
+  fContractExpected := 'SignUp 1.0'; //'*';
+  inherited Create(aClient);
+end;
+
+function TServiceDCSignUp.Help(): String;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'Help',1, // raise EServiceException on error
+    [],res);
+  Result := res[0];
+end;
+
+procedure TServiceDCSignUp.RequestSignUp(const Login: String; const EMail: String; const Password: String);
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'RequestSignUp',0, // raise EServiceException on error
+    [Login,EMail,Password],res);
+end;
+
+function TServiceDCSignUp.ConfirmSignUp(const Key: String): THttpBody;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'ConfirmSignUp',1, // raise EServiceException on error
+    [Key],res,true);
+  Result := VariantToHttpBody(res[0]);
+end;
+
+procedure TServiceDCSignUp.RequestResetPassword(const Login: String; const EMail: String);
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'RequestResetPassword',0, // raise EServiceException on error
+    [Login,EMail],res);
+end;
+
+procedure TServiceDCSignUp.ConfirmResetPassword(const Key: String);
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'ConfirmResetPassword',0, // raise EServiceException on error
+    [Key],res);
+end;
+
+
+{ TServiceDCSession }
+
+constructor TServiceDCSession.Create(aClient: TSQLRestClientURI);
+begin
+  fServiceName := 'DCSession';
+  fServiceURI := 'DCSession';
+  fInstanceImplementation := sicClientDriven;
+  fContractExpected := '*'; // '49237C319C65EA85';
+  inherited Create(aClient);
+end;
+
+procedure TServiceDCSession.SetSessionInfo(const Client: String);
+var
+  res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self, 'SetSessionInfo', 0, [Client], res); // raise EServiceException on error
 end;
 
 end.

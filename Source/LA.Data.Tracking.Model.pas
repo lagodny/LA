@@ -97,7 +97,7 @@ end;
 procedure TDevice.Init(v: Variant; aPrototypes: TLATagPrototypes);
 begin
   FID := v.id;
-  FName := v.name;
+  FName := Trim(v.name);
   Link.FromJSON(v, aPrototypes);
 end;
 

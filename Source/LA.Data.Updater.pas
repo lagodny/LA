@@ -69,6 +69,8 @@ type
     function GetDataFromServer(const IDs: TSIDArr): string; virtual; abstract;
     // разбор ответа сервера
     procedure ProcessServerResponse(const aResponse: string); virtual; abstract;
+    // обработка ошибки получения данных
+    procedure ProcessServerException(e: Exception); virtual; abstract;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -278,7 +280,8 @@ end;
 
 procedure TLADataUpdater.TLADataUpdateThread.DoLinksUpdated;
 begin
-  FUpdater.OnLinksUpdated(FUpdater);
+  if Assigned(FUpdater) and Assigned(FUpdater.OnLinksUpdated) then
+    FUpdater.OnLinksUpdated(FUpdater);
 end;
 
 procedure TLADataUpdater.TLADataUpdateThread.InitIDs;
@@ -325,6 +328,8 @@ begin
     except
       on e: Exception do
       begin
+        FUpdater.ProcessServerException(e);
+
         if Assigned(FUpdater.OnException) then
           Queue(nil, procedure
             begin
@@ -334,6 +339,7 @@ begin
         // в случае ошибки, нужно будет заново подключаться к серверу и передавать ID запрашиваемых датчиков
         FUpdater.Connector.Disconnect;
         FUpdater.FLinksChanged := True;
+        Queue(FUpdater.Notify);
         Exit;
       end;
     end;

@@ -180,15 +180,6 @@
         <DCCReference Include="..\Source\FMX\LA.FMX.Objects.pas"/>
         <DCCReference Include="..\Source\FMX\LA.FMX.Registration.pas"/>
         <DCCReference Include="..\Source\FMX\LA.FMX.StdCtrls.pas"/>
-        <DCCReference Include="..\Source\FMX\LA.FMX.Frame.Interval.pas">
-            <Form>LAIntervalFrame</Form>
-            <FormType>fmx</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="..\Source\FMX\LA.FMX.Dialog.Interval.pas">
-            <Form>IntervalDlg</Form>
-            <FormType>fmx</FormType>
-        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

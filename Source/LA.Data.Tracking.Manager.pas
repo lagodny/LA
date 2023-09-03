@@ -4,6 +4,7 @@ interface
 
 uses
   System.Classes,
+  System.SysUtils,
   System.Generics.Collections, System.Generics.Defaults,
   SynCrossPlatformJSON,
   LA.Net.Connector.Http,
@@ -41,6 +42,8 @@ type
     procedure InitClients;
     procedure InitDevices;
 
+    class function ExtractExceptionMessage(const aJSON: string): string;
+
   published
     property Connector: TLAHttpTrackingConnection read FConnector write SetConnector;
     property Updater: TLADataUpdater read FUpdater write SetUpdater;
@@ -68,6 +71,24 @@ begin
   FGroups.Free;
   FClients.Free;
   inherited;
+end;
+
+class function TLATrackingManager.ExtractExceptionMessage(const aJSON: string): string;
+var
+  v: TJSONVariantData;
+  arr: TArray<string>;
+begin
+  var p := Pos(#13#10, aJSON);
+  if p = 0 then
+    Result := aJSON
+  else
+  begin
+
+    v.Init(Copy(aJSON, p + 2, Length(aJSON)));
+    v.Init(v.Value['error']);
+    v.Init(v.Value['Exception']);
+    Result := v.Value['Exception'];
+  end;
 end;
 
 function TLATrackingManager.GetConnected: Boolean;
@@ -106,13 +127,25 @@ begin
   // [{"id":174,"name":"Demo","group":0}]
   v.Init(Connector.GetDevices([]));
 
-  TagPrototypes.Clear;
+//  TagPrototypes.Clear;
+//  p.Init(v.Value['prototypes']);
+//  for i := 0 to p.Count - 1 do
+//  begin
+//    aProto := TLATagPrototype.Create;
+//    aProto.Init(p.Values[i]);
+//    TagPrototypes.Add(aProto.ID, aProto);
+//  end;
+
+  // прототипы не очищаем, а только добавляем, если такого еще нет (на них возможны ссылки линков)
   p.Init(v.Value['prototypes']);
   for i := 0 to p.Count - 1 do
   begin
-    aProto := TLATagPrototype.Create;
-    aProto.Init(p.Values[i]);
-    TagPrototypes.Add(aProto.ID, aProto);
+    if not TagPrototypes.TryGetValue(p.Values[i].id, aProto) then
+    begin
+      aProto := TLATagPrototype.Create;
+      aProto.Init(p.Values[i]);
+      TagPrototypes.Add(aProto.ID, aProto);
+    end;
   end;
 
   Devices.Clear;

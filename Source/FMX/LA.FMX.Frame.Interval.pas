@@ -33,13 +33,15 @@ type
     cbKind: TComboBox;
     procedure rbLastChange(Sender: TObject);
     procedure cbKindChange(Sender: TObject);
-    procedure deFromChange(Sender: TObject);
+    procedure PeriodChange(Sender: TObject);
   private
     FViewUpdating: Boolean;
     FInterval: TLAInterval;
     procedure SetInterval(const Value: TLAInterval);
 
     procedure InitIntervalKind;
+    procedure InitDaysHours;
+
     procedure SetAbsolute;
     procedure UpdateUI;
   public
@@ -55,6 +57,7 @@ type
 implementation
 
 uses
+  DKLang,
   System.Math;
 
 {$R *.fmx}
@@ -71,13 +74,14 @@ end;
 constructor TLAIntervalFrame.Create(AOwner: TComponent);
 begin
   inherited;
+  InitDaysHours;
   InitIntervalKind;
 
   FInterval := TLAInterval.Create;
   Interval := TLAInterval.LastInterval;
 end;
 
-procedure TLAIntervalFrame.deFromChange(Sender: TObject);
+procedure TLAIntervalFrame.PeriodChange(Sender: TObject);
 begin
   SetAbsolute;
 end;
@@ -88,20 +92,32 @@ begin
   inherited;
 end;
 
+procedure TLAIntervalFrame.InitDaysHours;
+begin
+  if cbHours.Count = 0 then
+  begin
+    cbHours.Items.Add(TDKLanguageManager.ConstantValue['sHours']);
+    cbHours.Items.Add(TDKLanguageManager.ConstantValue['sDays']);
+  end;
+end;
+
 procedure TLAIntervalFrame.InitIntervalKind;
 begin
 //  cbKind.Items.Clear;
 //  cbKind.ListBox.Items.Add('hello');
   if cbKind.Count = 0 then
   begin
-    cbKind.Items.Add(rsAbsolute);
-    cbKind.Items.Add(rsToday);
-    cbKind.Items.Add(rsYesterday);
-    cbKind.Items.Add(rsThisWeek);
-    cbKind.Items.Add(rsPreviousWeek);
-    cbKind.Items.Add(rsThisMonth);
-    cbKind.Items.Add(rsPreviousMonth);
-    cbKind.Items.Add(rsThisYear);
+    for var i := ikAbsolute to ikThisYear do
+      cbKind.Items.Add(TLAInterval.IntervalKindToStr(i));
+
+//    cbKind.Items.Add(rsAbsolute);
+//    cbKind.Items.Add(rsToday);
+//    cbKind.Items.Add(rsYesterday);
+//    cbKind.Items.Add(rsThisWeek);
+//    cbKind.Items.Add(rsPreviousWeek);
+//    cbKind.Items.Add(rsThisMonth);
+//    cbKind.Items.Add(rsPreviousMonth);
+//    cbKind.Items.Add(rsThisYear);
   end;
 end;
 
@@ -112,6 +128,9 @@ end;
 
 procedure TLAIntervalFrame.SetAbsolute;
 begin
+  if FViewUpdating then
+    Exit;
+
   FViewUpdating := True;
   cbKind.ItemIndex := 0;
   FViewUpdating := False;
@@ -138,6 +157,8 @@ begin
       ikPreviousMonth,
       ikThisYear:
       begin
+        if cbHours.ItemIndex < 0 then
+          cbHours.ItemIndex := 0;
         rbPeriod.IsChecked := True;
         cbKind.ItemIndex := Ord(Interval.Kind);
       end;
@@ -146,14 +167,14 @@ begin
       begin
         rbLast.IsChecked := True;
         cbHours.ItemIndex := 0;
-        cbKind.ItemIndex := Ord(Interval.Kind);
+        cbKind.ItemIndex := -1; // Ord(Interval.Kind);
       end;
 
       ikLastNDays:
       begin
         rbLast.IsChecked := True;
         cbHours.ItemIndex := 1;
-        cbKind.ItemIndex := Ord(Interval.Kind);
+        cbKind.ItemIndex := -1; //Ord(Interval.Kind);
       end;
     end;
 

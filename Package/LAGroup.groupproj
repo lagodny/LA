@@ -24,34 +24,13 @@
         <Projects Include="..\Tests\LA.Test.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Samples\Object Pascal\Multi-Device Samples\User Interface\Settings Project\SettingsDemo.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj">
-            <Dependencies/>
+            <Dependencies>..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj</Dependencies>
         </Projects>
-        <Projects Include="..\Test\TestTracking\TestTracking.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\Projects\Utils\Export Image from Style file\ExportImageFromStyle.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\Projects\Test\Bottom sheet\BottomSheet.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\TFrameStand\demos\BottomSheet\BottomSheetProject.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test TDC web\TestTDC_web.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\Projects\Test\Map\TestMap\TestMap.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\Projects\Test\Map\MapProblem\MapProblem.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test get DPI\TestGetDPI.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test Map Big tile\TestTiles.dproj">
+        <Projects Include="..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -125,104 +104,41 @@
     <Target Name="LA_Test:Make">
         <MSBuild Projects="..\Tests\LA.Test.dproj" Targets="Make"/>
     </Target>
-    <Target Name="SCS">
+    <Target Name="SettingsDemo">
+        <MSBuild Projects="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Samples\Object Pascal\Multi-Device Samples\User Interface\Settings Project\SettingsDemo.dproj"/>
+    </Target>
+    <Target Name="SettingsDemo:Clean">
+        <MSBuild Projects="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Samples\Object Pascal\Multi-Device Samples\User Interface\Settings Project\SettingsDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SettingsDemo:Make">
+        <MSBuild Projects="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Samples\Object Pascal\Multi-Device Samples\User Interface\Settings Project\SettingsDemo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SCS" DependsOnTargets="SCSLocationService">
         <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj"/>
     </Target>
-    <Target Name="SCS:Clean">
+    <Target Name="SCS:Clean" DependsOnTargets="SCSLocationService:Clean">
         <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="SCS:Make">
+    <Target Name="SCS:Make" DependsOnTargets="SCSLocationService:Make">
         <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj" Targets="Make"/>
     </Target>
-    <Target Name="TestTracking">
-        <MSBuild Projects="..\Test\TestTracking\TestTracking.dproj"/>
+    <Target Name="SCSLocationService">
+        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj"/>
     </Target>
-    <Target Name="TestTracking:Clean">
-        <MSBuild Projects="..\Test\TestTracking\TestTracking.dproj" Targets="Clean"/>
+    <Target Name="SCSLocationService:Clean">
+        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="TestTracking:Make">
-        <MSBuild Projects="..\Test\TestTracking\TestTracking.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="ExportImageFromStyle">
-        <MSBuild Projects="..\..\..\Projects\Utils\Export Image from Style file\ExportImageFromStyle.dproj"/>
-    </Target>
-    <Target Name="ExportImageFromStyle:Clean">
-        <MSBuild Projects="..\..\..\Projects\Utils\Export Image from Style file\ExportImageFromStyle.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="ExportImageFromStyle:Make">
-        <MSBuild Projects="..\..\..\Projects\Utils\Export Image from Style file\ExportImageFromStyle.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="BottomSheet">
-        <MSBuild Projects="..\..\..\Projects\Test\Bottom sheet\BottomSheet.dproj"/>
-    </Target>
-    <Target Name="BottomSheet:Clean">
-        <MSBuild Projects="..\..\..\Projects\Test\Bottom sheet\BottomSheet.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="BottomSheet:Make">
-        <MSBuild Projects="..\..\..\Projects\Test\Bottom sheet\BottomSheet.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="BottomSheetProject">
-        <MSBuild Projects="..\..\TFrameStand\demos\BottomSheet\BottomSheetProject.dproj"/>
-    </Target>
-    <Target Name="BottomSheetProject:Clean">
-        <MSBuild Projects="..\..\TFrameStand\demos\BottomSheet\BottomSheetProject.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="BottomSheetProject:Make">
-        <MSBuild Projects="..\..\TFrameStand\demos\BottomSheet\BottomSheetProject.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestTDC_web">
-        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test TDC web\TestTDC_web.dproj"/>
-    </Target>
-    <Target Name="TestTDC_web:Clean">
-        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test TDC web\TestTDC_web.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestTDC_web:Make">
-        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test TDC web\TestTDC_web.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestMap">
-        <MSBuild Projects="..\..\..\Projects\Test\Map\TestMap\TestMap.dproj"/>
-    </Target>
-    <Target Name="TestMap:Clean">
-        <MSBuild Projects="..\..\..\Projects\Test\Map\TestMap\TestMap.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestMap:Make">
-        <MSBuild Projects="..\..\..\Projects\Test\Map\TestMap\TestMap.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="MapProblem">
-        <MSBuild Projects="..\..\..\Projects\Test\Map\MapProblem\MapProblem.dproj"/>
-    </Target>
-    <Target Name="MapProblem:Clean">
-        <MSBuild Projects="..\..\..\Projects\Test\Map\MapProblem\MapProblem.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="MapProblem:Make">
-        <MSBuild Projects="..\..\..\Projects\Test\Map\MapProblem\MapProblem.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestGetDPI">
-        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test get DPI\TestGetDPI.dproj"/>
-    </Target>
-    <Target Name="TestGetDPI:Clean">
-        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test get DPI\TestGetDPI.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestGetDPI:Make">
-        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test get DPI\TestGetDPI.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestTiles">
-        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test Map Big tile\TestTiles.dproj"/>
-    </Target>
-    <Target Name="TestTiles:Clean">
-        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test Map Big tile\TestTiles.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestTiles:Make">
-        <MSBuild Projects="C:\Users\LAGODNOL\Documents\Embarcadero\Studio\Projects\Test Map Big tile\TestTiles.dproj" Targets="Make"/>
+    <Target Name="SCSLocationService:Make">
+        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;SCS;TestTracking;ExportImageFromStyle;BottomSheet;BottomSheetProject;TestTDC_web;TestMap;MapProblem;TestGetDPI;TestTiles"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;SettingsDemo;SCS;SCSLocationService"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;SCS:Clean;TestTracking:Clean;ExportImageFromStyle:Clean;BottomSheet:Clean;BottomSheetProject:Clean;TestTDC_web:Clean;TestMap:Clean;MapProblem:Clean;TestGetDPI:Clean;TestTiles:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;SettingsDemo:Clean;SCS:Clean;SCSLocationService:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;SCS:Make;TestTracking:Make;ExportImageFromStyle:Make;BottomSheet:Make;BottomSheetProject:Make;TestTDC_web:Make;TestMap:Make;MapProblem:Make;TestGetDPI:Make;TestTiles:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;SettingsDemo:Make;SCS:Make;SCSLocationService:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

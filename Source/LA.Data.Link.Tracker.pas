@@ -3,7 +3,7 @@
 interface
 
 uses
-  System.Classes,
+  System.Classes, System.Variants,
   System.Generics.Defaults, System.Generics.Collections,
   System.SysUtils, System.DateUtils,
   System.Math,
@@ -116,13 +116,18 @@ var
 begin
   try
     vd.Init(Data);
-    Time := UnixToDateTime(vd.Value['time'], False);
-    Status := vd.Value['status'];
-    vTags.Init(vd.Value['tags']);
-    for var i := 0 to vTags.Count - 1 do
+    if VarIsEmpty(vd.Value['time']) then
+      Status := Data
+    else
     begin
-      if Tags.TryGetValue(vTags.Names[i], aTag) then
-        aTag.Value := vTags.Values[i];
+      Time := UnixToDateTime(vd.Value['time'], False);
+      Status := vd.Value['status'];
+      vTags.Init(vd.Value['tags']);
+      for var i := 0 to vTags.Count - 1 do
+      begin
+        if Tags.TryGetValue(vTags.Names[i], aTag) then
+          aTag.Value := vTags.Values[i];
+      end;
     end;
   except
     on e: Exception do

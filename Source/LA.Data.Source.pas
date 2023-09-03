@@ -6,7 +6,7 @@ uses
   System.Classes,
   System.Generics.Collections, System.Generics.Defaults,
   System.SyncObjs,
-  System.SysUtils,
+  System.SysUtils, System.DateUtils,
   LA.Data.Source.Intf,
   LA.Data.Link.Intf;
 
@@ -35,6 +35,7 @@ type
     FData: string;
     FDataSource: TLADataSource;
     FIsNeedNotify: Boolean;
+    FLastNotifyTime: TDateTime;
     FOnDataChange: TNotifyEvent;
     FOnOwnerNotify: TNotifyEvent;
     FLinks: TLADataLinkList;
@@ -278,7 +279,7 @@ end;
 
 procedure TLADataLink.Notify;
 begin
-  if FIsNeedNotify then
+  if FIsNeedNotify or (SecondsBetween(Now, FLastNotifyTime) > 10) then
   begin
     EncodeData;
     // уведомляем компонент-владелец
@@ -289,6 +290,7 @@ begin
       OnDataChange(Self);
 
     FIsNeedNotify := False;
+    FLastNotifyTime := Now;
   end;
 end;
 

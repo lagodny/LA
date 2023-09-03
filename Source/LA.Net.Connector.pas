@@ -55,6 +55,8 @@ type
     procedure SetUserName(const Value: string);
     procedure SetDescription(const Value: string);
   protected
+    FAuthorized: Boolean;
+
     function GetEncrypt: boolean; virtual; abstract;
     function GetCompressionLevel: Integer; virtual; abstract;
     function GetConnectTimeOut: Integer; virtual; abstract;
@@ -95,6 +97,8 @@ type
     procedure Connect; virtual; abstract;
     procedure Disconnect; virtual; abstract;
 
+    procedure Authorize; virtual; abstract;
+
     procedure InitServerCache; virtual;
 
     function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; virtual; abstract;
@@ -122,6 +126,9 @@ type
 
     // состояние подключения
     property Connected: Boolean read GetConnected write SetConnected stored False;
+
+    /// авторизован
+    property Authorized: Boolean read FAuthorized;
 
     /// как представиться серверу
     property Description: string read FDescription write SetDescription;
