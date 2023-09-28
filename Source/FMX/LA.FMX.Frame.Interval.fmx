@@ -29,6 +29,7 @@ object LAIntervalFrame: TLAIntervalFrame
         TabOrder = 0
         Text = 'Last'
         OnChange = rbLastChange
+        OnClick = rbLastClick
       end
       object nbNumber: TNumberBox
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -43,6 +44,7 @@ object LAIntervalFrame: TLAIntervalFrame
         Size.Width = 76.000000000000000000
         Size.Height = 27.000000000000000000
         Size.PlatformDefault = False
+        OnEnter = nbNumberEnter
       end
       object cbHours: TComboBox
         Margins.Left = 3.000000000000000000
@@ -98,7 +100,7 @@ object LAIntervalFrame: TLAIntervalFrame
       TabOrder = 2
       object rbMonth: TRadioButton
         Position.X = 5.000000000000000000
-        Position.Y = 5.000000000000000000
+        Position.Y = 7.000000000000000000
         Size.Width = 268.000000000000000000
         Size.Height = 27.000000000000000000
         Size.PlatformDefault = False

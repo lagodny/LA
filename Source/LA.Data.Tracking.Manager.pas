@@ -76,7 +76,7 @@ end;
 class function TLATrackingManager.ExtractExceptionMessage(const aJSON: string): string;
 var
   v: TJSONVariantData;
-  arr: TArray<string>;
+  //arr: TArray<string>;
 begin
   var p := Pos(#13#10, aJSON);
   if p = 0 then
@@ -118,7 +118,7 @@ procedure TLATrackingManager.InitDevices;
 var
   i: Integer;
   v, p, t: TJSONVariantData;
-  aClient: TClient;
+  //aClient: TClient;
   aProto: TLATagPrototype;
   aDevice: TDevice;
   //aTracker: TLATrackerLink;

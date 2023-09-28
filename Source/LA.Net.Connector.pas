@@ -83,16 +83,21 @@ type
 
     /// проверяем подключение перед вызовом методов сервера
     ///  если подключения нет, то пытаемся подключиться
-    procedure CheckConnection; virtual;
+    procedure CheckConnected; virtual;
+    procedure CheckAuthorized; virtual;
 
     procedure DoConnect; virtual; abstract;
     procedure DoDisconnect; virtual; abstract;
+    procedure DoAuthorize; virtual; abstract;
 
     procedure DoServicesConnect; virtual;
     procedure DoServicesDisconnect; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
+    procedure Lock;
+    procedure Unlock;
 
     procedure Connect; virtual; abstract;
     procedure Disconnect; virtual; abstract;
@@ -141,7 +146,13 @@ type
 implementation
 
 { TDCCustomConnector }
-procedure TLACustomConnector.CheckConnection;
+procedure TLACustomConnector.CheckAuthorized;
+begin
+  if not Authorized then
+    DoAuthorize;
+end;
+
+procedure TLACustomConnector.CheckConnected;
 begin
   if not Connected then
     DoConnect;
@@ -178,6 +189,11 @@ end;
 procedure TLACustomConnector.InitServerCache;
 begin
 
+end;
+
+procedure TLACustomConnector.Lock;
+begin
+  FClientLock.Enter;
 end;
 
 procedure TLACustomConnector.SetAddress(const Value: string);
@@ -265,6 +281,11 @@ begin
   finally
     aAddressList.Free;
   end;
+end;
+
+procedure TLACustomConnector.Unlock;
+begin
+  FClientLock.Leave;
 end;
 
 end.

@@ -53,13 +53,12 @@ type
     procedure SetConnectTimeOut(const Value: Integer); override;
 
     function GetConnected: Boolean; override;
-
     procedure TryConnectTo(const aAddrLine: string); override;
 
     procedure DoConnect; override;
     procedure DoDisconnect; override;
 
-    procedure Authorize; override;
+    procedure DoAuthorize; override;
 
     procedure DoServicesConnect; override;
     procedure DoServicesDisconnect; override;
@@ -69,6 +68,9 @@ type
 
     procedure Connect; override;
     procedure Disconnect; override;
+
+    // все эти методы используют блокировки (safe)
+    procedure Authorize; override;
 
     // взаимодействие с Мониторингом
     function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; override;
@@ -118,17 +120,29 @@ uses
 
 procedure TLAHttpConnector.Authorize;
 begin
-  if not Connected then
-    DoConnect;
+  Lock;
+  try
+    DoAuthorize;
+  finally
+    Unlock;
+  end;
 
-  FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
-  FAuthorized := True;
-  FSession.SetSessionInfo(TLASystemUtils.ProgramFullSpec);
+//  if not Connected then
+//    DoConnect;
+//
+//  FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
+//  FAuthorized := True;
+//  FSession.SetSessionInfo(TLASystemUtils.ProgramFullSpec);
 end;
 
 procedure TLAHttpConnector.Connect;
 begin
-  DoConnect;
+  Lock;
+  try
+    DoConnect;
+  finally
+    Unlock;
+  end;
 end;
 
 constructor TLAHttpConnector.Create(AOwner: TComponent);
@@ -147,7 +161,22 @@ end;
 
 procedure TLAHttpConnector.Disconnect;
 begin
-  DoDisconnect;
+  Lock;
+  try
+    DoDisconnect;
+  finally
+    Unlock;
+  end;
+end;
+
+procedure TLAHttpConnector.DoAuthorize;
+begin
+  if not Connected then
+    DoConnect;
+
+  FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
+  FAuthorized := True;
+  FSession.SetSessionInfo(TLASystemUtils.ProgramFullSpec);
 end;
 
 procedure TLAHttpConnector.DoConnect;
@@ -161,18 +190,13 @@ end;
 procedure TLAHttpConnector.DoDisconnect;
 begin
   FAuthorized := False;
-  ClientLock.Enter;
-  try
-    if Assigned(FClient) then
-    begin
-      //FMonitoring := nil;
-      DoServicesDisconnect;
-      FreeAndNil(FClient);
-      if Assigned(OnDisconnect) then
-        OnDisconnect(Self);
-    end;
-  finally
-    ClientLock.Leave;
+
+  if Assigned(FClient) then
+  begin
+    DoServicesDisconnect;
+    FreeAndNil(FClient);
+    if Assigned(OnDisconnect) then
+      OnDisconnect(Self);
   end;
 end;
 
@@ -199,12 +223,13 @@ end;
 
 function TLAHttpConnector.GetConnected: Boolean;
 begin
-  ClientLock.Enter;
-  try
-    Result := Assigned(FClient);
-  finally
-    ClientLock.Leave;
-  end;
+//  ClientLock.Enter;
+//  try
+//    Result := GetConnectedUnsafe;
+//  finally
+//    ClientLock.Leave;
+//  end;
+  Result := Assigned(FClient);
 end;
 
 function TLAHttpConnector.GetConnectTimeOut: Integer;
@@ -224,32 +249,28 @@ end;
 
 procedure TLAHttpConnector.RequestSignUp(const Login, EMail, Password: String);
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
+    // проверяем только подключение (авторизация не нужна)
+    CheckConnected;
+
     if Assigned(FSignUp) then
       FSignUp.RequestSignUp(Login, EMail, Password);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 
 function TLAHttpConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FMonitoring) then
       Result := FMonitoring.SensorsDataAsText(IDs, aUseCache);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 
@@ -333,19 +354,13 @@ begin
 
   DoDisconnect;
 
-  ClientLock.Enter;
-  try
-//    FClient := GetClient(aAddrRec.Host, UserName, Password, StrToInt(aAddrRec.Port), SERVER_ROOT, aAddrRec.Https,
-    FClient := GetClientNoUser(aAddrRec.Host, {UserName, Password,} StrToInt(aAddrRec.Port), SERVER_ROOT, aAddrRec.Https,
-      ProxyName, ProxyByPass,
-      SendTimeOut, ReadTimeout, ConnectTimeout);
+  // проверяем возможность подключения без авторизации
+  FClient := GetClientNoUser(aAddrRec.Host, {UserName, Password,} StrToInt(aAddrRec.Port), SERVER_ROOT, aAddrRec.Https,
+    ProxyName, ProxyByPass,
+    SendTimeOut, ReadTimeout, ConnectTimeout);
 //    FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
 
-    DoServicesConnect;
-//    FMonitoring :=  TServiceMonitoring.Create(FClient);
-  finally
-    ClientLock.Leave;
-  end;
+  DoServicesConnect;
 end;
 
 { TDCHttpAddr }
@@ -415,18 +430,14 @@ end;
 
 procedure TLAHttpTrackingConnection.CreateDevice(const aName, aLogin, aPhone, aProto: string);
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FTracking) then
       FTracking.CreateDevice(aName, aLogin, aPhone, aProto);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 
@@ -444,87 +455,67 @@ end;
 
 function TLAHttpTrackingConnection.GetClients: Variant;
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FTracking) then
       Result := FTracking.GetClients;
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 
 
 function TLAHttpTrackingConnection.GetDevices(const Clients: TIDDynArray): Variant;
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FTracking) then
       Result := FTracking.GetDevices(Clients);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 
 function TLAHttpTrackingConnection.GetDevicesData(const Devices: TIDDynArray): Variant;
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FTracking) then
       Result := FTracking.GetDevicesData(Devices);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 
 function TLAHttpTrackingConnection.GetReport(const DeviceID: TID; const Date1, Date2: Int64): Variant;
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FTracking) then
       Result := FTracking.GetReport(DeviceID, Date1, Date2);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 
 function TLAHttpTrackingConnection.GetTrack(const DeviceID: TID; const Date1, Date2: Int64): Variant;
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FTracking) then
       Result := FTracking.GetTrack(DeviceID, Date1, Date2);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 
@@ -535,53 +526,40 @@ end;
 
 procedure TLAHttpTrackingConnection.SetDevice(const Device: Variant);
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FTracking) then
       FTracking.SetDevice(Device);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 
 procedure TLAHttpTrackingConnection.SetTagValue(const DeviceID: TID; const TagSID: string; const Value: Variant);
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FTracking) then
       FTracking.SetTagValue(DeviceID, TagSID, Value);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
-
 end;
 
 procedure TLAHttpTrackingConnection.ShareDevice(const aDeviceID: TID; const aLogin, aRight: string);
 begin
-  if not Connected then
-    Connect;
-
-  ClientLock.Enter;
+  Lock;
   try
-    if not Authorized then
-      Authorize;
-
+    CheckConnected;
+    CheckAuthorized;
     if Assigned(FTracking) then
       FTracking.ShareDevice(aDeviceID, aLogin, aRight);
   finally
-    ClientLock.Leave;
+    Unlock;
   end;
 end;
 

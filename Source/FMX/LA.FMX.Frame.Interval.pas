@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, System.DateUtils,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls, FMX.Layouts,
-  LA.Interval, FMX.ListBox, FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.Controls.Presentation, FMX.DateTimeCtrls;
+  LA.Interval, FMX.ListBox, FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.Controls.Presentation, FMX.DateTimeCtrls, FMX.Calendar, UI.Base, UI.Calendar;
 
 type
   TLAIntervalFrame = class(TFrame)
@@ -34,10 +34,14 @@ type
     procedure rbLastChange(Sender: TObject);
     procedure cbKindChange(Sender: TObject);
     procedure PeriodChange(Sender: TObject);
+    procedure nbNumberEnter(Sender: TObject);
+    procedure rbLastClick(Sender: TObject);
   private
     FViewUpdating: Boolean;
     FInterval: TLAInterval;
     procedure SetInterval(const Value: TLAInterval);
+
+    procedure FocusItem;
 
     procedure InitIntervalKind;
     procedure InitDaysHours;
@@ -79,6 +83,8 @@ begin
 
   FInterval := TLAInterval.Create;
   Interval := TLAInterval.LastInterval;
+
+
 end;
 
 procedure TLAIntervalFrame.PeriodChange(Sender: TObject);
@@ -90,6 +96,21 @@ destructor TLAIntervalFrame.Destroy;
 begin
   FreeAndNil(FInterval);
   inherited;
+end;
+
+procedure TLAIntervalFrame.FocusItem;
+begin
+  if rbLast.IsChecked then
+  begin
+    nbNumber.SetFocus;
+    nbNumber.SelectAll;
+  end
+  else if rbDay.IsChecked then
+    deDay.SetFocus
+  else if rbMonth.IsChecked then
+    deMonth.SetFocus
+  else if rbPeriod.IsChecked then
+    cbKind.SetFocus;
 end;
 
 procedure TLAIntervalFrame.InitDaysHours;
@@ -124,6 +145,13 @@ end;
 procedure TLAIntervalFrame.rbLastChange(Sender: TObject);
 begin
   UpdateUI;
+  FocusItem;
+end;
+
+procedure TLAIntervalFrame.rbLastClick(Sender: TObject);
+begin
+  nbNumber.SetFocus;
+  nbNumber.SelectAll;
 end;
 
 procedure TLAIntervalFrame.SetAbsolute;
@@ -200,6 +228,11 @@ begin
   finally
     FViewUpdating := False;
   end;
+end;
+
+procedure TLAIntervalFrame.nbNumberEnter(Sender: TObject);
+begin
+  nbNumber.SelectAll;
 end;
 
 procedure TLAIntervalFrame.UpdateUI;

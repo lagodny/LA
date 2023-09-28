@@ -112,7 +112,7 @@ end;
 procedure TLATrackerLink.EncodeData;
 var
   aTag: TLATag;
-  vd, vTags: TJSONVariantData;
+  vd, vTags, vErrors: TJSONVariantData;
 begin
   try
     vd.Init(Data);
@@ -123,10 +123,14 @@ begin
       Time := UnixToDateTime(vd.Value['time'], False);
       Status := vd.Value['status'];
       vTags.Init(vd.Value['tags']);
+      vErrors.Init(vd.Value['errors']);
       for var i := 0 to vTags.Count - 1 do
       begin
         if Tags.TryGetValue(vTags.Names[i], aTag) then
+        begin
           aTag.Value := vTags.Values[i];
+          aTag.Status := vErrors.Value[aTag.SID];
+        end;
       end;
     end;
   except
