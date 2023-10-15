@@ -24,6 +24,7 @@ implementation
 
 uses
   SynCrossPlatformJSON,
+  LA.Log,
   LA.Net.Connector.Http,
   LA.Data.Link.Tracker;
 
@@ -118,10 +119,12 @@ procedure TLATrackerUpdater.ProcessServerException(e: Exception);
 begin
   FLock.BeginRead;
   try
+    TDCLog.WriteToLogFmt('TLATrackerUpdater.ProcessServerException : Links.Count = %d : Msg: %s', [Links.Count, e.Message]);
     for var i := 0 to Links.Count - 1 do
     begin
       Links[i].Data := e.Message;
     end;
+    TDCLog.WriteToLog('TLATrackerUpdater.ProcessServerException - done');
   finally
     FLock.EndRead;
   end;
