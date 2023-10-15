@@ -50,6 +50,7 @@ type
     FDescription: string;
     FOnConnect: TNotifyEvent;
     FOnDisconnect: TNotifyEvent;
+    FOnAuthorize: TNotifyEvent;
     procedure SetAddress(const Value: string);
     procedure SetPassword(const Value: string);
     procedure SetUserName(const Value: string);
@@ -61,11 +62,13 @@ type
     function GetCompressionLevel: Integer; virtual; abstract;
     function GetConnectTimeOut: Integer; virtual; abstract;
     function GetReadTimeOut: Integer; virtual; abstract;
+    function GetSendTimeOut: Integer; virtual; abstract;
 
     procedure SetEncrypt(const Value: boolean); virtual; abstract;
     procedure SetCompressionLevel(const Value: Integer); virtual; abstract;
     procedure SetReadTimeOut(const Value: Integer); virtual; abstract;
     procedure SetConnectTimeOut(const Value: Integer); virtual; abstract;
+    procedure SetSendTimeOut(const Value: Integer); virtual; abstract;
 
     function GetConnected: Boolean; virtual; abstract;
     procedure SetConnected(const Value: Boolean); virtual;
@@ -118,6 +121,8 @@ type
     property ConnectTimeOut: Integer read GetConnectTimeOut write SetConnectTimeOut default cDefConnectTimeout;
     // ожидание отклика на команду, мс
     property ReadTimeOut: Integer read GetReadTimeOut write SetReadTimeOut default cDefReadTimeout;
+    //
+    property SendTimeOut: Integer read GetSendTimeOut write SetSendTimeOut;
 
     // уровень сжатия (0 - без сжатия ... 9 - максимальное сжатие)
     property CompressionLevel: Integer read GetCompressionLevel write SetCompressionLevel default cDefCompressionLevel;
@@ -133,7 +138,7 @@ type
     property Connected: Boolean read GetConnected write SetConnected stored False;
 
     /// авторизован
-    property Authorized: Boolean read FAuthorized;
+    property Authorized: Boolean read FAuthorized write FAuthorized;
 
     /// как представиться серверу
     property Description: string read FDescription write SetDescription;
@@ -141,6 +146,7 @@ type
     /// события
     property OnConnect: TNotifyEvent read FOnConnect write FOnConnect;
     property OnDisconnect: TNotifyEvent read FOnDisconnect write FOnDisconnect;
+    property OnAuthorize: TNotifyEvent read FOnAuthorize write FOnAuthorize;
   end;
 
 implementation
