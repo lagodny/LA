@@ -10,6 +10,7 @@ type
   strict private
     FInterval: Int64;
     FTimer: TStopwatch;
+    FIdelMode: Boolean; protected
   strict protected
     function CalculateTimeout: Int64;
     function GetInterval: Int64;
@@ -28,6 +29,8 @@ type
     destructor Destroy; override;
 
     property Interval: Int64 read GetInterval write SetInterval;
+    // поток будет работать но без выполнения полезной работы
+    property IdelMode: Boolean read FIdelMode write FIdelMode;
   end;
 
 
@@ -82,14 +85,16 @@ begin
               // старт или принудительный запуск
               FTimer.Reset;
               FTimer.Start;
-              Process;
+              if not IdelMode then
+                Process;
             end;
           end;
         wrTimeout:
           begin
             FTimer.Reset;
             FTimer.Start;
-            Process;
+            if not IdelMode then
+              Process;
           end
         else
           Break; //Terminate thread
