@@ -50,12 +50,15 @@ type
     FConnector: TLACustomConnector;
     FOnLinksUpdated: TNotifyEvent;
     FOnException: TGetStrProc;
+    FIdleMode: Boolean;
 
     // управление потоком обновления
     procedure Start;
     procedure Stop;
+
     function GetActive: Boolean;
     procedure SetActive(const Value: Boolean);
+    procedure SetIdleMode(const Value: Boolean);
 
     procedure SetInterval(const Value: Int64);
     procedure SetConnector(const Value: TLACustomConnector);
@@ -79,9 +82,15 @@ type
     property Connector: TLACustomConnector read FConnector write SetConnector;
     // включать будем по необходимости
     property Active: Boolean read GetActive write SetActive stored False;
+    // режим работы потока вхолостую
+    property IdleMode: Boolean read FIdleMode write SetIdleMode;
     // период опроса сервера, мс
     property Interval: Int64 read FInterval write SetInterval default DefInterval;
+
     // дополнительное событие, которое вызывается после обновления линков
+    { TODO :
+      нужно переделать на TMulticastEvent
+      https://blog.grijjy.com/2023/04/27/lightweight-multicast-events/ }
     property OnLinksUpdated: TNotifyEvent read FOnLinksUpdated write FOnLinksUpdated;
     // вызывается при ошибке во время обновления
     property OnException: TGetStrProc read FOnException write FOnException;
@@ -93,6 +102,8 @@ implementation
 
 uses
   System.Math,
+  DW.OSLog,
+  LA.Log,
   LA.Data.Link.Sensor;
 
 constructor TLADataUpdater.Create(AOwner: TComponent);
@@ -103,8 +114,22 @@ end;
 
 destructor TLADataUpdater.Destroy;
 begin
-  Active := False;
+//  Active := False;
+  TDCLog.WriteToLog('TLADataUpdater.Destroy');
+  if Assigned(FThread) then
+  begin
+    FThread.FreeOnTerminate := False;
+    TDCLog.WriteToLog('FThread.Terminate');
+    FThread.Terminate;
+    TDCLog.WriteToLog('FThread.WaitFor');
+    FThread.WaitFor;
+    TDCLog.WriteToLog('FThread.Free');
+    FThread.Free;
+    TDCLog.WriteToLog('FThread := nil');
+    FThread := nil;
+  end;
   inherited;
+  TDCLog.WriteToLog('TLADataUpdater.Destroy - done');
 end;
 
 function TLADataUpdater.GetActive: Boolean;
@@ -236,6 +261,13 @@ begin
   FConnector := Value;
 end;
 
+procedure TLADataUpdater.SetIdleMode(const Value: Boolean);
+begin
+  FIdleMode := Value;
+  if Assigned(FThread) then
+    FThread.IdelMode := FIdleMode;
+end;
+
 procedure TLADataUpdater.SetInterval(const Value: Int64);
 begin
   if FInterval <> Value then
@@ -248,14 +280,27 @@ end;
 
 procedure TLADataUpdater.Start;
 begin
-  if Active then
-    Exit;
+  TOSLog.d(Self, 'TLADataUpdater.Start');
+  TDCLog.WriteToLog('TLADataUpdater.Start');
+  try
+    IdleMode := False;
+    if Active then
+      Exit;
 
-  // поток не может завершиться сам ни при каких условиях,
-  // только Stop корректно завершает и очищает поток
-  FThread := TLADataUpdateThread.Create(True, Self, Interval);
-  FThread.FreeOnTerminate := False;
-  FThread.Start;
+    FThread := TLADataUpdateThread.Create(True, Self, Interval);
+    // поток сам себя очистит по завершению работы
+    FThread.FreeOnTerminate := True; // False;
+    FThread.Start;
+
+    TOSLog.d(Self, 'TLADataUpdater.Start - done');
+    TDCLog.WriteToLog('TLADataUpdater.Start - done');
+  except
+    on e: Exception do
+    begin
+      TOSLog.e(Format('TLADataUpdater.Start: %s', [e.Message]));
+      TDCLog.WriteToLogFmt('TLADataUpdater.Start: %s', [e.Message]);
+    end;
+  end;
 end;
 
 procedure TLADataUpdater.Stop;
@@ -263,10 +308,31 @@ begin
   if not Active then
     Exit;
 
-  FThread.Terminate;
-  FThread.WaitFor;
-  FThread.Free;
-  FThread := nil;
+  TOSLog.d(Self, 'TLADataUpdater.Stop');
+  TDCLog.WriteToLog('TLADataUpdater.Stop');
+  try
+
+    TDCLog.WriteToLog('Terminate');
+    // не ждем завершения потока, т.к. это может быть долго из-за ожидания подключения или получения данных,
+    // но очищаем ссылку на поток, чтобы понимать, что можно запускать новый
+    FThread.FreeOnTerminate := True;
+    FThread.Terminate;
+//    TDCLog.WriteToLog('WaitFor');
+//    FThread.WaitFor;
+//    TDCLog.WriteToLog('Free');
+//    FThread.Free;
+    TDCLog.WriteToLog('nil');
+    FThread := nil;
+
+    TOSLog.d(Self, 'TLADataUpdater.Stop - done');
+    TDCLog.WriteToLog('TLADataUpdater.Stop - done');
+  except
+    on e: Exception do
+    begin
+      TOSLog.e(Format('TLADataUpdater.Stop: %s', [e.Message]));
+      TDCLog.WriteToLogFmt('TLADataUpdater.Stop: %s', [e.Message]);
+    end;
+  end;
 end;
 
 { TLADataUpdater.TDataUpdateThread }
@@ -319,15 +385,34 @@ begin
       if not FUpdater.Connector.Connected then
       begin
         FUpdater.Connector.Connect;
-        FUpdater.Connector.InitServerCache;
+        if Terminated then
+          Exit;
       end;
-      //r := FUpdater.Connector.SensorsDataAsText(FIDs, True);
+      if not FUpdater.Connector.Authorized then
+      begin
+        FUpdater.Connector.InitServerCache;
+        if Terminated then
+          Exit;
+      end;
+
+      // получаем данные
       r := FUpdater.GetDataFromServer(FIDs);
       // если запрос выполнен без ошибок, то нет необходимости повторно передавать IDs (сервер их запомнил)
       SetLength(FIDs, 0);
     except
       on e: Exception do
       begin
+        TDCLog.WriteToLogFmt('TLADataUpdateThread.Process: error1: %s', [e.Message]);
+        if Terminated then
+          Exit;
+
+//        // были авторизованы, но получили ошибку авторизации (возможно истекла сессия) - выполним авторизацию в следующем цикле
+//        if FUpdater.Connector.Authorized and e.Message.Contains('Authentication Failed') then
+//        begin
+//          FUpdater.Connector.Authorized := False;
+//          Exit;
+//        end;
+
         FUpdater.ProcessServerException(e);
 
         if Assigned(FUpdater.OnException) then
@@ -335,31 +420,50 @@ begin
             begin
               FUpdater.OnException(e.Message);
             end);
+        if Terminated then
+          Exit;
+
 
         // в случае ошибки, нужно будет заново подключаться к серверу и передавать ID запрашиваемых датчиков
         FUpdater.Connector.Disconnect;
         FUpdater.FLinksChanged := True;
+        if Terminated then
+          Exit;
+
         Queue(FUpdater.Notify);
         Exit;
       end;
     end;
 
+    if Terminated then
+      Exit;
+
     /// обрабатываем результат запроса
     FUpdater.ProcessServerResponse(r);
+    if Terminated then
+      Exit;
 
     /// уведомляем подписчиков
     Queue(FUpdater.Notify);
+    if Terminated then
+      Exit;
 
     /// в OnUpdate можем выполнить дополнительные действия с новыми данными
     if Assigned(FUpdater.OnLinksUpdated) then
       Queue(DoLinksUpdated);
   except
     on e: Exception do
+    begin
+      TDCLog.WriteToLogFmt('TLADataUpdateThread.Process: error2: %s', [e.Message]);
+      if Terminated then
+        Exit;
+
       if Assigned(FUpdater.OnException) then
         Queue(nil, procedure
           begin
             FUpdater.OnException(e.Message);
           end);
+    end;
   end;
 end;
 
