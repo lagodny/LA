@@ -5,11 +5,11 @@ interface
 uses
   System.Classes,
   FMX.Objects,
-  LA.Data.Link.Sensor,
+  LA.Data.Link.Sensor, LA.Data.Link.Sensor.Intf,
   LA.Data.Source;
 
 type
-  TLAText = class(TText)
+  TLAText = class(TText, ILASensorLink)
   private
     FLink: TLASensorLink;
     procedure SetLink(const Value: TLASensorLink);
@@ -21,7 +21,7 @@ type
 
     procedure DoDataLinkChanged(Sender: TObject);
   published
-    property Link: TLASensorLink read FLink write SetLink;
+    property Link: TLASensorLink read FLink  write SetLink implements ILASensorLink;
   end;
 
 implementation
@@ -44,7 +44,7 @@ end;
 
 procedure TLAText.DoDataLinkChanged(Sender: TObject);
 begin
-  if csLoading in ComponentState then
+  if (csLoading in ComponentState) or (csDestroying in ComponentState) then
     Exit;
 
   Text := Link.Text;

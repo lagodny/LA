@@ -24,15 +24,6 @@
         <Projects Include="..\Tests\LA.Test.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Samples\Object Pascal\Multi-Device Samples\User Interface\Settings Project\SettingsDemo.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj">
-            <Dependencies>..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj</Dependencies>
-        </Projects>
-        <Projects Include="..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -104,41 +95,14 @@
     <Target Name="LA_Test:Make">
         <MSBuild Projects="..\Tests\LA.Test.dproj" Targets="Make"/>
     </Target>
-    <Target Name="SettingsDemo">
-        <MSBuild Projects="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Samples\Object Pascal\Multi-Device Samples\User Interface\Settings Project\SettingsDemo.dproj"/>
-    </Target>
-    <Target Name="SettingsDemo:Clean">
-        <MSBuild Projects="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Samples\Object Pascal\Multi-Device Samples\User Interface\Settings Project\SettingsDemo.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="SettingsDemo:Make">
-        <MSBuild Projects="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Samples\Object Pascal\Multi-Device Samples\User Interface\Settings Project\SettingsDemo.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="SCS" DependsOnTargets="SCSLocationService">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj"/>
-    </Target>
-    <Target Name="SCS:Clean" DependsOnTargets="SCSLocationService:Clean">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="SCS:Make" DependsOnTargets="SCSLocationService:Make">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="SCSLocationService">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj"/>
-    </Target>
-    <Target Name="SCSLocationService:Clean">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="SCSLocationService:Make">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-location\SCSLocationService.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;SettingsDemo;SCS;SCSLocationService"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;SettingsDemo:Clean;SCS:Clean;SCSLocationService:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;SettingsDemo:Make;SCS:Make;SCSLocationService:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

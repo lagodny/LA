@@ -7,13 +7,14 @@ uses
   System.SysUtils, System.DateUtils,
   System.Math,
   LA.Data.Types,
-  LA.Data.Source;
+  LA.Data.Source,
+  LA.Data.Link.Sensor.Intf;
 
 type
   /// <summary>
   ///   Линк/адаптер к Датчику
   /// </summary>
-  TLASensorLink = class(TLADataLink)
+  TLASensorLink = class(TLADataLink, ILASensorLink)
   private
     {$REGION 'Fields'}
     FValue: Double;
@@ -32,6 +33,10 @@ type
     procedure SetName(const Value: string);
     procedure SetEquipment(const Value: string);
     procedure SetValueRange(const Value: TValueRange);
+    function GetStatus: string;
+    function GetText: string;
+    function GetTimestamp: TDateTime;
+    function GetValue: Double;
     {$ENDREGION}
   protected
     procedure AssignTo(Dest: TPersistent); override;
@@ -42,13 +47,13 @@ type
   published
     /// *** периодически получаем с сервера ***
     // числовое значение, необходимо для проверок на допустимые значения
-    property Value: Double read FValue write SetValue;
+    property Value: Double read GetValue write SetValue;
     // текстовое представление для отображения справочной информации и специального форматирования (date, hex, bin..)
-    property Text: string read FText write SetText;
+    property Text: string read GetText write SetText;
     // статус датчика, текстовое описание ошибок, если они есть, если ошибок нет, то пустая строка
-    property Status: string read FStatus write SetStatus;
+    property Status: string read GetStatus write SetStatus;
     // момент получения данных с датчика на сервере
-    property Timestamp: TDateTime read FTimestamp write SetTimestamp;
+    property Timestamp: TDateTime read GetTimestamp write SetTimestamp;
 
     /// *** настраиваются для датчика на клиенте ***
     /// наименование оборудования
@@ -137,6 +142,26 @@ begin
       FText := FStatus;
     end;
   end;
+end;
+
+function TLASensorLink.GetStatus: string;
+begin
+  Result := FStatus;
+end;
+
+function TLASensorLink.GetText: string;
+begin
+  Result := FText;
+end;
+
+function TLASensorLink.GetTimestamp: TDateTime;
+begin
+  Result := FTimestamp;
+end;
+
+function TLASensorLink.GetValue: Double;
+begin
+  Result := FValue;
 end;
 
 procedure TLASensorLink.SetEquipment(const Value: string);

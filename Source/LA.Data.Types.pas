@@ -51,6 +51,7 @@ type
     property L: Double read FL write FL stored IsLLStored nodefault;
     property H: Double read FH write FH stored IsHStored nodefault;
     property HH: Double read FHH write FHH stored IsHHStored nodefault;
+    // целевое значение
     property T: Double read FT write FT stored IsTStored nodefault;
   end;
 

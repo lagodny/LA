@@ -5,11 +5,11 @@ interface
 uses
   System.Classes,
   FMX.StdCtrls,
-  LA.Data.Link.Sensor,
+  LA.Data.Link.Sensor, LA.Data.Link.Sensor.Intf,
   LA.Data.Source;
 
 type
-  TLALabel = class(TLabel)
+  TLALabel = class(TLabel, ILASensorLink)
   private
     FLink: TLASensorLink;
     procedure SetLink(const Value: TLASensorLink);
@@ -21,7 +21,7 @@ type
 
     procedure DoDataLinkChanged(Sender: TObject);
   published
-    property Link: TLASensorLink read FLink write SetLink;
+    property Link: TLASensorLink read FLink write SetLink implements ILASensorLink;
   end;
 
 
