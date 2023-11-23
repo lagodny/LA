@@ -21,6 +21,13 @@ type
   TLADataSource = class;
   TLADataLinkList = TObjectList<TLADataLink>;
 
+//  TLANotifyEventKind = (
+//    nekDataChanged,
+//    nekValueChanged,
+//    nekPropChanged
+//  );
+
+
 
   /// <summary>
   ///   Линк к источнику данных.
@@ -35,6 +42,7 @@ type
     FData: string;
     FDataSource: TLADataSource;
     FIsNeedNotify: Boolean;
+    FIsNeedEncodeData: Boolean;
     FLastNotifyTime: TDateTime;
     FOnDataChange: TNotifyEvent;
     FOnOwnerNotify: TNotifyEvent;
@@ -56,6 +64,7 @@ type
     ///  нужно переопределить для датчика, для трекера и т.д. чтобы иметь доступ к
     ///  значению, моменту времени и статусу
     procedure EncodeData; virtual;
+    procedure DoNeedNotify;
   public
     constructor Create(const AOwner: TPersistent); virtual;
     destructor Destroy; override;
@@ -69,11 +78,10 @@ type
     /// компонент владелец должен уведомить об удалении компонента вызвав эту процедуру
     procedure Notification(AComponent: TComponent; Operation: TOperation); virtual;
 
-//     // подключение, отключение, уведомление наблюдателей
-//    procedure Attach(const aLink: TLADataLink); virtual;
-//    procedure Detach(const aLink: TLADataLink); virtual;
     // должна быть вызвана в основном потоке, именно в ней нужно обновлять элементы интерфейса
-    procedure Notify; virtual;
+    procedure Notify; overload; virtual;
+//    procedure Notify(aEvent: TLANotifyEventKind); overload; virtual;
+
 
     // список линков, не управляет временим их жизни
     property Links: TLADataLinkList read FLinks;
@@ -92,7 +100,6 @@ type
 
     /// событие изменения данных для разработчика
     property OnDataChange: TNotifyEvent read FOnDataChange write FOnDataChange;
-
   end;
 
 
@@ -104,14 +111,16 @@ type
     FLock: TMREWSync;
     FLinks: TLADataLinkList;
     FLinksChanged: Boolean;
-  public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-
+  protected
     // подключение, отключение, уведомление наблюдателей
     procedure Attach(const aLink: TLADataLink); virtual;
     procedure Detach(const aLink: TLADataLink); virtual;
     procedure Notify; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure ConnectLinksFromDataSource(aDataSource: TLADataSource); virtual;
 
     // список линков, не управляет временим их жизни
     property Links: TLADataLinkList read FLinks;
@@ -144,6 +153,12 @@ begin
   finally
     FLock.EndWrite;
   end;
+end;
+
+procedure TLADataSource.ConnectLinksFromDataSource(aDataSource: TLADataSource);
+begin
+  for var i := aDataSource.Links.Count - 1 downto 0 do
+    aDataSource.Links[i].DataSource := Self;
 end;
 
 constructor TLADataSource.Create(AOwner: TComponent);
@@ -238,6 +253,11 @@ begin
   inherited;
 end;
 
+procedure TLADataLink.DoNeedNotify;
+begin
+  FIsNeedNotify := True;
+end;
+
 //procedure TLADataLink.Detach(const aLink: TLADataLink);
 //begin
 //  FLinks.Remove(aLink);
@@ -246,6 +266,7 @@ end;
 procedure TLADataLink.EncodeData;
 begin
   // наследники должны разобрать поле Data
+  FIsNeedEncodeData := False;
 end;
 
 function TLADataLink.GetData: string;
@@ -273,15 +294,21 @@ begin
   if Operation = opRemove then
   begin
     if (AComponent = DataSource) then
-      DataSource := nil;
+      DataSource := nil
   end;
 end;
+
+//procedure TLADataLink.Notify(aEvent: TLANotifyEventKind);
+//begin
+//  Notify;
+//end;
 
 procedure TLADataLink.Notify;
 begin
   if FIsNeedNotify or (SecondsBetween(Now, FLastNotifyTime) > 10) then
   begin
-    EncodeData;
+    if FIsNeedEncodeData then
+      EncodeData;
     // уведомляем компонент-владелец
     if Assigned(FOnOwnerNotify) then
       OnOwnerNotify(Self);
@@ -299,6 +326,7 @@ begin
   if Value <> FData then
   begin
     FData := Value;
+    FIsNeedEncodeData := True;
     FIsNeedNotify := True;
   end;
 end;
