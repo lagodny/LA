@@ -4,13 +4,24 @@ interface
 
 uses
   System.Classes,
+  System.Generics.Defaults, System.Generics.Collections,
   System.SysUtils, System.DateUtils,
   System.Math,
   LA.Data.Types,
+  LA.Data.Lookup,
   LA.Data.Source,
   LA.Data.Link.Sensor.Intf;
 
 type
+  /// <summary>
+  ///   тип показаний датчика
+  ///  - аналоговый (температура, давление) - убва
+  ///  - возрастающий счетчик (счетчик электроэнергии)
+  ///  - убывающий счетчик (секунд до окончания операции)
+  ///  - дискретный (клапан)
+  /// </summary>
+  TLASensorKind = (skAnalog, skDiscret, skCounterUp, skCounterDown);
+
   /// <summary>
   ///   Линк/адаптер к Датчику
   /// </summary>
@@ -19,31 +30,49 @@ type
     {$REGION 'Fields'}
     FValue: Double;
     FStatus: string;
+    FStatusCode: Integer;
     FTimestamp: TDateTime;
     FUn: string;
     FText: string;
     FName: string;
     FEquipment: string;
     FValueRange: TValueRange;
+    FKind: TLASensorKind;
+    FValueLookupList: TLALookupList;
+    FLookupTableName: string;
+    FDisplayFormat: string;
+    FStatusLookupList: TLALookupList;
+    function GetValue: Double;
+    function GetText: string;
+    function GetStatus: string;
+    function GetStatusCode: Integer;
+    function GetTimestamp: TDateTime;
+    function GetDisplayValue: string;
+    function GetDisplayStatus: string;
     procedure SetValue(const Value: Double);
     procedure SetText(const Value: string);
     procedure SetStatus(const Value: string);
+    procedure SetStatusCode(const Value: Integer);
     procedure SetTimestamp(const Value: TDateTime);
     procedure SetUn(const Value: string);
     procedure SetName(const Value: string);
     procedure SetEquipment(const Value: string);
     procedure SetValueRange(const Value: TValueRange);
-    function GetStatus: string;
-    function GetText: string;
-    function GetTimestamp: TDateTime;
-    function GetValue: Double;
+    procedure SetKind(const Value: TLASensorKind);
+    procedure SetValueLookupList(const Value: TLALookupList);
+    procedure SetStatusLookupList(const Value: TLALookupList);
+    procedure SetLookupTableName(const Value: string);
+    procedure SetDisplayFormat(const Value: string);
     {$ENDREGION}
   protected
     procedure AssignTo(Dest: TPersistent); override;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure EncodeData; override;
   public
     constructor Create(const AOwner: TPersistent); override;
     destructor Destroy; override;
+
+//    procedure Notify(aEvent: TLANotifyEventKind); overload; override;
   published
     /// *** периодически получаем с сервера ***
     // числовое значение, необходимо для проверок на допустимые значения
@@ -52,21 +81,60 @@ type
     property Text: string read GetText write SetText;
     // статус датчика, текстовое описание ошибок, если они есть, если ошибок нет, то пустая строка
     property Status: string read GetStatus write SetStatus;
+    // код ошибки
+    property StatusCode: Integer read GetStatusCode write SetStatusCode;
     // момент получения данных с датчика на сервере
     property Timestamp: TDateTime read GetTimestamp write SetTimestamp;
 
-    /// *** настраиваются для датчика на клиенте ***
+    /// *** настраиваются для датчика на клиенте / можно запросить с сервера ***
     /// наименование оборудования
     property Equipment: string read FEquipment write SetEquipment;
     /// наименование датчика
     property Name: string read FName write SetName;
     /// единица измерения показаний датчика (литр, кг, км, км/ч ...)
     property Un: string read FUn write SetUn;
+    /// вид датчика
+    property Kind: TLASensorKind read FKind write SetKind;
+    /// форматирование значений
+    property DisplayFormat: string read FDisplayFormat write SetDisplayFormat;
+    /// наименование справочника на сервере
+    property LookupTableName: string read FLookupTableName write SetLookupTableName;
+
+    /// справочники показаний и статусов (ошибок)
+    property ValueLookupList: TLALookupList read FValueLookupList write SetValueLookupList;
+    property StatusLookupList: TLALookupList read FStatusLookupList write SetStatusLookupList;
+
+    /// текстовое представление значений
+    property DisplayValue: string read GetDisplayValue;
+    /// текстовое представление ошибок
+    property DisplayStatus: string read GetDisplayStatus;
 
     /// диапазон допустимых значений датчика
     property ValueRange: TValueRange read FValueRange write SetValueRange;
   end;
+  TLASensorLinkList = class(TList<TLASensorLink>);
 
+//  /// <summary>
+//  ///   Группа объединяющая в себе линки к Датчику со схожими ID
+//  /// </summary>
+//  TLASensorLinkGroup = class
+//  private
+//    {$REGION 'Fields'}
+//    FItems: TLASensorLinkList;
+//    FID: string;
+//    FKind: TLASensorKind;
+//    FMoment: TDateTime;
+//    {$ENDREGION}
+//  public
+//    constructor Create;
+//    destructor Destroy; override;
+//
+//    property Items: TLASensorLinkList read FItems;
+//
+//    property ID: string read FID write FID;
+//    property Kind: TLASensorKind read FKind write FKind;
+////    property Moment: TDateTime read FMoment write FMoment;
+//  end;
 
 implementation
 
@@ -111,7 +179,17 @@ end;
 
 procedure TLASensorLink.EncodeData;
 begin
+  // сбросим признак необходимости декодировать данные
+  inherited;
   try
+    // разбираем строку вида
+    // 6;19708;19708.00;
+    /// id;value;text;status;moment
+    ///  id - обязательный: идентификатор датчика
+    ///  value - обязательный: числовое значение: разделитель тысяч - '' (нет) : разделитель десятичных - '.' (точка)
+    ///  text - необязательный: текстовое представление (может не передаваться - быть пустым, если совпадает с value)
+    ///  status - необязательный: пустая строка, если ошибок нет, или описание ошибки
+    ///  moment - необязательный: если пустая строка, то берем текущее время : иначе момент изменения датчика на сервере в формате ISO8601 UTC
     var a := Data.Split([';']);
     var L := Length(a);
     if L >= 2 then
@@ -122,19 +200,32 @@ begin
           FValue := TLAStrUtils.DotStrToFloatDef(a[1]);
 
         if L >= 3 then
-        begin
-          FText := a[2];
-          if L >= 4 then
-          begin
-            FStatus := a[3];
-            if L >= 5 then
-              FTimestamp := ISO8601ToDate(a[4])
-            else
-              FTimestamp := Now;
-          end
-        end
+          FText := a[2]
+        else
+          FText := a[1];
+
+        if L >= 4 then
+          FStatus := a[3]
+        else
+          FStatus := '';
+
+        if L >= 5 then
+          FTimestamp := TTimeZone.Local.ToLocalTime(ISO8601ToDate(a[4]))
+        else
+          FTimestamp := Now;
       end;
+    end
+    // при возниконовении ошибок получения данных, в поле Data записывается эта ошибка
+    // используем ее, чтобы показать, что есть проблемы с полученем данных этого датчика
+    else
+    begin
+      FStatus := Data;
+      FText := Data;
     end;
+
+    { TODO : добавить передачу кода ошибки }
+    FStatusCode := 0;
+
   except
     on e: Exception do
     begin
@@ -144,9 +235,30 @@ begin
   end;
 end;
 
+function TLASensorLink.GetDisplayStatus: string;
+begin
+  if Assigned(StatusLookupList) then
+    StatusLookupList.Lookup(StatusCode.ToString, Result)
+  else
+    Result := '';
+end;
+
+function TLASensorLink.GetDisplayValue: string;
+begin
+  if Assigned(ValueLookupList) then
+    ValueLookupList.Lookup(Value.ToString, Result)
+  else
+    Result := TLAStrUtils.FormatValue(Value, DisplayFormat);
+end;
+
 function TLASensorLink.GetStatus: string;
 begin
   Result := FStatus;
+end;
+
+function TLASensorLink.GetStatusCode: Integer;
+begin
+  Result := FStatusCode;
 end;
 
 function TLASensorLink.GetText: string;
@@ -164,45 +276,188 @@ begin
   Result := FValue;
 end;
 
+procedure TLASensorLink.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  inherited;
+  if Operation = opRemove then
+  begin
+    if (AComponent = ValueLookupList) then
+      ValueLookupList := nil
+    else if (AComponent = StatusLookupList) then
+      StatusLookupList := nil
+  end;
+end;
+
+//procedure TLASensorLink.Notify(aEvent: TLANotifyEventKind);
+//begin
+//  case aEvent of
+//    // при изменении Data (например, при получении данных с сервера через Updater)
+//    // Data будет декодировано
+//    nekDataChanged:
+//      Notify;
+//
+//    // при непосредственном изменении Value, StatusCode (например, при просмотре истории)
+//    // нужно просто сообщить об изменении подписчикам
+//    nekValueChanged:
+//    begin
+//      if Assigned(OnOwnerNotify) then
+//        OnOwnerNotify(Self);
+//      if Assigned(OnDataChange) then
+//        OnDataChange(Self);
+//    end;
+//
+//    // при изменении свойств, которые влияют на отображение,
+//    // нужно сообщить подписчикам
+//    nekPropChanged:
+//    begin
+//      if Assigned(OnOwnerNotify) then
+//        OnOwnerNotify(Self);
+//      if Assigned(OnDataChange) then
+//        OnDataChange(Self);
+//    end;
+//  end;
+//
+//end;
+
+procedure TLASensorLink.SetDisplayFormat(const Value: string);
+begin
+  if FDisplayFormat <> Value then
+  begin
+    FDisplayFormat := Value;
+    DoNeedNotify;
+  end;
+end;
+
 procedure TLASensorLink.SetEquipment(const Value: string);
 begin
-  FEquipment := Value;
+  if FEquipment <> Value then
+  begin
+    FEquipment := Value;
+    DoNeedNotify;
+  end;
+end;
+
+procedure TLASensorLink.SetKind(const Value: TLASensorKind);
+begin
+  if FKind <> Value then
+  begin
+    FKind := Value;
+    DoNeedNotify;
+  end;
+end;
+
+//procedure TLASensorLink.SetLookupList(const Value: TLALookupList);
+//begin
+//  if FValueLookupList <> Value then
+//  begin
+//    FValueLookupList := Value;
+//    DoNeedNotify;
+//  end;
+//end;
+
+procedure TLASensorLink.SetLookupTableName(const Value: string);
+begin
+  if FLookupTableName <> Value then
+  begin
+    FLookupTableName := Value;
+    DoNeedNotify;
+  end;
 end;
 
 procedure TLASensorLink.SetName(const Value: string);
 begin
-  FName := Value;
+  if FName <> Value then
+  begin
+    FName := Value;
+    DoNeedNotify;
+  end;
 end;
 
 procedure TLASensorLink.SetStatus(const Value: string);
 begin
-  FStatus := Value;
+  if FStatus <> Value then
+  begin
+    FStatus := Value;
+    DoNeedNotify;
+  end;
+end;
+
+procedure TLASensorLink.SetStatusCode(const Value: Integer);
+begin
+  if FStatusCode <> Value then
+  begin
+    FStatusCode := Value;
+    DoNeedNotify;
+  end;
+end;
+
+procedure TLASensorLink.SetStatusLookupList(const Value: TLALookupList);
+begin
+  if FStatusLookupList <> Value then
+  begin
+    FStatusLookupList := Value;
+    DoNeedNotify;
+  end;
 end;
 
 procedure TLASensorLink.SetText(const Value: string);
 begin
-  FText := Value;
+  if FText <> Value then
+  begin
+    FText := Value;
+    DoNeedNotify;
+  end;
 end;
 
 procedure TLASensorLink.SetTimestamp(const Value: TDateTime);
 begin
-  FTimestamp := Value;
+  if FTimestamp <> Value then
+  begin
+    FTimestamp := Value;
+    DoNeedNotify;
+  end;
 end;
 
 procedure TLASensorLink.SetUn(const Value: string);
 begin
-  FUn := Value;
+  if FUn <> Value then
+  begin
+    FUn := Value;
+    DoNeedNotify;
+  end;
 end;
 
 procedure TLASensorLink.SetValue(const Value: Double);
 begin
-  FValue := Value;
+  if FValue <> Value then
+  begin
+    FValue := Value;
+    DoNeedNotify;
+  end;
 end;
 
+
+procedure TLASensorLink.SetValueLookupList(const Value: TLALookupList);
+begin
+
+end;
 
 procedure TLASensorLink.SetValueRange(const Value: TValueRange);
 begin
   FValueRange.Assign(Value);
 end;
+
+//{ TLASensorLinkGroup }
+//
+//constructor TLASensorLinkGroup.Create;
+//begin
+//  FItems := TLASensorLinkList.Create;
+//end;
+//
+//destructor TLASensorLinkGroup.Destroy;
+//begin
+//  FItems.Free;
+//  inherited;
+//end;
 
 end.
