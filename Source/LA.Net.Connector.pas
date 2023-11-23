@@ -22,6 +22,7 @@ resourcestring
 const
   cDefConnectTimeout = 2000;
   cDefReadTimeout = 60000;
+  cDefSendTimeout = 5000;
 
   cDefCompressionLevel = 4;
   cDefEncrypt = False;
@@ -99,17 +100,31 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
+    procedure DoLog(const aText: string);
+
     procedure Lock;
     procedure Unlock;
+
+    procedure LockAndExec(aProc: TProc; const aProcName: string = '');
 
     procedure Connect; virtual; abstract;
     procedure Disconnect; virtual; abstract;
 
     procedure Authorize; virtual; abstract;
+    /// авторизован
+    property Authorized: Boolean read FAuthorized;
 
     procedure InitServerCache; virtual;
 
+    // *** Мониторинг - работа с датчиками ***
+    /// <summary>Получить информацию по запрошенным датчикам</summary>
+    function GetSensorsInfo(const IDs: TSIDArr): Variant; virtual; abstract;
+
     function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; virtual; abstract;
+    procedure SensorHistoryStream(aStream: TStream; const SID: string; const FromDate, ToDate: Int64;
+      const GetValue, GetStatus, GetUser: Boolean; const CalcLeft, CalcRight: Boolean); virtual; abstract;
+    // получить справочник по имени
+    function GetLookup(const aName: string): string; virtual; abstract;
 
     property ClientLock: TCriticalSection read FClientLock;
   published
@@ -122,7 +137,7 @@ type
     // ожидание отклика на команду, мс
     property ReadTimeOut: Integer read GetReadTimeOut write SetReadTimeOut default cDefReadTimeout;
     //
-    property SendTimeOut: Integer read GetSendTimeOut write SetSendTimeOut;
+    property SendTimeOut: Integer read GetSendTimeOut write SetSendTimeOut default cDefSendTimeout;
 
     // уровень сжатия (0 - без сжатия ... 9 - максимальное сжатие)
     property CompressionLevel: Integer read GetCompressionLevel write SetCompressionLevel default cDefCompressionLevel;
@@ -137,9 +152,6 @@ type
     // состояние подключения
     property Connected: Boolean read GetConnected write SetConnected stored False;
 
-    /// авторизован
-    property Authorized: Boolean read FAuthorized write FAuthorized;
-
     /// как представиться серверу
     property Description: string read FDescription write SetDescription;
 
@@ -150,6 +162,10 @@ type
   end;
 
 implementation
+
+uses
+  LA.Log;
+
 
 { TDCCustomConnector }
 procedure TLACustomConnector.CheckAuthorized;
@@ -176,6 +192,11 @@ begin
   inherited;
 end;
 
+procedure TLACustomConnector.DoLog(const aText: string);
+begin
+  TDCLog.WriteToLog(aText);
+end;
+
 procedure TLACustomConnector.DoPropChanged;
 begin
   if Connected then
@@ -192,6 +213,15 @@ begin
 
 end;
 
+//function TLACustomConnector.GetSensorsInfo(const IDs: TSIDArr): Variant;
+//begin
+//  LockAndExec(procedure
+//    begin
+//
+//    end,
+//    'GetSensorsInfo');
+//end;
+
 procedure TLACustomConnector.InitServerCache;
 begin
 
@@ -200,6 +230,27 @@ end;
 procedure TLACustomConnector.Lock;
 begin
   FClientLock.Enter;
+end;
+
+procedure TLACustomConnector.LockAndExec(aProc: TProc; const aProcName: string = '');
+begin
+  Lock;
+  try
+    CheckConnected;
+    CheckAuthorized;
+    try
+      aProc;
+    except
+      on e: Exception do
+      begin
+        DoLog(Format('%s.%s.%S: Exception: %s', [ClassName, Name, aProcName, e.Message]));
+        DoDisconnect;
+        raise;
+      end;
+    end;
+  finally
+    Unlock;
+  end;
 end;
 
 procedure TLACustomConnector.SetAddress(const Value: string);

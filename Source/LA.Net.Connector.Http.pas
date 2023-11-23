@@ -7,6 +7,7 @@ uses
   // IdGlobal, IdTCPClient, IdException,
   SynCrossPlatformSpecific,
   SynCrossPlatformREST,
+  SynCrossPlatformJSON,
   LA.Net.Connector, LA.Types.Monitoring, LA.Net.Connector.Intf,
   LA.Net.DC.Client;
 // LA.DC.mORMotClient;
@@ -34,13 +35,13 @@ type
 
     FEncrypt: Boolean;
     FCompressionLevel: Integer;
-    FHttps: Boolean;
+//    FHttps: Boolean;
     FProxyName: string;
     FProxyByPass: string;
     FConnectTimeOut: Integer;
     FSendTimeOut: Integer;
     FReadTimeOut: Integer;
-    procedure SetHttps(const Value: Boolean);
+//    procedure SetHttps(const Value: Boolean);
     procedure SetProxyByPass(const Value: string);
     procedure SetProxyName(const Value: string);
 
@@ -50,12 +51,14 @@ type
   protected
     function GetEncrypt: Boolean; override;
     function GetCompressionLevel: Integer; override;
+
     function GetConnectTimeOut: Integer; override;
     function GetReadTimeOut: Integer; override;
     function GetSendTimeOut: Integer; override;
 
     procedure SetEncrypt(const Value: Boolean); override;
     procedure SetCompressionLevel(const Value: Integer); override;
+
     procedure SetReadTimeOut(const Value: Integer); override;
     procedure SetConnectTimeOut(const Value: Integer); override;
     procedure SetSendTimeOut(const Value: Integer); override;
@@ -71,7 +74,6 @@ type
     procedure DoServicesConnect; override;
     procedure DoServicesDisconnect; override;
 
-    procedure DoLog(const aText: string);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -83,6 +85,10 @@ type
 
     // взаимодействие с Мониторингом
     function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; override;
+    procedure SensorHistoryStream(aStream: TStream; const SID: string; const FromDate, ToDate: Int64;
+      const GetValue, GetStatus, GetUser: Boolean; const CalcLeft, CalcRight: Boolean); override;
+    function GetSensorsInfo(const IDs: TSIDArr): Variant; override;
+    function GetLookup(const aName: string): string; override;
 
     // регистрация
     procedure RequestSignUp(const Login: String; const EMail: String; const Password: String);
@@ -92,10 +98,10 @@ type
     property Session: IDCSession read GetSession;
     property Monitoring: IMonitoring read GetMonitoring;
   published
-    property Https: Boolean read FHttps write SetHttps;
+//    property Https: Boolean read FHttps write SetHttps;
     property ProxyName: string read FProxyName write SetProxyName;
     property ProxyByPass: string read FProxyByPass write SetProxyByPass;
-    property SendTimeOut: Integer read FSendTimeOut write SetSendTimeOut;
+//    property SendTimeOut: Integer read FSendTimeOut write SetSendTimeOut;
   end;
 
   TLAHttpTrackingConnection = class(TLAHttpConnector, IDCTracking)
@@ -155,9 +161,9 @@ end;
 constructor TLAHttpConnector.Create(AOwner: TComponent);
 begin
   inherited;
-  FConnectTimeOut := 5000;
-  FReadTimeOut := 10000;
-  FSendTimeOut := 5000;
+  FConnectTimeOut := cDefConnectTimeout;
+  FReadTimeOut := cDefReadTimeout;
+  FSendTimeOut := cDefSendTimeout;
 end;
 
 destructor TLAHttpConnector.Destroy;
@@ -242,10 +248,10 @@ begin
   TDCLog.WriteToLog('DoDisconnect - done');
 end;
 
-procedure TLAHttpConnector.DoLog(const aText: string);
-begin
-  TDCLog.WriteToLog(aText);
-end;
+//procedure TLAHttpConnector.DoLog(const aText: string);
+//begin
+//  TDCLog.WriteToLog(aText);
+//end;
 
 procedure TLAHttpConnector.DoServicesConnect;
 begin
@@ -282,6 +288,18 @@ begin
   Result := FEncrypt;
 end;
 
+function TLAHttpConnector.GetLookup(const aName: string): string;
+var
+  r: string;
+begin
+  LockAndExec(procedure
+    begin
+      r := Monitoring.GetLookup(aName);
+    end
+  );
+  Result := r;
+end;
+
 function TLAHttpConnector.GetMonitoring: IMonitoring;
 begin
   if not Assigned(FMonitoring) then
@@ -297,6 +315,18 @@ end;
 function TLAHttpConnector.GetSendTimeOut: Integer;
 begin
   Result := FSendTimeOut;
+end;
+
+function TLAHttpConnector.GetSensorsInfo(const IDs: TSIDArr): Variant;
+var
+  r: Variant;
+begin
+  LockAndExec(procedure
+    begin
+      r := Monitoring.GetSensorsInfo(IDs);
+    end,
+    'GetSensorsInfo');
+  Result := r;
 end;
 
 function TLAHttpConnector.GetSession: IDCSession;
@@ -325,13 +355,50 @@ begin
   end;
 end;
 
+procedure TLAHttpConnector.SensorHistoryStream(aStream: TStream; const SID: string; const FromDate, ToDate: Int64;
+  const GetValue, GetStatus, GetUser: Boolean;
+  const CalcLeft, CalcRight: Boolean);
+begin
+  Lock;
+  try
+    CheckConnected;
+    CheckAuthorized;
+    try
+      var aResult := Monitoring.SensorHistoryStream(SID, FromDate, ToDate, GetValue, GetStatus, GetUser, CalcLeft, CalcRight);
+
+      aStream.Size := 0;
+      aStream.Write(aResult[0], Length(aResult));
+      aStream.Position := 0;
+    except
+      on e: Exception do
+      begin
+        DoLog(Format('%s.%s.SensorHistoryStream: Exception: %s', [ClassName, Name, e.Message]));
+        DoDisconnect;
+        raise;
+      end;
+    end;
+  finally
+    Unlock;
+  end;
+end;
+
 function TLAHttpConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
 begin
   Lock;
   try
     CheckConnected;
     CheckAuthorized;
-    Result := Monitoring.SensorsDataAsText(IDs, aUseCache);
+    try
+      Result := Monitoring.SensorsDataAsText(IDs, aUseCache);
+    except
+      on e: Exception do
+      begin
+        DoLog(Format('%s.%s.SensorsDataAsText: Exception: %s', [ClassName, Name, e.Message]));
+        DoDisconnect;
+        raise;
+      end;
+    end;
+
   finally
     Unlock;
   end;
@@ -364,14 +431,14 @@ begin
   end;
 end;
 
-procedure TLAHttpConnector.SetHttps(const Value: Boolean);
-begin
-  if FHttps <> Value then
-  begin
-    FHttps := Value;
-    DoPropChanged;
-  end;
-end;
+//procedure TLAHttpConnector.SetHttps(const Value: Boolean);
+//begin
+//  if FHttps <> Value then
+//  begin
+//    FHttps := Value;
+//    DoPropChanged;
+//  end;
+//end;
 
 procedure TLAHttpConnector.SetProxyByPass(const Value: string);
 begin

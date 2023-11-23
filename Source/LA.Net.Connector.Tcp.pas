@@ -53,7 +53,7 @@ type
 
     function ReadLn: string;
 
-    function ExtractValue(var aValues: string; var aValue: string; var aErrorCode: integer; var aErrorStr: string; var aMoment: TDateTime): Boolean;
+//    function ExtractValue(var aValues: string; var aValue: string; var aErrorCode: integer; var aErrorStr: string; var aMoment: TDateTime): Boolean;
 
 
 
@@ -83,17 +83,19 @@ type
   protected
     function GetEncrypt: boolean; override;
     function GetCompressionLevel: Integer; override;
+    function GetSendTimeOut: Integer; override;
+
     function GetConnectTimeOut: Integer; override;
     function GetReadTimeOut: Integer; override;
 
     procedure SetEncrypt(const Value: boolean); override;
     procedure SetCompressionLevel(const Value: Integer); override;
+
     procedure SetReadTimeOut(const Value: Integer); override;
     procedure SetConnectTimeOut(const Value: Integer); override;
+    procedure SetSendTimeOut(const Value: Integer); override;
 
     function GetConnected: Boolean; override;
-
-    procedure Authorize(const aUser, aPassword: string); virtual;
 
     /// пытаемся подключиться по указанному адресу
     ///  если подключение невозможно вызываем исключение
@@ -101,6 +103,8 @@ type
 
     procedure DoConnect; override;
     procedure DoDisconnect; override;
+
+    procedure DoAuthorize; override;
 
 
     property Intercept: TLATCPIntercept read FIntercept;
@@ -112,8 +116,14 @@ type
     procedure Connect; override;
     procedure Disconnect; override;
 
+    procedure Authorize; override;
+
     /// методы работы с сервером
     function SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string; override;
+    procedure SensorHistoryStream(aStream: TStream; const SID: string; const FromDate, ToDate: Int64;
+      const GetValue, GetStatus, GetUser: Boolean; const CalcLeft, CalcRight: Boolean); override;
+    function GetSensorsInfo(const IDs: TSIDArr): Variant; override;
+    function GetLookup(const aName: string): string; override;
 
 
     property ServerFS: TFormatSettings read FServerFS;
@@ -140,6 +150,7 @@ implementation
 
 uses
   System.Character,
+  System.DateUtils,
   flcStdTypes, flcCipherRSA,
   LA.Utils.Str, LA.Utils.System,
   LA.Log;
@@ -156,10 +167,14 @@ const
 
 { TDCTCPConnector }
 
-procedure TLATCPConnector.Authorize(const aUser, aPassword: string);
+procedure TLATCPConnector.Authorize; //(const aUser, aPassword: string);
 begin
-  DoCommandFmt('Login %s;%s;1', [aUser, TLAStrUtils.StrToHex(aPassword, '')]);
-  ReadLn; // вычитываем приветствие
+  Lock;
+  try
+    DoAuthorize;
+  finally
+    Unlock;
+  end;
 end;
 
 procedure TLATCPConnector.CheckCommandResult;
@@ -230,6 +245,12 @@ begin
   end;
 end;
 
+procedure TLATCPConnector.DoAuthorize;
+begin
+  DoCommandFmt('Login %s;%s;1', [UserName, TLAStrUtils.StrToHex(Password, '')]);
+  ReadLn; // вычитываем приветствие
+end;
+
 procedure TLATCPConnector.DoCommand(const aCommand: string);
 begin
   SendCommand(aCommand);
@@ -269,65 +290,65 @@ begin
 
 end;
 
-function TLATCPConnector.ExtractValue(var aValues, aValue: string; var aErrorCode: integer; var aErrorStr: string;
-  var aMoment: TDateTime): Boolean;
-var
-  i, p1: integer;
-  s: string;
-  aState: (sValue, sErrorCode, sErrorStr, sMoment, sEOL);
-  aStrLength: integer;
-begin
-  // разбираем текст вида:
-  //
-  // Value;ErrorCode;ErrorStr;Moment<EOL>
-  // Value;ErrorCode;ErrorStr;Moment<EOL>
-  // <EOL>
-  // ...
-  // Value;ErrorCode;ErrorStr;Moment<EOL>
-  //
-  // удаляем из испходного текста разобранную строку
-
-  i := 1;
-  aStrLength := Length(aValues);
-
-  Assert(aStrLength > 0, 'Получена пустая строка');
-
-  Result := aValues[i] <> #13;
-  if Result then
-  begin
-    p1 := 1;
-    aState := sValue;
-
-    while aState <> sEOL do
-    begin
-      // EOL = CR + LF  (#13 + #10)
-
-      if (i > aStrLength) or aValues[i].IsInArray([';', #13]) then
-      //(CharInSet(aValues[i], [';', #13])) then
-      begin
-        s := Copy(aValues, p1, i - p1);
-        p1 := i + 1;
-        case aState of
-          sValue:       // значение
-            aValue := s;
-          sErrorCode:   // код ошибки
-            aErrorCode := StrToIntDef(s, 0);
-          sErrorStr:    // ошибка
-            aErrorStr := s;
-          sMoment:      // момент времени
-            aMoment := StrToDateTimeDef(s, aMoment); // DateToClient(aMoment), OpcFS);
-        end;
-        Inc(aState);
-      end;
-      Inc(i);
-    end;
-    aValues := Copy(aValues, i + 1 {LF}, aStrLength);
-  end
-  else
-    aValues := Copy(aValues, i + 2 {CRLF}, aStrLength);
-
-
-end;
+//function TLATCPConnector.ExtractValue(var aValues, aValue: string; var aErrorCode: integer; var aErrorStr: string;
+//  var aMoment: TDateTime): Boolean;
+//var
+//  i, p1: integer;
+//  s: string;
+//  aState: (sValue, sErrorCode, sErrorStr, sMoment, sEOL);
+//  aStrLength: integer;
+//begin
+//  // разбираем текст вида:
+//  //
+//  // Value;ErrorCode;ErrorStr;Moment<EOL>
+//  // Value;ErrorCode;ErrorStr;Moment<EOL>
+//  // <EOL>
+//  // ...
+//  // Value;ErrorCode;ErrorStr;Moment<EOL>
+//  //
+//  // удаляем из испходного текста разобранную строку
+//
+//  i := 1;
+//  aStrLength := Length(aValues);
+//
+//  Assert(aStrLength > 0, 'Получена пустая строка');
+//
+//  Result := aValues[i] <> #13;
+//  if Result then
+//  begin
+//    p1 := 1;
+//    aState := sValue;
+//
+//    while aState <> sEOL do
+//    begin
+//      // EOL = CR + LF  (#13 + #10)
+//
+//      if (i > aStrLength) or aValues[i].IsInArray([';', #13]) then
+//      //(CharInSet(aValues[i], [';', #13])) then
+//      begin
+//        s := Copy(aValues, p1, i - p1);
+//        p1 := i + 1;
+//        case aState of
+//          sValue:       // значение
+//            aValue := s;
+//          sErrorCode:   // код ошибки
+//            aErrorCode := StrToIntDef(s, 0);
+//          sErrorStr:    // ошибка
+//            aErrorStr := s;
+//          sMoment:      // момент времени
+//            aMoment := StrToDateTimeDef(s, aMoment); // DateToClient(aMoment), OpcFS);
+//        end;
+//        Inc(aState);
+//      end;
+//      Inc(i);
+//    end;
+//    aValues := Copy(aValues, i + 1 {LF}, aStrLength);
+//  end
+//  else
+//    aValues := Copy(aValues, i + 2 {CRLF}, aStrLength);
+//
+//
+//end;
 
 function TLATCPConnector.GenerateCryptKey(const aCharCount: Integer): RawByteString;
 var
@@ -363,6 +384,21 @@ end;
 function TLATCPConnector.GetReadTimeOut: Integer;
 begin
   Result := FClient.ReadTimeout;
+end;
+
+function TLATCPConnector.GetLookup(const aName: string): string;
+begin
+  Result := LockAndGetStringsCommand(Format('GetLookup %s', [aName]));
+end;
+
+function TLATCPConnector.GetSendTimeOut: Integer;
+begin
+  Result := 0;
+end;
+
+function TLATCPConnector.GetSensorsInfo(const IDs: TSIDArr): Variant;
+begin
+  Result := LockDoCommandReadLnFmt('GetSensorsInfo %s', [String.Join(';', IDs)]);
 end;
 
 procedure TLATCPConnector.GetServerSettings;
@@ -545,9 +581,50 @@ begin
   SendCommand(Format(aCommand, Args));
 end;
 
+procedure TLATCPConnector.SensorHistoryStream(aStream: TStream; const SID: string; const FromDate, ToDate: Int64; const GetValue, GetStatus, GetUser,
+  CalcLeft, CalcRight: Boolean);
+begin
+  Assert(Assigned(aStream), 'Не создан поток');
+
+  Lock;
+  try
+    try
+      DoConnect;
+
+      DoCommand('GetHistory ' +
+        SID + ';' +
+//        DateTimeToStr(UnixToDateTime(FromDate, True)) + ';' +
+//        DateTimeToStr(UnixToDateTime(ToDate, True)) + ';' +
+        FromDate.ToString + ';' +
+        ToDate.ToString + ';' +
+        BoolToStr(GetStatus) + ';' +
+        BoolToStr(GetValue) + ';' +
+        BoolToStr(GetUser) + ';' +
+        BoolToStr(CalcLeft) + ';' +
+        BoolToStr(CalcRight) + ';' +
+        BoolToStr(True) // время UTC
+        );
+
+      FClient.IOHandler.ReadStream(aStream);
+
+//	    // переводим даты в наше смещение
+//      HistoryDateToClient(aStream, aDataKindSet);
+
+      aStream.Position := 0;
+    except
+      on e: EIdException do
+        if ProcessTCPException(e) then
+          raise;
+    end;
+  finally
+    UnLock;
+  end;
+
+end;
+
 function TLATCPConnector.SensorsDataAsText(const IDs: TSIDArr; aUseCache: Boolean): string;
 begin
-
+  Result := LockAndGetStringsCommand(Format('GetValues2 %s', [String.Join(';', IDs)]));
 end;
 
 //function TDCTCPConnector.SensorValue(const SID: String): String;
@@ -601,7 +678,8 @@ begin
 	    'HostName=%s;'+
 	    'MaxLineLength=%d;'+
       'Language=%s;'+
-      'StringEncoding=%s',
+      'StringEncoding=%s;'+
+      'ValueDataSize=%d',
 	    [ ProtocolVersion,
 	      //CompressionLevel,
 	      Ord(EnableMessage),
@@ -610,7 +688,8 @@ begin
 	      TLASystemUtils.GetComputerName,
 	      FClient.IOHandler.MaxLineLength,
         Language,
-        cStringEncoding
+        cStringEncoding,
+        8
 	      ]
 	    );
 
@@ -680,6 +759,11 @@ begin
 
 end;
 
+procedure TLATCPConnector.SetSendTimeOut(const Value: Integer);
+begin
+
+end;
+
 procedure TLATCPConnector.TryConnectTo(const aAddrLine: string);
 var
   aAddrRec: TDCTcpAddr;
@@ -720,7 +804,7 @@ begin
   if UserName <> '' then
   begin
     try
-      Authorize(UserName, Password);
+      DoAuthorize; //(UserName, Password);
     except
       on e: EIdException do
         if ProcessTCPException(e) then
@@ -864,8 +948,8 @@ begin
     if aParams.Count = 2 then
     begin
       // dc.tdc.org.ua:5152
-      Host := aParams[1];
-      Port := aParams[2];
+      Host := aParams[0];
+      Port := aParams[1];
     end
     else
       raise EDCConnectorBadAddress.CreateFmt(sResAddressIsBadFmt, [aAddr]);

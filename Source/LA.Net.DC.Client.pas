@@ -70,7 +70,14 @@ type
     function SensorsDataAsText(const SIDs: TSIDArr; const aUseCache: Boolean): String;
     function SensorHistory(const SID: String; const FromDate: Int64; const ToDate: Int64): THistoryRecArr;
     function SensorHistoryExt(const SID: String; const FromDate: Int64; const ToDate: Int64): THistoryRecExtArr;
-    function CloneGroup(const aGroupID: TID; const aCloneChildren: Boolean; const aCloneSensors: Boolean; const aCloneDevices: Boolean; const aCount: Integer): Integer;
+
+    function SensorHistoryStream(const SID: String; const FromDate: Int64; const ToDate: Int64;
+      const GetValue: Boolean; const GetStatus: Boolean; const GetUser: Boolean; const CalcLeft: Boolean; const CalcRight: Boolean): THttpBody;
+    function GetSensorsInfo(const IDs: TSIDArr): Variant;
+    function GetLookup(const aTableName: String): String;
+
+    function CloneGroup(const aGroupID: TID; const aCloneChildren: Boolean; const aCloneSensors: Boolean; const aCloneDevices: Boolean;
+      const aCount: Integer): Integer;
     procedure InitSensorsByID(const IDs: TIntegerDynArray);
     procedure InitGroupsByID(const IDs: TIntegerDynArray);
     procedure InitDevicesByID(const IDs: TIntegerDynArray);
@@ -101,6 +108,13 @@ type
     function SensorsDataAsText(const SIDs: TSIDArr; const aUseCache: Boolean): String;
     function SensorHistory(const SID: String; const FromDate: Int64; const ToDate: Int64): THistoryRecArr;
     function SensorHistoryExt(const SID: String; const FromDate: Int64; const ToDate: Int64): THistoryRecExtArr;
+
+//    function SensorHistoryStream(const SID: String; const FromDate: Int64; const ToDate: Int64; const CalcLeft: Boolean; const CalcRight: Boolean): THttpBody;
+    function SensorHistoryStream(const SID: String; const FromDate: Int64; const ToDate: Int64;
+      const GetValue: Boolean; const GetStatus: Boolean; const GetUser: Boolean; const CalcLeft: Boolean; const CalcRight: Boolean): THttpBody;
+    function GetSensorsInfo(const IDs: TSIDArr): Variant;
+    function GetLookup(const aTableName: String): String;
+
     function CloneGroup(const aGroupID: TID; const aCloneChildren: Boolean; const aCloneSensors: Boolean; const aCloneDevices: Boolean; const aCount: Integer): Integer;
     procedure InitSensorsByID(const IDs: TIntegerDynArray);
     procedure InitGroupsByID(const IDs: TIntegerDynArray);
@@ -776,6 +790,22 @@ begin
   Result := Variant2TValArr(res[0]);
 end;
 
+function TServiceMonitoring.GetLookup(const aTableName: String): String;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'GetLookup',1, // raise EServiceException on error
+    [aTableName],res);
+  Result := res[0];
+end;
+
+function TServiceMonitoring.GetSensorsInfo(const IDs: TSIDArr): Variant;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'GetSensorsInfo',1, // raise EServiceException on error
+    [TSIDArr2Variant(IDs)],res);
+  Result := res[0];
+end;
+
 function TServiceMonitoring.GroupSensorData(const SIDs: TSIDArr): TDataRecArr;
 var res: TVariantDynArray;
 begin
@@ -854,6 +884,15 @@ begin
   fClient.CallRemoteService(self,'SensorHistoryExt',1, // raise EServiceException on error
     [SID,FromDate,ToDate],res);
   Result := Variant2THistoryRecExtArr(res[0]);
+end;
+
+function TServiceMonitoring.SensorHistoryStream(const SID: String; const FromDate: Int64; const ToDate: Int64;
+      const GetValue: Boolean; const GetStatus: Boolean; const GetUser: Boolean; const CalcLeft: Boolean; const CalcRight: Boolean): THttpBody;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'SensorHistoryStream',1, // raise EServiceException on error
+    [SID,FromDate,ToDate,GetValue,GetStatus,GetUser,CalcLeft,CalcRight],res,true);
+  Result := VariantToHttpBody(res[0]);
 end;
 
 function TServiceMonitoring.SensorsDataAsText(const SIDs: TSIDArr; const aUseCache: Boolean): String;
