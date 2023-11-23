@@ -83,7 +83,7 @@ type
     // включать будем по необходимости
     property Active: Boolean read GetActive write SetActive stored False;
     // режим работы потока вхолостую
-    property IdleMode: Boolean read FIdleMode write SetIdleMode;
+    property IdleMode: Boolean read FIdleMode write SetIdleMode default False;
     // период опроса сервера, мс
     property Interval: Int64 read FInterval write SetInterval default DefInterval;
 

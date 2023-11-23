@@ -132,7 +132,16 @@ begin
 {$ENDIF}
 {$IFDEF MSWINDOWS}
   aPath := ExtractFilePath(ParamStr(0));
-  aAppName := ExtractFileName(ParamStr(0));
+  aAppName := ChangeFileExt(ExtractFileName(ParamStr(0)), '');
+  if SameText(aAppName, 'bds') then
+  begin
+    aPath := TPath.GetTempPath;
+    aAppName := 'la';
+  end;
+//  aPath := 'c:\1\';
+//  aAppName := 'la' + ExtractFilePath(ParamStr(0)) + '_' + ChangeFileExt(ExtractFileName(ParamStr(0)), '');
+//  aAppName := StringReplace(aAppName, '\', '_', [rfReplaceAll]);
+//  aAppName := StringReplace(aAppName, ':', '_', [rfReplaceAll]);
 {$ENDIF}
 
   Result := TPath.Combine(aPath, aAppName + '.log');

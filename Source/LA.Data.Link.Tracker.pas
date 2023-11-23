@@ -114,6 +114,8 @@ var
   aTag: TLATag;
   vd, vTags, vErrors: TJSONVariantData;
 begin
+  // сбросим признак необходимости декодировать данные
+  inherited;
   try
     vd.Init(Data);
     if VarIsEmpty(vd.Value['time']) then
