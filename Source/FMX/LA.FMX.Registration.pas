@@ -15,6 +15,7 @@ procedure Register;
 begin
   RegisterComponents('LA Controls', [
     TLAText,
+    TLAGlyph,
     TLALabel
     ]);
 end;
