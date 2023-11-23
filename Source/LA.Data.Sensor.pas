@@ -224,11 +224,8 @@ end;
 procedure TLASensor.Notification(AComponent: TComponent; Operation: TOperation);
 begin
   inherited;
-  if Operation = opRemove then
-  begin
-    if AComponent = Link.DataSource then
-      Link.DataSource := nil;
-  end;
+  if Assigned(Link) then
+    Link.Notification(AComponent, Operation);
 end;
 
 //procedure TLASensor.ObserverAdded(const ID: Integer; const Observer: IObserver);
