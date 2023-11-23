@@ -13,6 +13,7 @@ type
   protected
     function GetDataFromServer(const IDs: TSIDArr): string; override;
     procedure ProcessServerResponse(const aResponse: string); override;
+    procedure ProcessServerException(e: Exception); override;
   public
     procedure Attach(const aLink: TLADataLink); override;
   end;
@@ -20,6 +21,7 @@ type
 implementation
 
 uses
+  LA.Log,
   LA.Data.Link.Sensor;
 
 
@@ -40,6 +42,21 @@ begin
     Exit('');
 
   Result := Connector.SensorsDataAsText(IDs, True);
+end;
+
+procedure TLASensorUpdater.ProcessServerException(e: Exception);
+begin
+  FLock.BeginRead;
+  try
+    TDCLog.WriteToLogFmt('TLATrackerUpdater.ProcessServerException : Links.Count = %d : Msg: %s', [Links.Count, e.Message]);
+    for var i := 0 to Links.Count - 1 do
+    begin
+      Links[i].Data := e.Message;
+    end;
+    TDCLog.WriteToLog('TLATrackerUpdater.ProcessServerException - done');
+  finally
+    FLock.EndRead;
+  end;
 end;
 
 procedure TLASensorUpdater.ProcessServerResponse(const aResponse: string);
