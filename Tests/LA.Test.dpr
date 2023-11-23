@@ -19,7 +19,8 @@ uses
   LA.Tests.Data.Updater in 'Source\LA.Tests.Data.Updater.pas',
   LA.Tests.Threads in 'Source\LA.Tests.Threads.pas',
   LA.Tests.Data.Sensor in 'Source\LA.Tests.Data.Sensor.pas',
-  LA.Tests.Net.Connector.Http.Tracking in 'Source\LA.Tests.Net.Connector.Http.Tracking.pas';
+  LA.Tests.Net.Connector.Http.Tracking in 'Source\LA.Tests.Net.Connector.Http.Tracking.pas',
+  LA.Tests.Data.History.Viewer in 'Source\LA.Tests.Data.History.Viewer.pas';
 
 {$IFDEF TESTINSIGHT}
 var

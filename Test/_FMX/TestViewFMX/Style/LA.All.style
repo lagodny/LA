@@ -1,0 +1,28 @@
+object TStyleContainer
+  object TLayout
+    StyleName = 'LALabelStyle'
+    Align = Center
+    Size.Width = 120.000000000000000000
+    Size.Height = 24.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object TRectangle
+      StyleName = 'background'
+      Align = Client
+      Size.Width = 120.000000000000000000
+      Size.Height = 24.000000000000000000
+      Size.PlatformDefault = False
+      object TText
+        StyleName = 'text'
+        Align = Client
+        Locked = True
+        HitTest = False
+        Size.Width = 120.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Text'
+        TextSettings.Font.Size = 14.000000000000000000
+      end
+    end
+  end
+end

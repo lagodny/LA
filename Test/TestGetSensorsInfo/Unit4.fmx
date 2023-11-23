@@ -1,0 +1,67 @@
+object Form4: TForm4
+  Left = 0
+  Top = 0
+  Caption = 'Form4'
+  ClientHeight = 480
+  ClientWidth = 637
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Edit1: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    Align = Top
+    TabOrder = 0
+    Text = '1;2;3;4;5;6'
+    Position.X = 10.000000000000000000
+    Position.Y = 10.000000000000000000
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 100.000000000000000000
+    Size.Width = 527.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    object Button1: TButton
+      Align = Right
+      Margins.Right = -80.000000000000000000
+      Position.X = 527.000000000000000000
+      TabOrder = 0
+      Text = 'Button1'
+      OnClick = Button1Click
+    end
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    TextSettings.WordWrap = True
+    Align = Client
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Size.Width = 617.000000000000000000
+    Size.Height = 428.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Viewport.Width = 613.000000000000000000
+    Viewport.Height = 424.000000000000000000
+  end
+  object LAHttpConnector1: TLAHttpConnector
+    Address = '192.168.126.1:89'
+    CompressionLevel = 0
+    UserName = 'demo'
+    Password = 'demo'
+    Left = 320
+    Top = 336
+  end
+  object LATCPConnector1: TLATCPConnector
+    Address = '192.168.126.1:5152'
+    SendTimeOut = 0
+    CompressionLevel = 0
+    UserName = #1051#1072#1075#1086#1076#1085#1099#1081
+    Password = '314'
+    Language = 'ru'
+    Left = 320
+    Top = 392
+  end
+end

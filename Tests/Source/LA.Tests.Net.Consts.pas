@@ -21,7 +21,7 @@ const
 {$ENDIF}
 
 {$IFDEF vmware-host}
-  cHttpAddr = '192.168.126.1:80';//'http://dc.tdc.org.ua:80';
+  cHttpAddr = '192.168.126.1:89';//'http://dc.tdc.org.ua:80';
   cHttpsAddr = 'https://192.168.126.1:443';
 {$ENDIF}
 

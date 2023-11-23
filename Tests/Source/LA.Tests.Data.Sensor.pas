@@ -58,7 +58,7 @@ begin
   Assert.AreEqual<Double>(CUT.Link.Value, 3);
   Assert.AreEqual<string>(CUT.Link.Text, 'Production');
   Assert.AreEqual<string>(CUT.Link.Status, 'no data');
-  Assert.AreEqual<TDateTime>(CUT.Link.Timestamp, ISO8601ToDate('2022-12-19T00:01:02'));
+  Assert.AreEqual<TDateTime>(CUT.Link.Timestamp, ISO8601ToDate('2022-12-19T02:01:02'));
 end;
 
 procedure TTest_TLASensor.TestEncodeData_Case(const aID, aResponse, aValue, aText, aStatus, aTimestamp: string);
@@ -70,7 +70,7 @@ begin
   Assert.AreEqual<Double>(CUT.Link.Value, TLAStrUtils.DotStrToFloat(aValue));
   Assert.AreEqual<string>(CUT.Link.Text, aText);
   Assert.AreEqual<string>(CUT.Link.Status, aStatus);
-  Assert.AreEqual<TDateTime>(CUT.Link.Timestamp, ISO8601ToDate(aTimestamp));
+  Assert.AreEqual<TDateTime>(CUT.Link.Timestamp, TTimeZone.Local.ToLocalTime(ISO8601ToDate(aTimestamp)));
 end;
 
 procedure TTest_TLASensor.TestLink;
