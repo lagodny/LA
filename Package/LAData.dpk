@@ -69,6 +69,8 @@ contains
   LA.Data.Tracking.Model in '..\Source\LA.Data.Tracking.Model.pas',
   LA.Version in '..\Source\LA.Version.pas',
   LA.FMX.UI.Toast in '..\Source\FMX\LA.FMX.UI.Toast.pas',
-  LA.Data.Link.Sensor.Intf in '..\Source\LA.Data.Link.Sensor.Intf.pas';
+  LA.Data.Link.Sensor.Intf in '..\Source\LA.Data.Link.Sensor.Intf.pas',
+  LA.Data.History.Viewer in '..\Source\LA.Data.History.Viewer.pas',
+  LA.Data.Lookup in '..\Source\LA.Data.Lookup.pas';
 
 end.

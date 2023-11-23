@@ -24,6 +24,18 @@
         <Projects Include="..\Tests\LA.Test.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Test\_FMX\TestViewFMX\TestViewFMX.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\Test\_FMX\TestLAStyle\TestLAStyle.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\Test\TestHistoryViewer\TestHistoryViewer.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -95,14 +107,50 @@
     <Target Name="LA_Test:Make">
         <MSBuild Projects="..\Tests\LA.Test.dproj" Targets="Make"/>
     </Target>
+    <Target Name="TestViewFMX">
+        <MSBuild Projects="..\Test\_FMX\TestViewFMX\TestViewFMX.dproj"/>
+    </Target>
+    <Target Name="TestViewFMX:Clean">
+        <MSBuild Projects="..\Test\_FMX\TestViewFMX\TestViewFMX.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestViewFMX:Make">
+        <MSBuild Projects="..\Test\_FMX\TestViewFMX\TestViewFMX.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestLAStyle">
+        <MSBuild Projects="..\Test\_FMX\TestLAStyle\TestLAStyle.dproj"/>
+    </Target>
+    <Target Name="TestLAStyle:Clean">
+        <MSBuild Projects="..\Test\_FMX\TestLAStyle\TestLAStyle.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestLAStyle:Make">
+        <MSBuild Projects="..\Test\_FMX\TestLAStyle\TestLAStyle.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestHistoryViewer">
+        <MSBuild Projects="..\Test\TestHistoryViewer\TestHistoryViewer.dproj"/>
+    </Target>
+    <Target Name="TestHistoryViewer:Clean">
+        <MSBuild Projects="..\Test\TestHistoryViewer\TestHistoryViewer.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestHistoryViewer:Make">
+        <MSBuild Projects="..\Test\TestHistoryViewer\TestHistoryViewer.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestGetSensorsInfo">
+        <MSBuild Projects="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj"/>
+    </Target>
+    <Target Name="TestGetSensorsInfo:Clean">
+        <MSBuild Projects="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestGetSensorsInfo:Make">
+        <MSBuild Projects="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

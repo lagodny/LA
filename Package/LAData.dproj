@@ -244,6 +244,8 @@
         <DCCReference Include="..\Source\LA.Version.pas"/>
         <DCCReference Include="..\Source\FMX\LA.FMX.UI.Toast.pas"/>
         <DCCReference Include="..\Source\LA.Data.Link.Sensor.Intf.pas"/>
+        <DCCReference Include="..\Source\LA.Data.History.Viewer.pas"/>
+        <DCCReference Include="..\Source\LA.Data.Lookup.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
