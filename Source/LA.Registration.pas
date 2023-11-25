@@ -18,7 +18,11 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('LA', [TLASensorList, TLASensor, TLAHttpConnector, TLATCPConnector, TLASensorUpdater, TLAHistoryViewer]);
+  RegisterComponents('LA', [
+    TLASensorList, TLASensor,
+    TLAHttpConnector, TLATCPConnector,
+    TLASensorUpdater, TLAHistoryViewer
+  ]);
 
   RegisterClasses([TLADataLink, TLASensorLink]);
   RegisterClasses([TLASensorList, TLASensor]);
