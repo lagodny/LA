@@ -14,21 +14,13 @@ object Form4: TForm4
     TabOrder = 0
     Text = '1;2;3;4;5;6'
     Position.X = 10.000000000000000000
-    Position.Y = 10.000000000000000000
+    Position.Y = 29.000000000000000000
     Margins.Left = 10.000000000000000000
     Margins.Top = 10.000000000000000000
-    Margins.Right = 100.000000000000000000
-    Size.Width = 527.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Size.Width = 617.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
-    object Button1: TButton
-      Align = Right
-      Margins.Right = -80.000000000000000000
-      Position.X = 527.000000000000000000
-      TabOrder = 0
-      Text = 'Button1'
-      OnClick = Button1Click
-    end
   end
   object Memo1: TMemo
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
@@ -39,12 +31,139 @@ object Form4: TForm4
     Margins.Top = 10.000000000000000000
     Margins.Right = 10.000000000000000000
     Margins.Bottom = 10.000000000000000000
-    Size.Width = 617.000000000000000000
-    Size.Height = 428.000000000000000000
+    Size.Width = 428.000000000000000000
+    Size.Height = 409.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
-    Viewport.Width = 613.000000000000000000
-    Viewport.Height = 424.000000000000000000
+    Viewport.Width = 424.000000000000000000
+    Viewport.Height = 405.000000000000000000
+  end
+  object Layout1: TLayout
+    Align = Right
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Position.X = 448.000000000000000000
+    Position.Y = 61.000000000000000000
+    Size.Width = 179.000000000000000000
+    Size.Height = 419.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    object Button1: TButton
+      Align = Top
+      Size.Width = 179.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Button1'
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Align = Top
+      Margins.Top = 10.000000000000000000
+      Position.Y = 35.000000000000000000
+      Size.Width = 179.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Button2'
+      OnClick = Button2Click
+    end
+    object LALabel1: TLALabel
+      Align = Bottom
+      Margins.Bottom = 10.000000000000000000
+      Position.Y = 244.000000000000000000
+      Size.Width = 179.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Center
+      Text = 'LALabel1'
+      TabOrder = 6
+      Link.ID = '1'
+      Link.DataSource = DataModule1.u1
+      Link.StatusCode = 0
+      Link.Kind = skAnalog
+    end
+    object LALabel2: TLALabel
+      Align = Bottom
+      Margins.Bottom = 10.000000000000000000
+      Position.Y = 279.000000000000000000
+      Size.Width = 179.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Center
+      Text = 'LALabel1'
+      TabOrder = 5
+      Link.ID = '2'
+      Link.DataSource = LASensorUpdater1
+      Link.StatusCode = 0
+      Link.Kind = skAnalog
+    end
+    object LALabel3: TLALabel
+      Align = Bottom
+      Margins.Bottom = 10.000000000000000000
+      Position.Y = 314.000000000000000000
+      Size.Width = 179.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Center
+      Text = 'LALabel1'
+      TabOrder = 4
+      Link.ID = '3'
+      Link.DataSource = LASensorUpdater1
+      Link.StatusCode = 0
+      Link.Kind = skAnalog
+    end
+    object LALabel4: TLALabel
+      Align = Bottom
+      Margins.Bottom = 10.000000000000000000
+      Position.Y = 349.000000000000000000
+      Size.Width = 179.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Center
+      Text = 'LALabel1'
+      TabOrder = 3
+      Link.ID = '4'
+      Link.DataSource = LASensorUpdater1
+      Link.StatusCode = 0
+      Link.Kind = skAnalog
+    end
+    object LALabel5: TLALabel
+      Align = Bottom
+      Margins.Bottom = 10.000000000000000000
+      Position.Y = 384.000000000000000000
+      Size.Width = 179.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Center
+      Text = 'LALabel1'
+      TabOrder = 2
+      Link.ID = '5'
+      Link.DataSource = LASensorUpdater1
+      Link.StatusCode = 0
+      Link.Kind = skAnalog
+    end
+    object Button3: TButton
+      Align = Top
+      Margins.Top = 10.000000000000000000
+      Position.Y = 67.000000000000000000
+      Size.Width = 179.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 7
+      Text = 'Button3'
+      OnClick = Button3Click
+    end
+  end
+  object TrackBar1: TTrackBar
+    Align = MostTop
+    CanParentFocus = True
+    Orientation = Horizontal
+    Size.Width = 637.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
+    OnTracking = TrackBar1Tracking
   end
   object LAHttpConnector1: TLAHttpConnector
     Address = '192.168.126.1:89'
@@ -63,5 +182,16 @@ object Form4: TForm4
     Language = 'ru'
     Left = 320
     Top = 392
+  end
+  object LASensorUpdater1: TLASensorUpdater
+    Connector = LAHttpConnector1
+    Left = 442
+    Top = 338
+  end
+  object LAHistoryViewer1: TLAHistoryViewer
+    Date1 = 45253.000000000000000000
+    Date2 = 45254.000000000000000000
+    Left = 314
+    Top = 266
   end
 end
