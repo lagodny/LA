@@ -246,6 +246,8 @@
         <DCCReference Include="..\Source\LA.Data.Link.Sensor.Intf.pas"/>
         <DCCReference Include="..\Source\LA.Data.History.Viewer.pas"/>
         <DCCReference Include="..\Source\LA.Data.Lookup.pas"/>
+        <DCCReference Include="..\Source\LA.Common.Consts.pas"/>
+        <DCCReference Include="..\Source\LA.Data.Connection.Manager.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

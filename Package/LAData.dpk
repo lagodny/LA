@@ -71,6 +71,8 @@ contains
   LA.FMX.UI.Toast in '..\Source\FMX\LA.FMX.UI.Toast.pas',
   LA.Data.Link.Sensor.Intf in '..\Source\LA.Data.Link.Sensor.Intf.pas',
   LA.Data.History.Viewer in '..\Source\LA.Data.History.Viewer.pas',
-  LA.Data.Lookup in '..\Source\LA.Data.Lookup.pas';
+  LA.Data.Lookup in '..\Source\LA.Data.Lookup.pas',
+  LA.Common.Consts in '..\Source\LA.Common.Consts.pas',
+  LA.Data.Connection.Manager in '..\Source\LA.Data.Connection.Manager.pas';
 
 end.

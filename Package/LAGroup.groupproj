@@ -36,6 +36,9 @@
         <Projects Include="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Source\FMX\Template\LAProjectTemplate.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -143,14 +146,23 @@
     <Target Name="TestGetSensorsInfo:Make">
         <MSBuild Projects="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj" Targets="Make"/>
     </Target>
+    <Target Name="LAProjectTemplate">
+        <MSBuild Projects="..\Source\FMX\Template\LAProjectTemplate.dproj"/>
+    </Target>
+    <Target Name="LAProjectTemplate:Clean">
+        <MSBuild Projects="..\Source\FMX\Template\LAProjectTemplate.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LAProjectTemplate:Make">
+        <MSBuild Projects="..\Source\FMX\Template\LAProjectTemplate.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;LAProjectTemplate"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;LAProjectTemplate:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;LAProjectTemplate:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
