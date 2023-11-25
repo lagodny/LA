@@ -73,6 +73,7 @@ type
     destructor Destroy; override;
 
 //    procedure Notify(aEvent: TLANotifyEventKind); overload; override;
+    procedure InitFromJSON(v: Variant);
   published
     /// *** периодически получаем с сервера ***
     // числовое значение, необходимо для проверок на допустимые значения
@@ -82,7 +83,7 @@ type
     // статус датчика, текстовое описание ошибок, если они есть, если ошибок нет, то пустая строка
     property Status: string read GetStatus write SetStatus;
     // код ошибки
-    property StatusCode: Integer read GetStatusCode write SetStatusCode;
+    property StatusCode: Integer read GetStatusCode write SetStatusCode default 0;
     // момент получения данных с датчика на сервере
     property Timestamp: TDateTime read GetTimestamp write SetTimestamp;
 
@@ -94,7 +95,7 @@ type
     /// единица измерения показаний датчика (литр, кг, км, км/ч ...)
     property Un: string read FUn write SetUn;
     /// вид датчика
-    property Kind: TLASensorKind read FKind write SetKind;
+    property Kind: TLASensorKind read FKind write SetKind default skAnalog;
     /// форматирование значений
     property DisplayFormat: string read FDisplayFormat write SetDisplayFormat;
     /// наименование справочника на сервере
@@ -139,6 +140,7 @@ type
 implementation
 
 uses
+  SynCrossPlatformJSON,
   LA.Utils.Str;
 
 { TLASensorLink }
@@ -274,6 +276,26 @@ end;
 function TLASensorLink.GetValue: Double;
 begin
   Result := FValue;
+end;
+
+procedure TLASensorLink.InitFromJSON(v: Variant);
+begin
+{$REGION 'Sample'}
+  {
+      "id": 1,
+      "name": "Время на сервере",
+      "kind": 0,
+      "un": "",
+      "format": "datedd.mm.yyyy hh:mm:ss",
+      "lookup": ""
+    }
+{$ENDREGION}
+//  ID := v.id;
+  Name := v.name;
+  Kind := TLASensorKind(v.kind);
+  Un := v.un;
+  DisplayFormat := v.format;
+  LookupTableName := v.lookup;
 end;
 
 procedure TLASensorLink.Notification(AComponent: TComponent; Operation: TOperation);
