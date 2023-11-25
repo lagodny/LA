@@ -211,8 +211,8 @@ begin
   FGroups := TObjectList<TLASensorLinkGroupHistory>.Create(TDelegatedComparer<TLASensorLinkGroupHistory>.Create(
     function (const aLeft, aRight: TLASensorLinkGroupHistory): Integer
     begin
-      // группы должны быть отсортированы в порядке возрастания ID, чтобы ускорить поиск группы при добавлении линков
-      Result := CompareStr(aLeft.ID, aRight.ID);
+      // группы должны быть отсортированы в порядке возрастания ID, чтобы ускорить поиск группы при добавлении/удалении линков
+      Result := CompareText(aLeft.ID, aRight.ID);
       // группы могут иметь одинаковые ID, тогда сравниваем их FStoredDataSource (источники данных)
       if Result = 0 then
         Result := Integer(aLeft.FStoredDataSource) - Integer(aRight.FStoredDataSource);
@@ -237,11 +237,35 @@ begin
     aGroup := TLASensorLinkGroupHistory.Create;
     try
       aGroup.ID := aLink.ID;
-      if FGroups.BinarySearch(aGroup, aGroupIndex) then
+      if FGroups.BinarySearch(aGroup, aGroupIndex, TDelegatedComparer<TLASensorLinkGroupHistory>.Create(
+        function (const aLeft, aRight: TLASensorLinkGroupHistory): Integer
+        begin
+          // при удалении поиск выполняем только по ID
+          Result := CompareText(aLeft.ID, aRight.ID);
+        end)) then
       begin
-        FLinksChanged := FGroups[aGroupIndex].Items.Remove(TLASensorLink(aLink)) >= 0;
-        if FGroups[aGroupIndex].Items.Count = 0 then
-          FGroups.Delete(aGroupIndex);
+        // может быть несколько групп с одинаковым ID (мы нашли одну из них, возможно не первую)
+
+        // находим первую
+        while (aGroupIndex > 0) and SameText(FGroups[aGroupIndex - 1].ID, aLink.ID) do
+          Dec(aGroupIndex);
+
+        // перебираем все группы с заданным ID в поисках нужного линка
+        while (aGroupIndex < FGroups.Count) and SameText(FGroups[aGroupIndex].ID, aLink.ID) do
+        begin
+          // пытаемся найти и удалить нужный линк
+          FLinksChanged := FGroups[aGroupIndex].Items.Remove(TLASensorLink(aLink)) >= 0;
+          // выходим, если удалили
+          if FLinksChanged then
+          begin
+            // удаляем группу, если в ней не осталось линков
+            if FGroups[aGroupIndex].Items.Count = 0 then
+              FGroups.Delete(aGroupIndex);
+            Break;
+          end;
+          Inc(aGroupIndex);
+        end;
+
       end;
     finally
       aGroup.Free;
