@@ -4,6 +4,7 @@ interface
 
 uses
   System.Classes, System.SysUtils,
+  System.Generics.Defaults, System.Generics.Collections,
   LA.Net.Connector;
 
 type
@@ -16,7 +17,7 @@ type
 
   /// объект для поиска текстовой справочной информации по числовому значению
   ///  - хранит соответствия кода и его представления, может возвращать неточное соответствие
-  ///  - умеет автоматически подгружать справочную информацию, если не находит соответствие
+  ///  - умеет автоматически подгружать справочную информацию, если не находит соответствие (только в режиме vsmExact)
   TLALookupList = class(TComponent)
   private
     FItems: TStrings;
@@ -52,6 +53,19 @@ type
     property AutoUpdate: Boolean read FAutoUpdate write SetAutoUpdate default True;
   end;
 
+  /// <summary>Позволяет создавать LALookupList по запросу</summary>
+  TLALookupListManager = class
+  private
+    class var
+      FItems: TObjectList<TLALookupList>;
+  public
+    class constructor Create;
+    class destructor Destroy;
+
+    /// возвращает существующий или создает новый, если не найден
+    class function GetLookupList(const aName: string; aConnector: TLACustomConnector): TLALookupList;
+  end;
+
 implementation
 
 { TLALookup }
@@ -78,8 +92,11 @@ end;
 
 function TLALookupList.InitFromServer: Boolean;
 begin
-  if not Assigned(Connector) then
+  if not Assigned(Connector) or (TableName = '') then
     Exit(False);
+
+  Items.Text := Connector.GetLookup(TableName);
+  Result := True;
 end;
 
 function TLALookupList.Lookup(const aKey: string; var aValue: string): Integer;
@@ -98,7 +115,9 @@ begin
     begin
       if AutoUpdate and Assigned(Connector) and (TableName <> '') then
       begin
-        Items.Text := Connector.GetLookup(TableName);
+        if not InitFromServer then
+          Exit;
+
         Result := Items.IndexOfName(aKey);
         if Result < 0 then
         begin
@@ -202,6 +221,49 @@ end;
 procedure TLALookupList.SetValueSearchMethod(const Value: TLAValueSearchMethod);
 begin
   FValueSearchMethod := Value;
+end;
+
+{ TLALookupListManager }
+
+class constructor TLALookupListManager.Create;
+begin
+  FItems := TObjectList<TLALookupList>.Create(TDelegatedComparer<TLALookupList>.Create(
+    function (const aLeft, aRight: TLALookupList): Integer
+    begin
+      Result := CompareStr(aLeft.TableName, aRight.TableName);
+      if Result = 0 then
+        Result := Integer(aLeft.Connector) - Integer(aRight.Connector);
+    end)
+    // мы отвечаем за уничтожение
+  , True);
+end;
+
+class destructor TLALookupListManager.Destroy;
+begin
+  FItems.Free;
+end;
+
+class function TLALookupListManager.GetLookupList(const aName: string; aConnector: TLACustomConnector): TLALookupList;
+var
+  aSearchItem: TLALookupList;
+  aInsertIndex: Integer;
+begin
+  if (aName.Trim = '') or (aConnector = nil) then
+    Exit(nil);
+
+  aSearchItem := TLALookupList.Create(nil);
+  aSearchItem.TableName := aName;
+  aSearchItem.Connector := aConnector;
+  if FItems.BinarySearch(aSearchItem, aInsertIndex) then
+  begin
+    aSearchItem.Free;
+    Result := FItems[aInsertIndex];
+  end
+  else
+  begin
+    FItems.Insert(aInsertIndex, aSearchItem);
+    Result := aSearchItem;
+  end;
 end;
 
 end.
