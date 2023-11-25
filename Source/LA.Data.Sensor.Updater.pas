@@ -16,11 +16,13 @@ type
     procedure ProcessServerException(e: Exception); override;
   public
     procedure Attach(const aLink: TLADataLink); override;
+    procedure InitItems;
   end;
 
 implementation
 
 uses
+  SynCrossPlatformJSON,
   LA.Log,
   LA.Data.Link.Sensor;
 
@@ -42,6 +44,29 @@ begin
     Exit('');
 
   Result := Connector.SensorsDataAsText(IDs, True);
+end;
+
+procedure TLASensorUpdater.InitItems;
+var
+  v: Variant;
+  a: TSIDArr;
+  aJSON: TJSONVariantData;
+begin
+  if not Assigned(Connector) then
+    raise Exception.Create('No connector');
+
+  FLock.BeginRead;
+  try
+    SetLength(a, Links.Count);
+    for var i := 0 to Links.Count - 1 do
+      a[i] := Links[i].ID;
+    v := Connector.GetSensorsInfo(a);
+    aJSON.Init(v);
+    for var i := 0 to Links.Count - 1 do
+      TLASensorLink(Links[i]).InitFromJSON(TJSONVariantData(v).Value['_' + Links[i].ID]);
+  finally
+    FLock.EndRead;
+  end;
 end;
 
 procedure TLASensorUpdater.ProcessServerException(e: Exception);
