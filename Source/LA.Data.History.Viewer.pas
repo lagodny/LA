@@ -276,12 +276,19 @@ begin
 end;
 
 procedure TLAHistoryViewer.DisconnectLinks;
+var
+  aGroup: TLASensorLinkGroupHistory;
 begin
-  for var aGroup in Groups do
+  /// в процессе переключения DataSource уменьшается количество - важно идти с конца в начало списков
+  for var iGroup := Groups.Count - 1 downto 0 do
   begin
+    aGroup := Groups[iGroup];
     if Assigned(aGroup.FStoredDataSource) then
-      for var aLink in aGroup.Items do
-        aLink.DataSource := aGroup.FStoredDataSource;
+    begin
+      //for var aLink in aGroup.Items do
+      for var iLink := aGroup.Items.Count - 1 downto 0 do
+        aGroup.Items[iLink].DataSource := aGroup.FStoredDataSource;
+    end;
   end;
 end;
 
