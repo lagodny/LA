@@ -42,6 +42,9 @@ type
     FLookupTableName: string;
     FDisplayFormat: string;
     FStatusLookupList: TLALookupList;
+    // сохраненный LASensorUpdater для поиска подключения
+    FSensorUpdater: TLADataSource;
+
     function GetValue: Double;
     function GetText: string;
     function GetStatus: string;
@@ -67,6 +70,8 @@ type
   protected
     procedure AssignTo(Dest: TPersistent); override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+
+    procedure SetDataSource(const Value: TLADataSource); override;
     procedure EncodeData; override;
   public
     constructor Create(const AOwner: TPersistent); override;
@@ -141,6 +146,9 @@ implementation
 
 uses
   SynCrossPlatformJSON,
+  LA.Common.Consts,
+  LA.Data.Sensor.Updater,
+  LA.Data.Connection.Manager,
   LA.Utils.Str;
 
 { TLASensorLink }
@@ -241,6 +249,8 @@ function TLASensorLink.GetDisplayStatus: string;
 begin
   if Assigned(StatusLookupList) then
     StatusLookupList.Lookup(StatusCode.ToString, Result)
+  else if (StatusCode <> 0) and Assigned(FSensorUpdater) and Assigned(TLAConnectionManager.DefInstance) then
+    Result := TLAConnectionManager.DefInstance.Lookup(StatusCode.ToString, cStatesLookupTableName, TLASensorUpdater(DataSource))
   else
     Result := '';
 end;
@@ -249,6 +259,8 @@ function TLASensorLink.GetDisplayValue: string;
 begin
   if Assigned(ValueLookupList) then
     ValueLookupList.Lookup(Value.ToString, Result)
+  else if (LookupTableName <> '') and Assigned(FSensorUpdater) and Assigned(TLAConnectionManager.DefInstance) then
+    Result := TLAConnectionManager.DefInstance.Lookup(Value.ToString, LookupTableName, TLASensorUpdater(FSensorUpdater))
   else
     Result := TLAStrUtils.FormatValue(Value, DisplayFormat);
 end;
@@ -307,6 +319,8 @@ begin
       ValueLookupList := nil
     else if (AComponent = StatusLookupList) then
       StatusLookupList := nil
+    else if AComponent = FSensorUpdater then
+      FSensorUpdater := nil;
   end;
 end;
 
@@ -340,6 +354,13 @@ end;
 //  end;
 //
 //end;
+
+procedure TLASensorLink.SetDataSource(const Value: TLADataSource);
+begin
+  inherited;
+  if Value is TLASensorUpdater then
+    FSensorUpdater := Value;
+end;
 
 procedure TLASensorLink.SetDisplayFormat(const Value: string);
 begin
