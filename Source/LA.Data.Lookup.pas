@@ -37,7 +37,7 @@ type
     destructor Destroy; override;
 
     function InitFromServer: Boolean;
-    function Lookup(const aKey:string; var aValue:string): Integer;
+    function Lookup(const aKey: string; var aValue: string; aConnector: TLACustomConnector = nil): Integer;
 
     function GetValueByKey(aKey: Double; const aDefault: string = ''): string;
   published
@@ -99,7 +99,7 @@ begin
   Result := True;
 end;
 
-function TLALookupList.Lookup(const aKey: string; var aValue: string): Integer;
+function TLALookupList.Lookup(const aKey: string; var aValue: string; aConnector: TLACustomConnector = nil): Integer;
 var
   aIndexNum, aNameNum: Double;
   i: Integer;
@@ -113,9 +113,13 @@ begin
     Result := Items.IndexOfName(aKey);
     if Result < 0 then
     begin
-      if AutoUpdate and Assigned(Connector) and (TableName <> '') then
+      if AutoUpdate and (TableName <> '') then
       begin
-        if not InitFromServer then
+        if Assigned(aConnector) then
+           Items.Text := aConnector.GetLookup(TableName)
+        else if Assigned(FConnector) then
+           Items.Text := FConnector.GetLookup(TableName)
+        else
           Exit;
 
         Result := Items.IndexOfName(aKey);
