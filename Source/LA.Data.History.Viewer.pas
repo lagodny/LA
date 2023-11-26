@@ -183,6 +183,7 @@ begin
     begin
       for aLink in aGroup.Items do
       begin
+        aLink.Data := '';
         aLink.Value := aRec.FValue;
         aLink.StatusCode := Trunc(aRec.FState);
         aLink.Timestamp := aRec.FDateTime;
@@ -231,18 +232,21 @@ procedure TLAHistoryViewer.Detach(const aLink: TLADataLink);
 var
   aGroup: TLASensorLinkGroupHistory;
   aGroupIndex: Integer;
+  aComparer: IComparer<TLASensorLinkGroupHistory>;
 begin
   FLock.BeginWrite;
   try
-    aGroup := TLASensorLinkGroupHistory.Create;
-    try
-      aGroup.ID := aLink.ID;
-      if FGroups.BinarySearch(aGroup, aGroupIndex, TDelegatedComparer<TLASensorLinkGroupHistory>.Create(
+    aComparer := TDelegatedComparer<TLASensorLinkGroupHistory>.Create(
         function (const aLeft, aRight: TLASensorLinkGroupHistory): Integer
         begin
           // при удалении поиск выполняем только по ID
           Result := CompareText(aLeft.ID, aRight.ID);
-        end)) then
+        end);
+
+    aGroup := TLASensorLinkGroupHistory.Create;
+    try
+      aGroup.ID := aLink.ID;
+      if FGroups.BinarySearch(aGroup, aGroupIndex, aComparer) then
       begin
         // может быть несколько групп с одинаковым ID (мы нашли одну из них, возможно не первую)
 
