@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, LA.Data.History.Viewer, LA.Net.Connector.Tcp, LA.Net.Connector,
   LA.Net.Connector.Http, LA.Data.Source, LA.Data.Updater, LA.Data.Sensor.Updater, FMX.Controls.Presentation, FMX.StdCtrls, LA.FMX.StdCtrls,
-  FMX.Objects, LA.Data.Connection.Manager;
+  FMX.Objects, LA.Data.Connection.Manager, FMX.Layouts;
 
 type
   TForm3 = class(TForm)
@@ -15,6 +15,7 @@ type
     LATCPConnector1: TLATCPConnector;
     TCPSensorUpdater: TLASensorUpdater;
     LAHistoryViewer1: TLAHistoryViewer;
+    LAConnectionManager1: TLAConnectionManager;
     LALabel3: TLALabel;
     LALabel1: TLALabel;
     Text1: TText;
@@ -24,7 +25,6 @@ type
     TrackBar1: TTrackBar;
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
-    LAConnectionManager1: TLAConnectionManager;
     LALabel5: TLALabel;
     LALabel6: TLALabel;
     procedure TrackBar1Tracking(Sender: TObject);
@@ -50,14 +50,16 @@ begin
     LAHistoryViewer1.ConnectLinksFromDataSource(HTTPSensorUpdater);
     LAHistoryViewer1.ConnectLinksFromDataSource(TCPSensorUpdater);
     LAHistoryViewer1.Active := True;
+
+    TrackBar1.Max := LAHistoryViewer1.Date2;
+    TrackBar1.Min := LAHistoryViewer1.Date1;
+    TrackBar1.Value := TrackBar1.Min;
   end
   else
   begin
     LAHistoryViewer1.Active := False;
     LAHistoryViewer1.DisconnectLinks;
   end;
-  TrackBar1.Max := LAHistoryViewer1.Date2;
-  TrackBar1.Min := LAHistoryViewer1.Date1;
 end;
 
 procedure TForm3.CheckBox2Change(Sender: TObject);

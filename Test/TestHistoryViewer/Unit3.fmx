@@ -2,29 +2,25 @@ object Form3: TForm3
   Left = 0
   Top = 0
   Caption = 'Form3'
-  ClientHeight = 480
-  ClientWidth = 817
+  ClientHeight = 457
+  ClientWidth = 805
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   DesignerMasterStyle = 0
-  object LALabel3: TLALabel
-    Position.X = 29.000000000000000000
-    Position.Y = 88.000000000000000000
-    Size.Width = 164.000000000000000000
-    Size.Height = 33.000000000000000000
-    Size.PlatformDefault = False
-    TextSettings.HorzAlign = Center
-    Text = '23.11.2023 11:09:25'
-    TabOrder = 11
-    Link.ID = '1'
-    Link.Data = '1;45253.4648840856;23.11.2023 11:09:25;'
-    Link.DataSource = HTTPSensorUpdater
-    Link.Value = 45253.464884085600000000
-    Link.Text = '23.11.2023 11:09:25'
-    Link.Timestamp = 45253.464887546300000000
-    Link.Kind = skCounterUp
-    Link.DisplayFormat = 'datedd.mm.yyyy hh:MM:ss'
+  object CheckBox1: TCheckBox
+    Position.X = 25.000000000000000000
+    Position.Y = 272.000000000000000000
+    TabOrder = 17
+    Text = 'History'
+    OnChange = CheckBox1Change
+  end
+  object CheckBox2: TCheckBox
+    Position.X = 28.000000000000000000
+    Position.Y = 240.000000000000000000
+    TabOrder = 23
+    Text = 'Realtime'
+    OnChange = CheckBox2Change
   end
   object LALabel1: TLALabel
     Position.X = 417.000000000000000000
@@ -44,22 +40,6 @@ object Form3: TForm3
     Link.Kind = skCounterUp
     Link.DisplayFormat = 'datedd.mm.yyyy hh:MM:ss'
   end
-  object Text1: TText
-    Position.X = 72.000000000000000000
-    Position.Y = 48.000000000000000000
-    Size.Width = 73.000000000000000000
-    Size.Height = 32.000000000000000000
-    Size.PlatformDefault = False
-    Text = 'HTTP'
-  end
-  object Text2: TText
-    Position.X = 460.000000000000000000
-    Position.Y = 48.000000000000000000
-    Size.Width = 73.000000000000000000
-    Size.Height = 32.000000000000000000
-    Size.PlatformDefault = False
-    Text = 'TCP'
-  end
   object LALabel2: TLALabel
     Position.X = 29.000000000000000000
     Position.Y = 129.000000000000000000
@@ -77,6 +57,24 @@ object Form3: TForm3
     Link.Timestamp = 45253.464455451390000000
     Link.DisplayFormat = '# ##0'
   end
+  object LALabel3: TLALabel
+    Position.X = 29.000000000000000000
+    Position.Y = 88.000000000000000000
+    Size.Width = 164.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Center
+    Text = '23.11.2023 11:09:25'
+    TabOrder = 11
+    Link.ID = '1'
+    Link.Data = '1;45253.4648840856;23.11.2023 11:09:25;'
+    Link.DataSource = HTTPSensorUpdater
+    Link.Value = 45253.464884085600000000
+    Link.Text = '23.11.2023 11:09:25'
+    Link.Timestamp = 45253.464887546300000000
+    Link.Kind = skCounterUp
+    Link.DisplayFormat = 'datedd.mm.yyyy hh:MM:ss'
+  end
   object LALabel4: TLALabel
     Position.X = 417.000000000000000000
     Position.Y = 129.000000000000000000
@@ -93,30 +91,6 @@ object Form3: TForm3
     Link.Text = ' 313 652'
     Link.Timestamp = 45253.464454560180000000
     Link.DisplayFormat = '# ##0'
-  end
-  object TrackBar1: TTrackBar
-    Align = Top
-    CanParentFocus = True
-    Orientation = Horizontal
-    Size.Width = 817.000000000000000000
-    Size.Height = 19.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 14
-    OnTracking = TrackBar1Tracking
-  end
-  object CheckBox1: TCheckBox
-    Position.X = 25.000000000000000000
-    Position.Y = 272.000000000000000000
-    TabOrder = 16
-    Text = 'History'
-    OnChange = CheckBox1Change
-  end
-  object CheckBox2: TCheckBox
-    Position.X = 28.000000000000000000
-    Position.Y = 240.000000000000000000
-    TabOrder = 23
-    Text = 'Realtime'
-    OnChange = CheckBox2Change
   end
   object LALabel5: TLALabel
     Position.X = 29.000000000000000000
@@ -136,7 +110,7 @@ object Form3: TForm3
     Link.DisplayFormat = '# ##0'
   end
   object LALabel6: TLALabel
-    Position.X = 417.000000000000000000
+    Position.X = 409.000000000000000000
     Position.Y = 170.000000000000000000
     Size.Width = 380.000000000000000000
     Size.Height = 33.000000000000000000
@@ -151,6 +125,32 @@ object Form3: TForm3
     Link.Text = ' 313 652'
     Link.Timestamp = 45253.464454560180000000
     Link.DisplayFormat = '# ##0'
+  end
+  object Text1: TText
+    Position.X = 72.000000000000000000
+    Position.Y = 48.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'HTTP'
+  end
+  object Text2: TText
+    Position.X = 460.000000000000000000
+    Position.Y = 48.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'TCP'
+  end
+  object TrackBar1: TTrackBar
+    Align = Top
+    CanParentFocus = True
+    Orientation = Horizontal
+    Size.Width = 805.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 14
+    OnTracking = TrackBar1Tracking
   end
   object HTTPSensorUpdater: TLASensorUpdater
     Connector = LAHttpConnector1
@@ -199,7 +199,7 @@ object Form3: TForm3
         Updater = HTTPSensorUpdater
       end>
     HistoryViewer = LAHistoryViewer1
-    Left = 264
-    Top = 264
+    Left = 624
+    Top = 344
   end
 end
