@@ -191,6 +191,10 @@ procedure TLASensorLink.EncodeData;
 begin
   // сбросим признак необходимости декодировать данные
   inherited;
+
+  if Data = '' then
+    Exit;
+
   try
     // разбираем строку вида
     // 6;19708;19708.00;
