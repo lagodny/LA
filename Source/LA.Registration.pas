@@ -14,20 +14,25 @@ uses
   LA.Net.Connector.Tcp,
   LA.Data.Source, LA.Data.Updater,
   LA.Data.Sensor.Updater,
-  LA.Data.History.Viewer;
+  LA.Data.History.Viewer,
+  LA.Data.Connection.Manager;
 
 procedure Register;
 begin
   RegisterComponents('LA', [
     TLASensorList, TLASensor,
     TLAHttpConnector, TLATCPConnector,
-    TLASensorUpdater, TLAHistoryViewer
+    TLASensorUpdater, TLAHistoryViewer,
+    TLAConnectionManager
   ]);
 
   RegisterClasses([TLADataLink, TLASensorLink]);
   RegisterClasses([TLASensorList, TLASensor]);
 
+  RegisterClasses([TLAConnectionCollection, TLAConnectionItem]);
+
   RegisterNoIcon([TLASensor]);
+
 end;
 
 initialization

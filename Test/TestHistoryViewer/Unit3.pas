@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, LA.Data.History.Viewer, LA.Net.Connector.Tcp, LA.Net.Connector,
   LA.Net.Connector.Http, LA.Data.Source, LA.Data.Updater, LA.Data.Sensor.Updater, FMX.Controls.Presentation, FMX.StdCtrls, LA.FMX.StdCtrls,
-  FMX.Objects;
+  FMX.Objects, LA.Data.Connection.Manager;
 
 type
   TForm3 = class(TForm)
@@ -24,6 +24,9 @@ type
     TrackBar1: TTrackBar;
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
+    LAConnectionManager1: TLAConnectionManager;
+    LALabel5: TLALabel;
+    LALabel6: TLALabel;
     procedure TrackBar1Tracking(Sender: TObject);
     procedure CheckBox1Change(Sender: TObject);
     procedure CheckBox2Change(Sender: TObject);
@@ -61,6 +64,11 @@ procedure TForm3.CheckBox2Change(Sender: TObject);
 begin
   HTTPSensorUpdater.Active := CheckBox2.IsChecked;
   TCPSensorUpdater.Active := CheckBox2.IsChecked;
+  if CheckBox2.IsChecked then
+  begin
+    HTTPSensorUpdater.InitItems;
+    TCPSensorUpdater.InitItems;
+  end;
 end;
 
 procedure TForm3.TrackBar1Tracking(Sender: TObject);

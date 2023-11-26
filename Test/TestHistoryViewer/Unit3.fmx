@@ -3,7 +3,7 @@ object Form3: TForm3
   Top = 0
   Caption = 'Form3'
   ClientHeight = 480
-  ClientWidth = 640
+  ClientWidth = 817
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -16,19 +16,18 @@ object Form3: TForm3
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
     Text = '23.11.2023 11:09:25'
-    TabOrder = 9
+    TabOrder = 11
     Link.ID = '1'
     Link.Data = '1;45253.4648840856;23.11.2023 11:09:25;'
     Link.DataSource = HTTPSensorUpdater
     Link.Value = 45253.464884085600000000
     Link.Text = '23.11.2023 11:09:25'
-    Link.StatusCode = 0
     Link.Timestamp = 45253.464887546300000000
     Link.Kind = skCounterUp
     Link.DisplayFormat = 'datedd.mm.yyyy hh:MM:ss'
   end
   object LALabel1: TLALabel
-    Position.X = 221.000000000000000000
+    Position.X = 417.000000000000000000
     Position.Y = 88.000000000000000000
     Size.Width = 164.000000000000000000
     Size.Height = 33.000000000000000000
@@ -41,7 +40,6 @@ object Form3: TForm3
     Link.DataSource = TCPSensorUpdater
     Link.Value = 45253.464884085600000000
     Link.Text = '23.11.2023 11:09:25'
-    Link.StatusCode = 0
     Link.Timestamp = 45253.464886493060000000
     Link.Kind = skCounterUp
     Link.DisplayFormat = 'datedd.mm.yyyy hh:MM:ss'
@@ -55,7 +53,7 @@ object Form3: TForm3
     Text = 'HTTP'
   end
   object Text2: TText
-    Position.X = 264.000000000000000000
+    Position.X = 460.000000000000000000
     Position.Y = 48.000000000000000000
     Size.Width = 73.000000000000000000
     Size.Height = 32.000000000000000000
@@ -70,59 +68,89 @@ object Form3: TForm3
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
     Text = ' 313 652'
-    TabOrder = 8
+    TabOrder = 10
     Link.ID = '4'
     Link.Data = '4;313652; 313 652;'
     Link.DataSource = HTTPSensorUpdater
     Link.Value = 313652.000000000000000000
     Link.Text = ' 313 652'
-    Link.StatusCode = 0
     Link.Timestamp = 45253.464455451390000000
-    Link.Kind = skAnalog
     Link.DisplayFormat = '# ##0'
   end
   object LALabel4: TLALabel
-    Position.X = 221.000000000000000000
+    Position.X = 417.000000000000000000
     Position.Y = 129.000000000000000000
     Size.Width = 164.000000000000000000
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
     Text = ' 313 652'
-    TabOrder = 7
+    TabOrder = 8
     Link.ID = '4'
     Link.Data = '4;313652; 313 652;'
     Link.DataSource = TCPSensorUpdater
     Link.Value = 313652.000000000000000000
     Link.Text = ' 313 652'
-    Link.StatusCode = 0
     Link.Timestamp = 45253.464454560180000000
-    Link.Kind = skAnalog
     Link.DisplayFormat = '# ##0'
   end
   object TrackBar1: TTrackBar
     Align = Top
     CanParentFocus = True
     Orientation = Horizontal
-    Size.Width = 640.000000000000000000
+    Size.Width = 817.000000000000000000
     Size.Height = 19.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 12
+    TabOrder = 14
     OnTracking = TrackBar1Tracking
   end
   object CheckBox1: TCheckBox
-    Position.X = 29.000000000000000000
-    Position.Y = 216.000000000000000000
-    TabOrder = 14
+    Position.X = 25.000000000000000000
+    Position.Y = 272.000000000000000000
+    TabOrder = 16
     Text = 'History'
     OnChange = CheckBox1Change
   end
   object CheckBox2: TCheckBox
-    Position.X = 32.000000000000000000
-    Position.Y = 184.000000000000000000
-    TabOrder = 21
+    Position.X = 28.000000000000000000
+    Position.Y = 240.000000000000000000
+    TabOrder = 23
     Text = 'Realtime'
     OnChange = CheckBox2Change
+  end
+  object LALabel5: TLALabel
+    Position.X = 29.000000000000000000
+    Position.Y = 170.000000000000000000
+    Size.Width = 380.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Center
+    Text = ' 313 652'
+    TabOrder = 9
+    Link.ID = '29697'
+    Link.Data = '4;313652; 313 652;'
+    Link.DataSource = HTTPSensorUpdater
+    Link.Value = 313652.000000000000000000
+    Link.Text = ' 313 652'
+    Link.Timestamp = 45253.464455451390000000
+    Link.DisplayFormat = '# ##0'
+  end
+  object LALabel6: TLALabel
+    Position.X = 417.000000000000000000
+    Position.Y = 170.000000000000000000
+    Size.Width = 380.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Center
+    Text = ' 313 652'
+    TabOrder = 7
+    Link.ID = '29697'
+    Link.Data = '4;313652; 313 652;'
+    Link.DataSource = TCPSensorUpdater
+    Link.Value = 313652.000000000000000000
+    Link.Text = ' 313 652'
+    Link.Timestamp = 45253.464454560180000000
+    Link.DisplayFormat = '# ##0'
   end
   object HTTPSensorUpdater: TLASensorUpdater
     Connector = LAHttpConnector1
@@ -153,9 +181,25 @@ object Form3: TForm3
     Top = 384
   end
   object LAHistoryViewer1: TLAHistoryViewer
-    Date1 = 45240.000000000000000000
-    Date2 = 45252.000000000000000000
+    Date1 = 45255.000000000000000000
+    Date2 = 45256.000000000000000000
     Left = 504
     Top = 344
+  end
+  object LAConnectionManager1: TLAConnectionManager
+    Items = <
+      item
+        Name = 'vmwareTCP'
+        Connector = LATCPConnector1
+        Updater = TCPSensorUpdater
+      end
+      item
+        Name = 'vmwareHTTP'
+        Connector = LAHttpConnector1
+        Updater = HTTPSensorUpdater
+      end>
+    HistoryViewer = LAHistoryViewer1
+    Left = 264
+    Top = 264
   end
 end

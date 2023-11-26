@@ -39,6 +39,9 @@
         <Projects Include="..\Source\FMX\Template\LAProjectTemplate.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Test\TestConnectionManager\TestConnectionManager.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -155,14 +158,23 @@
     <Target Name="LAProjectTemplate:Make">
         <MSBuild Projects="..\Source\FMX\Template\LAProjectTemplate.dproj" Targets="Make"/>
     </Target>
+    <Target Name="TestConnectionManager">
+        <MSBuild Projects="..\Test\TestConnectionManager\TestConnectionManager.dproj"/>
+    </Target>
+    <Target Name="TestConnectionManager:Clean">
+        <MSBuild Projects="..\Test\TestConnectionManager\TestConnectionManager.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestConnectionManager:Make">
+        <MSBuild Projects="..\Test\TestConnectionManager\TestConnectionManager.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;LAProjectTemplate"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;LAProjectTemplate;TestConnectionManager"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;LAProjectTemplate:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;LAProjectTemplate:Clean;TestConnectionManager:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;LAProjectTemplate:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;LAProjectTemplate:Make;TestConnectionManager:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
