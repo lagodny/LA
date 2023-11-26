@@ -55,6 +55,9 @@ begin
   if not Assigned(Connector) then
     raise Exception.Create('No connector');
 
+  if Links.Count = 0 then
+    Exit;
+
   FLock.BeginRead;
   try
     SetLength(a, Links.Count);
@@ -63,7 +66,7 @@ begin
     v := Connector.GetSensorsInfo(a);
     aJSON.Init(v);
     for var i := 0 to Links.Count - 1 do
-      TLASensorLink(Links[i]).InitFromJSON(TJSONVariantData(v).Value['_' + Links[i].ID]);
+      TLASensorLink(Links[i]).InitFromJSON(aJSON.Value['_' + Links[i].ID]);
   finally
     FLock.EndRead;
   end;
