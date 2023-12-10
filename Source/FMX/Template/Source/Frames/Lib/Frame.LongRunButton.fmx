@@ -1,0 +1,26 @@
+inherited LongRunButtonFrame: TLongRunButtonFrame
+  Size.Width = 213.000000000000000000
+  Size.Height = 41.000000000000000000
+  object RunButton: TButton
+    Align = Client
+    Size.Width = 213.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Text = 'RunButton'
+    object RunIndicator: TAniIndicator
+      Align = Right
+      Locked = True
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Position.X = 158.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 50.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      Visible = False
+    end
+  end
+end

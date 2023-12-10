@@ -1,0 +1,7 @@
+object BaseFrame: TBaseFrame
+  StyleName = '_background'
+  Align = Client
+  Size.Width = 280.000000000000000000
+  Size.Height = 412.000000000000000000
+  Size.PlatformDefault = False
+end

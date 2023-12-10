@@ -1,0 +1,112 @@
+inherited SettingsFrame: TSettingsFrame
+  inherited loClient: TLayout
+    inherited loTop: TLayout
+      inherited sbDrawer: TSpeedButton
+        Position.Y = 1.000000000000000000
+        Size.Height = 48.000000000000000000
+        Visible = False
+      end
+      inherited sbMore: TSpeedButton
+        Position.Y = 1.000000000000000000
+        Size.Height = 48.000000000000000000
+        Visible = False
+      end
+      inherited laTitle: TLabel
+        Size.Width = 332.000000000000000000
+        Text = 'Settings'
+      end
+      inherited sbBack: TSpeedButton
+        Position.X = 8.000000000000000000
+        Visible = True
+      end
+    end
+    inherited loContent: TLayout
+      object lbSettings: TListBox
+        Align = Client
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 16.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 16.000000000000000000
+        Size.Width = 390.000000000000000000
+        Size.Height = 634.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        DisableFocusEffect = True
+        ItemHeight = 66.000000000000000000
+        DefaultItemStyles.ItemStyle = ''
+        DefaultItemStyles.GroupHeaderStyle = ''
+        DefaultItemStyles.GroupFooterStyle = ''
+        Viewport.Width = 386.000000000000000000
+        Viewport.Height = 630.000000000000000000
+        object lbiLanguage: TListBoxItem
+          Selectable = False
+          ItemData.Detail = 'Interface language'
+          Size.Width = 386.000000000000000000
+          Size.Height = 66.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_listboxitembottomdetail'
+          TabOrder = 5
+          Text = 'Language'
+          object cbLanguage: TComboBox
+            Align = Right
+            Margins.Right = 10.000000000000000000
+            Position.X = 248.000000000000000000
+            Size.Width = 128.000000000000000000
+            Size.Height = 66.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 39
+            OnChange = cbLanguageChange
+          end
+        end
+        object lbiConnection: TListBoxItem
+          Selectable = False
+          ItemData.Detail = 'Server address'
+          Position.Y = 66.000000000000000000
+          Size.Width = 386.000000000000000000
+          Size.Height = 66.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_listboxitembottomdetail'
+          TabOrder = 4
+          Text = 'Connection'
+          object eConnection: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Right
+            TabOrder = 66
+            TextSettings.FontColor = claWhite
+            TextSettings.HorzAlign = Trailing
+            Position.X = 176.000000000000000000
+            Margins.Right = 10.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 66.000000000000000000
+            Size.PlatformDefault = False
+          end
+        end
+      end
+    end
+  end
+  inherited acMore: TActionList
+    inherited aBack: TAction
+      ImageIndex = 61
+    end
+  end
+  object lng: TDKLanguageController
+    IgnoreList.Strings = (
+      '*.StyleLookup'
+      '*.StyleName'
+      'Platform')
+    SectionName = 'SettingsFrame'
+    Left = 88
+    Top = 16
+    LangData = {
+      0D0053657474696E67734672616D6500010E00000008006C6F436C69656E7400
+      0005006C6F546F70000008007362447261776572010100000003000000040054
+      65787400060073624D6F72650101000000050000000400546578740007006C61
+      5469746C6501010000000600000004005465787400060073624261636B000009
+      006C6F436F6E74656E740000060061634D6F726500000500614261636B010100
+      000008000000040054657874000A006C6253657474696E677300000B006C6269
+      4C616E677561676501020000000D0000000F004974656D446174612E44657461
+      696C0B000000040054657874000A0063624C616E677561676500000D006C6269
+      436F6E6E656374696F6E01020000000E0000000F004974656D446174612E4465
+      7461696C0F000000040054657874000B0065436F6E6E656374696F6E0000}
+  end
+end

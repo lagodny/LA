@@ -1,0 +1,90 @@
+inherited ToolbarFrame: TToolbarFrame
+  DesignerMasterStyle = 0
+  object loClient: TLayout
+    Align = Client
+    Size.Width = 360.000000000000000000
+    Size.Height = 720.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object loTop: TLayout
+      Align = Top
+      Size.Width = 360.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object sbDrawer: TSpeedButton
+        Align = Left
+        Images = DMCommon.SVGImages
+        ImageIndex = 11
+        Margins.Left = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Position.X = 8.000000000000000000
+        Position.Y = 1.000000000000000000
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = '_toolbutton'
+        Text = 'Menu'
+      end
+      object sbMore: TSpeedButton
+        Align = Right
+        Images = DMCommon.SVGImages
+        ImageIndex = 13
+        Margins.Left = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Position.X = 304.000000000000000000
+        Position.Y = 1.000000000000000000
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = '_toolbutton'
+        Text = 'More'
+      end
+      object laTitle: TLabel
+        Align = Client
+        StyledSettings = [Family, Style, FontColor]
+        Margins.Left = 10.000000000000000000
+        Size.Width = 222.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 22.000000000000000000
+        TabOrder = 0
+      end
+      object sbBack: TSpeedButton
+        Action = aBack
+        Align = Left
+        Enabled = True
+        Images = DMCommon.SVGImages
+        ImageIndex = 61
+        Margins.Left = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Position.X = 80.000000000000000000
+        Position.Y = 1.000000000000000000
+        Size.Width = 48.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = '_toolbutton'
+        Visible = False
+      end
+    end
+    object loContent: TLayout
+      Align = Client
+      Size.Width = 360.000000000000000000
+      Size.Height = 670.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+    end
+  end
+  object acMore: TActionList
+    Images = DMCommon.SVGImages
+    Left = 280
+    Top = 184
+    object aBack: TAction
+      Text = 'aBack'
+      ImageIndex = 61
+      Visible = False
+      OnExecute = aBackExecute
+      ImageIndex = 61
+    end
+  end
+end
