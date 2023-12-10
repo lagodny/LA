@@ -29,14 +29,14 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
-    Text = '23.11.2023 11:09:25'
+    Text = '26.11.2023 21:23:37'
     TabOrder = 6
     Link.ID = '1'
-    Link.Data = '1;45253.4648840856;23.11.2023 11:09:25;'
+    Link.Data = '1;45256.8914048495;26.11.2023 21:23:37;'
     Link.DataSource = TCPSensorUpdater
-    Link.Value = 45253.464884085600000000
-    Link.Text = '23.11.2023 11:09:25'
-    Link.Timestamp = 45253.464886493060000000
+    Link.Value = 45256.891404849500000000
+    Link.Text = '26.11.2023 21:23:37'
+    Link.Timestamp = 45256.891409224540000000
     Link.Kind = skCounterUp
     Link.DisplayFormat = 'datedd.mm.yyyy hh:MM:ss'
   end
@@ -47,15 +47,17 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
-    Text = ' 313 652'
+    Text = ' 316 260'
     TabOrder = 10
     Link.ID = '4'
-    Link.Data = '4;313652; 313 652;'
+    Link.Data = '4;316260; 316 260;'
     Link.DataSource = HTTPSensorUpdater
-    Link.Value = 313652.000000000000000000
-    Link.Text = ' 313 652'
-    Link.Timestamp = 45253.464455451390000000
-    Link.DisplayFormat = '# ##0'
+    Link.Value = 316260.000000000000000000
+    Link.Text = ' 316 260'
+    Link.Timestamp = 45256.891383599530000000
+    Link.Name = #1054#1073#1098#1077#1084' '#1087#1072#1084#1103#1090#1080
+    Link.Un = #1050#1073
+    Link.DisplayFormat = '# ### ##0'
   end
   object LALabel3: TLALabel
     Position.X = 29.000000000000000000
@@ -64,16 +66,16 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
-    Text = '23.11.2023 11:09:25'
+    Text = '26.11.2023 21:23:35'
     TabOrder = 11
     Link.ID = '1'
-    Link.Data = '1;45253.4648840856;23.11.2023 11:09:25;'
+    Link.Data = '1;45256.8913794676;26.11.2023 21:23:35;'
     Link.DataSource = HTTPSensorUpdater
-    Link.Value = 45253.464884085600000000
-    Link.Text = '23.11.2023 11:09:25'
-    Link.Timestamp = 45253.464887546300000000
-    Link.Kind = skCounterUp
-    Link.DisplayFormat = 'datedd.mm.yyyy hh:MM:ss'
+    Link.Value = 45256.891379467600000000
+    Link.Text = '26.11.2023 21:23:35'
+    Link.Timestamp = 45256.891383599530000000
+    Link.Name = #1042#1088#1077#1084#1103' '#1085#1072' '#1089#1077#1088#1074#1077#1088#1077
+    Link.DisplayFormat = 'datedd.mm.yyyy hh:mm:ss'
   end
   object LALabel4: TLALabel
     Position.X = 417.000000000000000000
@@ -82,14 +84,14 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
-    Text = ' 313 652'
+    Text = ' 316 260'
     TabOrder = 8
     Link.ID = '4'
-    Link.Data = '4;313652; 313 652;'
+    Link.Data = '4;316260; 316 260;'
     Link.DataSource = TCPSensorUpdater
-    Link.Value = 313652.000000000000000000
-    Link.Text = ' 313 652'
-    Link.Timestamp = 45253.464454560180000000
+    Link.Value = 316260.000000000000000000
+    Link.Text = ' 316 260'
+    Link.Timestamp = 45256.891385763890000000
     Link.DisplayFormat = '# ##0'
   end
   object LALabel5: TLALabel
@@ -99,31 +101,34 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
-    Text = ' 313 652'
+    Text = 'd:\_services\DC\Data\UploadFile\Logisticcom.scp-123'
     TabOrder = 9
     Link.ID = '29697'
-    Link.Data = '4;313652; 313 652;'
+    Link.Data = '29697;384;d:\_services\DC\Data\UploadFile\Logisticcom.scp-123;'
     Link.DataSource = HTTPSensorUpdater
-    Link.Value = 313652.000000000000000000
-    Link.Text = ' 313 652'
-    Link.Timestamp = 45253.464455451390000000
-    Link.DisplayFormat = '# ##0'
+    Link.Value = 384.000000000000000000
+    Link.Text = 'd:\_services\DC\Data\UploadFile\Logisticcom.scp-123'
+    Link.Timestamp = 45256.523208113420000000
+    Link.Name = #1055#1088#1086#1077#1082#1090
+    Link.Kind = skDiscret
+    Link.DisplayFormat = '%s'
+    Link.LookupTableName = 'refProjects'
   end
   object LALabel6: TLALabel
-    Position.X = 409.000000000000000000
+    Position.X = 417.000000000000000000
     Position.Y = 170.000000000000000000
     Size.Width = 380.000000000000000000
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
-    Text = ' 313 652'
+    Text = 'd:\_services\DC\Data\UploadFile\Logisticcom.scp-123'
     TabOrder = 7
     Link.ID = '29697'
-    Link.Data = '4;313652; 313 652;'
+    Link.Data = '29697;384;d:\_services\DC\Data\UploadFile\Logisticcom.scp-123;'
     Link.DataSource = TCPSensorUpdater
-    Link.Value = 313652.000000000000000000
-    Link.Text = ' 313 652'
-    Link.Timestamp = 45253.464454560180000000
+    Link.Value = 384.000000000000000000
+    Link.Text = 'd:\_services\DC\Data\UploadFile\Logisticcom.scp-123'
+    Link.Timestamp = 45256.523157835650000000
     Link.DisplayFormat = '# ##0'
   end
   object Text1: TText

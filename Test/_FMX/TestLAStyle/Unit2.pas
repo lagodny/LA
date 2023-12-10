@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls, LA.FMX.StdCtrls, FMX.Layouts,
-  System.ImageList, FMX.ImgList, FMX.Objects, LA.FMX.Objects, FMX.Edit, Radiant.Shapes, FMX.SVGIconImageList, LA.Data.Sensor;
+  System.ImageList, FMX.ImgList, FMX.Objects, LA.FMX.Objects, FMX.Edit, Radiant.Shapes, FMX.SVGIconImageList, LA.Data.Sensor, FMX.Ani;
 
 type
   TForm2 = class(TForm)
@@ -19,6 +19,9 @@ type
     SVGIconImageList1: TSVGIconImageList;
     LASensorList1: TLASensorList;
     LASensor1: TLASensor;
+    ColorKeyAnimation1: TColorKeyAnimation;
+    ColorAnimation1: TColorAnimation;
+    Text1: TText;
     procedure CheckBox1Change(Sender: TObject);
     procedure TrackBar1Tracking(Sender: TObject);
     procedure Button1Click(Sender: TObject);
