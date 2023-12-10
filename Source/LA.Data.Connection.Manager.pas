@@ -60,6 +60,16 @@ type
     FHistoryViewer: TLAHistoryViewer;
     procedure SetItems(const Value: TLAConnectionCollection);
     procedure SetHistoryViewer(const Value: TLAHistoryViewer);
+    function GetConnected: Boolean;
+    procedure SetConnected(const Value: Boolean);
+    function GetActive: Boolean;
+    procedure SetActive(const Value: Boolean);
+    function GetPassword: string;
+    function GetUserName: string;
+    procedure SetPassword(const Value: string);
+    procedure SetUserName(const Value: string);
+    function GetIdleMode: Boolean;
+    procedure SetIdleMode(const Value: Boolean);
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
@@ -78,6 +88,14 @@ type
   published
     property Items: TLAConnectionCollection read FItems write SetItems;
     property HistoryViewer: TLAHistoryViewer read FHistoryViewer write SetHistoryViewer;
+
+    property Active: Boolean read GetActive write SetActive stored False;
+    property Connected: Boolean read GetConnected write SetConnected stored False;
+    property IdleMode: Boolean read GetIdleMode write SetIdleMode stored False;
+
+    property UserName: string read GetUserName write SetUserName;
+    property Password: string read GetPassword write SetPassword;
+
   end;
 
 
@@ -124,6 +142,46 @@ begin
   FDefaultConnectionManager := nil;
 end;
 
+function TLAConnectionManager.GetActive: Boolean;
+begin
+  if Items.Count > 0 then
+    Result := Assigned(Items[0].Updater) and Items[0].Updater.Active
+  else
+    Result := False;
+end;
+
+function TLAConnectionManager.GetConnected: Boolean;
+begin
+  if Items.Count > 0 then
+    Result := Assigned(Items[0].Connector) and  Items[0].Connector.Connected
+  else
+    Result := False;
+end;
+
+function TLAConnectionManager.GetIdleMode: Boolean;
+begin
+  if Items.Count > 0 then
+    Result := Assigned(Items[0].Connector) and  Items[0].Updater.IdleMode
+  else
+    Result := False;
+end;
+
+function TLAConnectionManager.GetPassword: string;
+begin
+  if (Items.Count > 0) and Assigned(Items[0].Connector) then
+    Result := Items[0].Connector.Password
+  else
+    Result := '';
+end;
+
+function TLAConnectionManager.GetUserName: string;
+begin
+  if (Items.Count > 0) and Assigned(Items[0].Connector) then
+    Result := Items[0].Connector.UserName
+  else
+    Result := '';
+end;
+
 function TLAConnectionManager.IndexOf(const aName: string): Integer;
 begin
   Result := -1;
@@ -168,14 +226,49 @@ begin
   end;
 end;
 
+procedure TLAConnectionManager.SetActive(const Value: Boolean);
+begin
+  for var i := 0 to Items.Count - 1 do
+    if Assigned(Items[i].Updater) then
+      Items[i].Updater.Active := Value;
+end;
+
+procedure TLAConnectionManager.SetConnected(const Value: Boolean);
+begin
+  for var i := 0 to Items.Count - 1 do
+    if Assigned(Items[i].Connector) then
+      Items[i].Connector.Connected := Value;
+end;
+
 procedure TLAConnectionManager.SetHistoryViewer(const Value: TLAHistoryViewer);
 begin
   FHistoryViewer := Value;
 end;
 
+procedure TLAConnectionManager.SetIdleMode(const Value: Boolean);
+begin
+  for var i := 0 to Items.Count - 1 do
+    if Assigned(Items[i].Connector) then
+      Items[i].Updater.IdleMode := Value;
+end;
+
 procedure TLAConnectionManager.SetItems(const Value: TLAConnectionCollection);
 begin
   FItems.Assign(Value);
+end;
+
+procedure TLAConnectionManager.SetPassword(const Value: string);
+begin
+  for var i := 0 to Items.Count - 1 do
+    if Assigned(Items[i].Connector) then
+      Items[i].Connector.Password := Value;
+end;
+
+procedure TLAConnectionManager.SetUserName(const Value: string);
+begin
+  for var i := 0 to Items.Count - 1 do
+    if Assigned(Items[i].Connector) then
+      Items[i].Connector.UserName := Value;
 end;
 
 { TLAConnectionCollection }

@@ -5,19 +5,12 @@ interface
 uses
   System.Classes, System.SysUtils,
   System.Generics.Defaults, System.Generics.Collections,
+  LA.Data.Types,
   LA.Data.Link.Sensor,
   LA.Data.Source,
   LA.Net.Connector;
 
 type
-  // снимок данных датчика: значение и состояние на момент времени
-  TLASensorValueSnapshot = packed record
-    FDateTime: TDateTime;
-    FValue: Double;
-    FState: Double;
-  end;
-  TLASensorValueSnapshots = array of TLASensorValueSnapshot;
-
   /// группа датчиков с историей и возможностью работы с ней
   ///  - получение данных на момент времени
   ///  - поиск следующего/предыдущего значения в истории
@@ -183,13 +176,15 @@ begin
     begin
       for aLink in aGroup.Items do
       begin
+        aLink.BeginUpdate;
         aLink.Data := '';
         aLink.Value := aRec.FValue;
         aLink.StatusCode := Trunc(aRec.FState);
         aLink.Timestamp := aRec.FDateTime;
         aLink.Text := aLink.DisplayValue;
         aLink.Status := aLink.DisplayStatus;
-        aLink.Notify;
+        //aLink.Notify;
+        aLink.EndUpdate;
       end;
     end;
   end;
@@ -520,7 +515,6 @@ var
   aConnector: TLACustomConnector;
   aRec: TLASensorValueSnapshot;
 begin
-  // если для
   aConnector := aDefConnector;
   if Assigned(FStoredDataSource) and (FStoredDataSource is TLASensorUpdater) then
     aConnector := TLASensorUpdater(FStoredDataSource).Connector;
@@ -566,14 +560,14 @@ var
   L, H, I: integer;
   Item1: TDateTime;
 begin
-  H := High(FValues);
+  H := System.High(FValues);
   if H = -1 then
   begin
     Result := -1;
     Exit;
   end;
   I := -1;
-  L := Low(FValues);
+  L := System.Low(FValues);
   while L <= H do
   begin
     I := (L + H) shr 1;
@@ -599,18 +593,18 @@ begin
   if Result < 0 then
     Exit;
 
-  while (Result < High(FValues)) and (FValues[Result].FDateTime = FValues[Result + 1].FDateTime) do
+  while (Result < System.High(FValues)) and (FValues[Result].FDateTime = FValues[Result + 1].FDateTime) do
     Inc(Result);
 end;
 
 function TLASensorLinkGroupHistory.GetIsEmpty: Boolean;
 begin
-  Result := High(FValues) = -1;
+  Result := System.High(FValues) = -1;
 end;
 
 function TLASensorLinkGroupHistory.GetNextMoment(var aMoment: TDateTime): Boolean;
 begin
-  if FPosition >= High(FValues) then
+  if FPosition >= System.High(FValues) then
     Result := False
   else
   begin
@@ -622,7 +616,7 @@ end;
 
 function TLASensorLinkGroupHistory.GetPredMoment(var aMoment: TDateTime): Boolean;
 begin
-  if FPosition <= Low(FValues) then
+  if FPosition <= System.Low(FValues) then
     Result := False
   else
   begin
@@ -650,7 +644,7 @@ begin
     
   // 2. расчет промежуточного значения не нужен
   aSnapshot.FDateTime := aDateTime;
-  if (aSnapshot.FState <> 0) or (FPosition = High(FValues)) or (Kind = skDiscret)  then
+  if (aSnapshot.FState <> 0) or (FPosition = System.High(FValues)) or (Kind = skDiscret)  then
     Exit;
 
   // 3. возможно нужен расчет промежуточного значения

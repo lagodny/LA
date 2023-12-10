@@ -10,7 +10,18 @@ uses
   LA.Data.Types,
   LA.Data.Lookup,
   LA.Data.Source,
+  LA.Net.Connector,
   LA.Data.Link.Sensor.Intf;
+
+const
+  cStyleDefault = 'default';
+  cStyleError = 'error';
+  cStyleHH = 'hh';
+  cStyleH = 'h';
+  cStyleL = 'l';
+  cStyleLL = 'll';
+  cStyleInTarget = 'in_target';
+  cStyleNotInTarget = 'not_in_target';
 
 type
   /// <summary>
@@ -52,6 +63,7 @@ type
     function GetTimestamp: TDateTime;
     function GetDisplayValue: string;
     function GetDisplayStatus: string;
+    function GetStatusStyleName: string;
     procedure SetValue(const Value: Double);
     procedure SetText(const Value: string);
     procedure SetStatus(const Value: string);
@@ -66,10 +78,10 @@ type
     procedure SetStatusLookupList(const Value: TLALookupList);
     procedure SetLookupTableName(const Value: string);
     procedure SetDisplayFormat(const Value: string);
+    function GetConnector: TLACustomConnector;
     {$ENDREGION}
   protected
     procedure AssignTo(Dest: TPersistent); override;
-    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
 
     procedure SetDataSource(const Value: TLADataSource); override;
     procedure EncodeData; override;
@@ -77,8 +89,13 @@ type
     constructor Create(const AOwner: TPersistent); override;
     destructor Destroy; override;
 
-//    procedure Notify(aEvent: TLANotifyEventKind); overload; override;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+
+    function ValueToText(aValue: Double): string;
+    function StatusCodeToText(aStatusCode: Integer): string;
+
     procedure InitFromJSON(v: Variant);
+    property Connector: TLACustomConnector read GetConnector;
   published
     /// *** периодически получаем с сервера ***
     // числовое значение, необходимо для проверок на допустимые значения
@@ -107,6 +124,8 @@ type
     property LookupTableName: string read FLookupTableName write SetLookupTableName;
 
     /// справочники показаний и статусов (ошибок)
+    ///  можно не использовать, тогда за поиск описания значения или ошибки будет отвечать ConnectionManager
+    ///  будет использовано наименование справочника из LookupTableName для значений и cStatesLookupTableName (States) для ошибок
     property ValueLookupList: TLALookupList read FValueLookupList write SetValueLookupList;
     property StatusLookupList: TLALookupList read FStatusLookupList write SetStatusLookupList;
 
@@ -114,6 +133,11 @@ type
     property DisplayValue: string read GetDisplayValue;
     /// текстовое представление ошибок
     property DisplayStatus: string read GetDisplayStatus;
+
+    /// текстовое наименование стиля, которым должен быть представлен датчик
+    ///  - default, error, hh, h, l, ll
+    ///  эти наименования следует давать слоям стиля визуального компонента для их переключения
+    property StatusStyleName: string read GetStatusStyleName;
 
     /// диапазон допустимых значений датчика
     property ValueRange: TValueRange read FValueRange write SetValueRange;
@@ -249,24 +273,28 @@ begin
   end;
 end;
 
+function TLASensorLink.GetConnector: TLACustomConnector;
+begin
+  if FSensorUpdater is TLASensorUpdater then
+    Result := TLASensorUpdater(FSensorUpdater).Connector
+  else
+    Result := nil;
+end;
+
 function TLASensorLink.GetDisplayStatus: string;
 begin
-  if Assigned(StatusLookupList) then
-    StatusLookupList.Lookup(StatusCode.ToString, Result)
-  else if (StatusCode <> 0) and Assigned(FSensorUpdater) and Assigned(TLAConnectionManager.DefInstance) then
-    Result := TLAConnectionManager.DefInstance.Lookup(StatusCode.ToString, cStatesLookupTableName, TLASensorUpdater(DataSource))
-  else
-    Result := '';
+  Result := StatusCodeToText(StatusCode);
+//  if Assigned(StatusLookupList) then
+//    StatusLookupList.Lookup(StatusCode.ToString, Result)
+//  else if (StatusCode <> 0) and Assigned(FSensorUpdater) and Assigned(TLAConnectionManager.DefInstance) then
+//    Result := TLAConnectionManager.DefInstance.Lookup(StatusCode.ToString, cStatesLookupTableName, TLASensorUpdater(DataSource))
+//  else
+//    Result := '';
 end;
 
 function TLASensorLink.GetDisplayValue: string;
 begin
-  if Assigned(ValueLookupList) then
-    ValueLookupList.Lookup(Value.ToString, Result)
-  else if (LookupTableName <> '') and Assigned(FSensorUpdater) and Assigned(TLAConnectionManager.DefInstance) then
-    Result := TLAConnectionManager.DefInstance.Lookup(Value.ToString, LookupTableName, TLASensorUpdater(FSensorUpdater))
-  else
-    Result := TLAStrUtils.FormatValue(Value, DisplayFormat);
+  Result := ValueToText(Value);
 end;
 
 function TLASensorLink.GetStatus: string;
@@ -277,6 +305,32 @@ end;
 function TLASensorLink.GetStatusCode: Integer;
 begin
   Result := FStatusCode;
+end;
+
+function TLASensorLink.GetStatusStyleName: string;
+begin
+  if (StatusCode <> 0) or (Status <> '') then
+    Result := cStyleError
+  else
+  begin
+    case ValueRange.Check(Value) of
+      TValueCheckResult.Correct, TValueCheckResult.NoRange:
+        Result := cStyleDefault;
+      TValueCheckResult.LowLow:
+        Result := cStyleLL;
+      TValueCheckResult.Low:
+        Result := cStyleL;
+      TValueCheckResult.High:
+        Result := cStyleH;
+      TValueCheckResult.HighHigh:
+        Result := cStyleHH;
+      TValueCheckResult.InTarget:
+        Result := cStyleInTarget;
+      TValueCheckResult.NoTarget:
+        Result := cStyleNotInTarget;
+    end;
+  end;
+
 end;
 
 function TLASensorLink.GetText: string;
@@ -328,37 +382,6 @@ begin
   end;
 end;
 
-//procedure TLASensorLink.Notify(aEvent: TLANotifyEventKind);
-//begin
-//  case aEvent of
-//    // при изменении Data (например, при получении данных с сервера через Updater)
-//    // Data будет декодировано
-//    nekDataChanged:
-//      Notify;
-//
-//    // при непосредственном изменении Value, StatusCode (например, при просмотре истории)
-//    // нужно просто сообщить об изменении подписчикам
-//    nekValueChanged:
-//    begin
-//      if Assigned(OnOwnerNotify) then
-//        OnOwnerNotify(Self);
-//      if Assigned(OnDataChange) then
-//        OnDataChange(Self);
-//    end;
-//
-//    // при изменении свойств, которые влияют на отображение,
-//    // нужно сообщить подписчикам
-//    nekPropChanged:
-//    begin
-//      if Assigned(OnOwnerNotify) then
-//        OnOwnerNotify(Self);
-//      if Assigned(OnDataChange) then
-//        OnDataChange(Self);
-//    end;
-//  end;
-//
-//end;
-
 procedure TLASensorLink.SetDataSource(const Value: TLADataSource);
 begin
   inherited;
@@ -392,15 +415,6 @@ begin
     DoNeedNotify;
   end;
 end;
-
-//procedure TLASensorLink.SetLookupList(const Value: TLALookupList);
-//begin
-//  if FValueLookupList <> Value then
-//  begin
-//    FValueLookupList := Value;
-//    DoNeedNotify;
-//  end;
-//end;
 
 procedure TLASensorLink.SetLookupTableName(const Value: string);
 begin
@@ -486,7 +500,11 @@ end;
 
 procedure TLASensorLink.SetValueLookupList(const Value: TLALookupList);
 begin
-
+  if FValueLookupList <> Value then
+  begin
+    FValueLookupList := Value;
+    DoNeedNotify;
+  end;
 end;
 
 procedure TLASensorLink.SetValueRange(const Value: TValueRange);
@@ -494,17 +512,25 @@ begin
   FValueRange.Assign(Value);
 end;
 
-//{ TLASensorLinkGroup }
-//
-//constructor TLASensorLinkGroup.Create;
-//begin
-//  FItems := TLASensorLinkList.Create;
-//end;
-//
-//destructor TLASensorLinkGroup.Destroy;
-//begin
-//  FItems.Free;
-//  inherited;
-//end;
+function TLASensorLink.StatusCodeToText(aStatusCode: Integer): string;
+begin
+  if Assigned(StatusLookupList) then
+    StatusLookupList.Lookup(aStatusCode.ToString, Result)
+  else if (aStatusCode <> 0) and Assigned(FSensorUpdater) and Assigned(TLAConnectionManager.DefInstance) then
+    Result := TLAConnectionManager.DefInstance.Lookup(aStatusCode.ToString, cStatesLookupTableName, TLASensorUpdater(DataSource))
+  else
+    Result := '';
+end;
+
+function TLASensorLink.ValueToText(aValue: Double): string;
+begin
+  if Assigned(ValueLookupList) then
+    ValueLookupList.Lookup(aValue.ToString, Result)
+  else if (LookupTableName <> '') and Assigned(FSensorUpdater) and Assigned(TLAConnectionManager.DefInstance) then
+    Result := TLAConnectionManager.DefInstance.Lookup(aValue.ToString, LookupTableName, TLASensorUpdater(FSensorUpdater))
+  else
+    Result := TLAStrUtils.FormatValue(aValue, DisplayFormat);
+end;
+
 
 end.
