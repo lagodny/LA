@@ -38,6 +38,7 @@ type
   TLADataLink = class(TInterfacedPersistent, ILADataLink) //, IDCObservable<TLADataLink> )
   private
     [Weak] FOwner: TPersistent;
+    [Weak] FLinks: TLADataLinkList;
     FID: string;
     FData: string;
     FDataSource: TLADataSource;
@@ -46,10 +47,13 @@ type
     FLastNotifyTime: TDateTime;
     FOnDataChange: TNotifyEvent;
     FOnOwnerNotify: TNotifyEvent;
-    FLinks: TLADataLinkList;
+    FUpdateCount: Integer;
+    FNotifyConstantly: Boolean;
+    procedure SetNotifyConstantly(const Value: Boolean);
   protected
     function GetOwner: TPersistent; override;
     procedure AssignTo(Dest: TPersistent); override;
+
 
     function GetID: string; virtual;
     procedure SetID(const Value: string); virtual;
@@ -64,10 +68,16 @@ type
     ///  нужно переопределить для датчика, для трекера и т.д. чтобы иметь доступ к
     ///  значению, моменту времени и статусу
     procedure EncodeData; virtual;
+
     procedure DoNeedNotify;
   public
     constructor Create(const AOwner: TPersistent); virtual;
     destructor Destroy; override;
+    /// компонент владелец должен уведомить об удалении компонента вызвав эту процедуру
+    procedure Notification(AComponent: TComponent; Operation: TOperation); virtual;
+
+    procedure BeginUpdate;
+    procedure EndUpdate;
 
     procedure Clear; virtual;
     // событие изменения данных для компонента владельца
@@ -75,13 +85,9 @@ type
   public
     /// владелец - должен быть указан при создании линка
     property Owner: TPersistent read FOwner;
-    /// компонент владелец должен уведомить об удалении компонента вызвав эту процедуру
-    procedure Notification(AComponent: TComponent; Operation: TOperation); virtual;
 
     // должна быть вызвана в основном потоке, именно в ней нужно обновлять элементы интерфейса
     procedure Notify; overload; virtual;
-//    procedure Notify(aEvent: TLANotifyEventKind); overload; virtual;
-
 
     // список линков, не управляет временим их жизни
     property Links: TLADataLinkList read FLinks;
@@ -93,6 +99,9 @@ type
     /// строка данных полученная с сервера для указанного ID
     ///  должна быть разобрана в процедуре EncodeData
     property Data: string read GetData write SetData;
+    /// уведомлять при каждом получении данных, независимо от того изменились они или нет
+    ///  важно для рисования графиков в режиме реального времени
+    property NotifyConstantly: Boolean read FNotifyConstantly write SetNotifyConstantly;
 
     // объект, который обеспечивает получение данных
     // должно быть очищено при удалении соответствующего компонента
@@ -234,6 +243,11 @@ end;
 //  FLinks.Add(aLink)
 //end;
 
+procedure TLADataLink.BeginUpdate;
+begin
+  Inc(FUpdateCount);
+end;
+
 procedure TLADataLink.Clear;
 begin
   DataSource := nil;
@@ -256,6 +270,8 @@ end;
 procedure TLADataLink.DoNeedNotify;
 begin
   FIsNeedNotify := True;
+  if FUpdateCount = 0 then
+    Notify;
 end;
 
 //procedure TLADataLink.Detach(const aLink: TLADataLink);
@@ -267,6 +283,14 @@ procedure TLADataLink.EncodeData;
 begin
   // наследники должны разобрать поле Data
   FIsNeedEncodeData := False;
+end;
+
+procedure TLADataLink.EndUpdate;
+begin
+  if FUpdateCount > 0 then
+    Dec(FUpdateCount);
+  if FUpdateCount = 0 then
+    Notify;
 end;
 
 function TLADataLink.GetData: string;
@@ -298,14 +322,9 @@ begin
   end;
 end;
 
-//procedure TLADataLink.Notify(aEvent: TLANotifyEventKind);
-//begin
-//  Notify;
-//end;
-
 procedure TLADataLink.Notify;
 begin
-  if FIsNeedNotify or (SecondsBetween(Now, FLastNotifyTime) > 10) then
+  if NotifyConstantly or FIsNeedNotify or (SecondsBetween(Now, FLastNotifyTime) > 10) then
   begin
     if FIsNeedEncodeData then
       EncodeData;
@@ -363,6 +382,11 @@ begin
     else
       FID := Value;
   end;
+end;
+
+procedure TLADataLink.SetNotifyConstantly(const Value: Boolean);
+begin
+  FNotifyConstantly := Value;
 end;
 
 end.
