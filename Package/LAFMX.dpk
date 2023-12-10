@@ -32,11 +32,18 @@
 requires
   rtl,
   fmx,
-  LAData;
+  LAData,
+  dklang,
+  FMXTee928;
 
 contains
   LA.FMX.Objects in '..\Source\FMX\LA.FMX.Objects.pas',
   LA.FMX.Registration in '..\Source\FMX\LA.FMX.Registration.pas',
-  LA.FMX.StdCtrls in '..\Source\FMX\LA.FMX.StdCtrls.pas';
+  LA.FMX.StdCtrls in '..\Source\FMX\LA.FMX.StdCtrls.pas',
+  LA.FMX.Chart in '..\Source\FMX\LA.FMX.Chart.pas',
+  LA.FMX.Chart.LineSeries in '..\Source\FMX\LA.FMX.Chart.LineSeries.pas',
+  LA.FMX.UI.Toast in '..\Source\FMX\LA.FMX.UI.Toast.pas',
+  LA.FMX.Chart.Series.Intf in '..\Source\FMX\LA.FMX.Chart.Series.Intf.pas',
+  LA.FMX.PropLink in '..\Source\FMX\LA.FMX.PropLink.pas';
 
 end.

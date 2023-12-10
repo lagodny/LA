@@ -1,0 +1,16 @@
+26.11.2023
++ добавить TLAChart
++ добавить TLALineSeries 
+- добавить TLAGantSeries
+
+02.12.2023
+- шаблон проекта
+	- для desktop
+	- для mobile
+
+06.12.2023
+- компонент связка свойства с датчиком
+	- значение в число, строку, в целое (TLAPropLink)
+	- преобразование по ключам в значение	
+		- в число (TLAFloatKeyPropLink)
+		- в цвет (TLAColorKeyPropLink)
