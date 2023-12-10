@@ -52,6 +52,7 @@ type
     procedure SetKind(const Value: TLAIntervalKind);
     procedure SetShift(const Value: Double);
 
+    function IsDateStored: Boolean;
   protected
     procedure AssignTo(Dest: TPersistent); override;
     procedure DoChanged;
@@ -84,11 +85,17 @@ type
     property Kind: TLAIntervalKind read FKind write SetKind;
     property Shift: Double read FShift write SetShift;
 
-    property Date1: TDatetime read GetDate1 write SetDate1;
-    property Date2: TDatetime read GetDate2 write SetDate2;
+    property Date1: TDatetime read GetDate1 write SetDate1 stored IsDateStored;
+    property Date2: TDatetime read GetDate2 write SetDate2 stored IsDateStored;
 
     property OnChanged: TNotifyEvent read FOnChanged write FOnChanged;
   end;
+
+  IHasLAInterval = interface
+  ['{0FB4D9AC-1E13-4C6B-A189-2DADC2ABC85D}']
+    function GetInterval: TLAInterval;
+  end;
+
 
 resourcestring
   rsYouHaveToSetAbsoluteIntervalKindFirst = 'You have to set Absolute interval Kind first';
@@ -242,8 +249,8 @@ begin
 end;
 
 function TLAInterval.GetDate1: TDatetime;
-var
-  y,m,d: Word;
+//var
+//  y,m,d: Word;
 begin
   case Kind of
     ikAbsolute:
@@ -353,6 +360,11 @@ begin
 end;
 
 
+function TLAInterval.IsDateStored: Boolean;
+begin
+  Result := Kind = ikAbsolute;
+end;
+
 procedure TLAInterval.Lock;
 begin
   Inc(FLockCount);
@@ -364,7 +376,7 @@ begin
     Exit;
 
   // если нет блокировок, то проверяем корректность дат
-  if FLockCount <= 0 then
+  if (FLockCount <= 0) then
   begin
     // менять даты можем только в Абсолютном режиме
     if Kind <> ikAbsolute then
@@ -427,7 +439,11 @@ end;
 
 procedure TLAInterval.SetKind(const Value: TLAIntervalKind);
 begin
-  FKind := Value;
+  if FKind <> Value then
+  begin
+    FKind := Value;
+    DoChanged;
+  end;
 end;
 
 class procedure TLAInterval.SetLastInterval(const Value: TLAInterval);
@@ -439,7 +455,11 @@ end;
 
 procedure TLAInterval.SetShift(const Value: Double);
 begin
-  FShift := Value;
+  if FShift <> Value then
+  begin
+    FShift := Value;
+    DoChanged;
+  end;
 end;
 
 procedure TLAInterval.Unlock;

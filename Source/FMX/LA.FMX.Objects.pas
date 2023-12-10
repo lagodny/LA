@@ -5,13 +5,19 @@ interface
 uses
   System.Classes, System.Types, System.UITypes,
   System.SysUtils, System.Math,
-  FMX.Objects, FMX.ImgList, FMX.Graphics, FMX.Types, FMX.Layouts,
+  FMX.Objects, FMX.Controls, FMX.ImgList, FMX.Graphics, FMX.Types, FMX.Layouts,
   LA.Utils.Str,
   LA.Data.Link.Sensor, LA.Data.Link.Sensor.Intf,
   LA.Data.Source;
 
 type
   TCalcImageIndexEvent = procedure(Sender: TObject; aValue: Double; var aImageIndex: Integer) of object;
+
+//  [ComponentPlatforms(pidAllPlatforms)]
+//  TLAColoredRectangle = class(TRectangle, ILASensorLink)
+//
+//  end;
+
 
   [ComponentPlatforms(pidAllPlatforms)]
   TLAText = class(TText, ILASensorLink)
@@ -181,7 +187,7 @@ end;
 
 function TLAGlyph.LinkValueToImageIndex(aValue: Double): Integer;
 var
-  aImageIndex: Integer;
+//  aImageIndex: Integer;
   aLeft, aRight: Double;
 begin
   if Assigned(FOnCalcImageIndex) then

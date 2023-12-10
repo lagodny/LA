@@ -30,7 +30,7 @@ type
     ///  'hh' - превышение максимально высокого уровня - авария
     ///  'l' - низкий уровень - предупреждение
     ///  'll' - низкий уровень - авария
-    function GetLinkStatus: string;
+    //function GetLinkStatus: string;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -110,9 +110,9 @@ begin
 
   Text := Link.Text;
 
-  if FLastLinkStatus <> GetLinkStatus then
+  if FLastLinkStatus <> Link.StatusStyleName then
   begin
-    FLastLinkStatus := GetLinkStatus;
+    FLastLinkStatus := Link.StatusStyleName;
     ApplyStyle;
   end;
 end;
@@ -122,30 +122,30 @@ begin
   Result := TSizeF.Create(100, 25);
 end;
 
-function TLALabel.GetLinkStatus: string;
-begin
-  if (Link.Status <> '') or (Link.StatusCode <> 0) then
-    Result := 'error'
-  else
-  begin
-    case Link.ValueRange.Check(Link.Value) of
-      Correct, NoRange:
-        Result := 'default';
-      LowLow:
-        Result := 'LL';
-      Low:
-        Result := 'L';
-      High:
-        Result := 'H';
-      HighHigh:
-        Result := 'HH';
-      InTarget:
-        Result := 'T';
-      NoTarget:
-        Result := 'NT';
-    end;
-  end;
-end;
+//function TLALabel.GetLinkStatus: string;
+//begin
+//  if (Link.Status <> '') or (Link.StatusCode <> 0) then
+//    Result := 'error'
+//  else
+//  begin
+//    case Link.ValueRange.Check(Link.Value) of
+//      Correct, NoRange:
+//        Result := 'default';
+//      LowLow:
+//        Result := 'LL';
+//      Low:
+//        Result := 'L';
+//      High:
+//        Result := 'H';
+//      HighHigh:
+//        Result := 'HH';
+//      InTarget:
+//        Result := 'T';
+//      NoTarget:
+//        Result := 'NT';
+//    end;
+//  end;
+//end;
 
 function TLALabel.GetStyleObject: TFmxObject;
 begin
