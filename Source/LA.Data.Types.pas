@@ -7,6 +7,7 @@ uses
   System.Math;
 
 type
+{$SCOPEDENUMS ON}
   TValueCheckResult = (
     NoRange,  // нет проверок
     LowLow,   // ниже нижнего уровня
@@ -19,11 +20,20 @@ type
   );
 
 const
-  vcrWarnings = [Low, High];
-  vcrAlarms = [LowLow, HighHigh];
-  vcrCorrects = [InTarget, Correct, NoRange];
+  vcrWarnings = [TValueCheckResult.Low, TValueCheckResult.High];
+  vcrAlarms = [TValueCheckResult.LowLow, TValueCheckResult.HighHigh];
+  vcrCorrects = [TValueCheckResult.InTarget, TValueCheckResult.Correct, TValueCheckResult.NoRange];
 
 type
+  // снимок данных датчика: значение и состояние на момент времени
+  TLASensorValueSnapshot = packed record
+    FDateTime: TDateTime;
+    FValue: Double;
+    FState: Double;
+  end;
+  TLASensorValueSnapshots = array of TLASensorValueSnapshot;
+
+
   TValueRange = class(TPersistent)
   private
     FH: Double;
@@ -77,34 +87,34 @@ end;
 
 function TValueRange.Check(aValue: Double): TValueCheckResult;
 begin
-  if (L = H) and (LL = HH) and (T = L) then
-    Exit(NoRange);
+  if SameValue(L, H) and SameValue(LL, HH) and SameValue(T, L) then
+    Exit(TValueCheckResult.NoRange);
 
-  if LL <> HH then
+  if not SameValue(LL, HH) then
   begin
     if aValue < LL then
-      Exit(LowLow)
+      Exit(TValueCheckResult.LowLow)
     else if aValue > HH then
-      Exit(HighHigh);
+      Exit(TValueCheckResult.HighHigh);
   end;
 
-  if L <> H then
+  if not SameValue(L, H) then
   begin
     if aValue < L then
-      Exit(Low)
+      Exit(TValueCheckResult.Low)
     else if aValue > H then
-      Exit(High);
+      Exit(TValueCheckResult.High);
   end;
 
-  if (LL = HH) and (L = H) then
+  if SameValue(LL, HH) and SameValue(L, H) then
   begin
     if SameValue(aValue, T) then
-      Exit(InTarget)
+      Exit(TValueCheckResult.InTarget)
     else
-      Exit(NoTarget);
+      Exit(TValueCheckResult.NoTarget);
   end;
 
-  Exit(Correct);
+  Exit(TValueCheckResult.Correct);
 end;
 
 procedure TValueRange.DefineProperties(Filer: TFiler);
