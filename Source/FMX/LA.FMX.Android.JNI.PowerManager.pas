@@ -85,6 +85,8 @@ function AcquireWakeLock: Boolean;
 var
   PowerManager: JPowerManager;
 begin
+  Exit;
+  { TODO : проверить: ошибка IntOverflow в WakeLock.acquire; }
   Result := Assigned(WakeLock);
   if not Result then
   begin
