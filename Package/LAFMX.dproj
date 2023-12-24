@@ -195,6 +195,8 @@
         <DCCReference Include="..\Source\FMX\LA.FMX.UI.Toast.pas"/>
         <DCCReference Include="..\Source\FMX\LA.FMX.Chart.Series.Intf.pas"/>
         <DCCReference Include="..\Source\FMX\LA.FMX.PropLink.pas"/>
+        <DCCReference Include="..\Source\FMX\LA.FMX.Shapes.pas"/>
+        <DCCReference Include="..\Source\FMX\LA.FMX.UI.Consts.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

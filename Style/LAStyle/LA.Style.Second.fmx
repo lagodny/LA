@@ -1,0 +1,73 @@
+object Form10: TForm10
+  Left = 0
+  Top = 0
+  Caption = 'Form10'
+  ClientHeight = 480
+  ClientWidth = 640
+  StyleLookup = 'background'
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnClose = FormClose
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Position.X = 312.000000000000000000
+    Position.Y = 216.000000000000000000
+    Size.Width = 297.000000000000000000
+    Size.Height = 120.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'primary'
+    TabOrder = 1
+    object Panel2: TPanel
+      Position.X = 24.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 225.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'onprimary'
+      TabOrder = 1
+    end
+    object Label2: TLabel
+      Position.X = 16.000000000000000000
+      Position.Y = 15.000000000000000000
+      StyleLookup = 'LabelOnPrimary'
+      Text = 'Label1'
+      TabOrder = 0
+    end
+  end
+  object Rectangle1: TRectangle
+    Fill.Color = clasurfaceBright
+    Position.X = 80.000000000000000000
+    Position.Y = 312.000000000000000000
+    Size.Width = 129.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = claoutline
+  end
+  object Label1: TLabel
+    Position.X = 328.000000000000000000
+    Position.Y = 191.000000000000000000
+    StyleLookup = 'LabelOnSurface'
+    TextSettings.FontColor = claonBackground
+    Text = 'Label1'
+    TabOrder = 0
+  end
+  object Rectangle2: TRectangle
+    Fill.Color = claprimary
+    Position.X = 80.000000000000000000
+    Position.Y = 191.000000000000000000
+    Size.Width = 129.000000000000000000
+    Size.Height = 34.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+  end
+  object Rectangle3: TRectangle
+    Fill.Color = claprimaryContainer
+    Position.X = 80.000000000000000000
+    Position.Y = 255.000000000000000000
+    Size.Width = 129.000000000000000000
+    Size.Height = 34.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+  end
+end

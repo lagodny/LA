@@ -1,0 +1,427 @@
+object Form8: TForm8
+  Left = 0
+  Top = 0
+  Caption = 'Form8'
+  ClientHeight = 738
+  ClientWidth = 969
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Button1: TButton
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    TabOrder = 0
+    Text = 'Open...'
+    OnClick = Button1Click
+  end
+  object chDark: TCheckBox
+    Position.X = 113.000000000000000000
+    Position.Y = 11.000000000000000000
+    TabOrder = 1
+    Text = 'dark'
+  end
+  object background: TRectangle
+    Fill.Color = claDarkgray
+    Position.X = 16.000000000000000000
+    Position.Y = 54.000000000000000000
+    Size.Width = 921.000000000000000000
+    Size.Height = 659.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object onBackground: TText
+      Locked = True
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'onBackground'
+      TextSettings.Font.Size = 14.000000000000000000
+      TextSettings.FontColor = xFF1A1C1E
+    end
+    object primaryContainer: TRectangle
+      Fill.Color = xFF00497B
+      Position.X = 24.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 273.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object onPrimaryContainer: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'primaryContainer'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFFD1E4FF
+      end
+    end
+    object secondaryContainer: TRectangle
+      Fill.Color = xFF3B4858
+      Position.X = 305.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 273.000000000000000000
+      Size.Height = 179.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object onSecondaryContainer: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'secondaryContainer'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFFD6E4F7
+      end
+      object secondary: TRectangle
+        Fill.Color = xFFBAC8DB
+        Position.X = 32.000000000000000000
+        Position.Y = 41.000000000000000000
+        Size.Width = 209.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object onSecondary: TText
+          Locked = True
+          Size.Width = 185.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'secondary'
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.FontColor = xFF253140
+        end
+      end
+      object secondaryFixed: TRectangle
+        Fill.Color = xFFBAC8DB
+        Position.X = 32.000000000000000000
+        Position.Y = 82.000000000000000000
+        Size.Width = 209.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object onSecondaryFixed: TText
+          Locked = True
+          Size.Width = 185.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'onSecondaryFixed'
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.FontColor = xFF253140
+        end
+      end
+      object secondaryFixedDim: TRectangle
+        Fill.Color = xFFBAC8DB
+        Position.X = 32.000000000000000000
+        Position.Y = 123.000000000000000000
+        Size.Width = 209.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object onSecondaryFixedVariant: TText
+          Locked = True
+          Size.Width = 185.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'onSecondaryFixedVariant'
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.FontColor = xFF253140
+        end
+      end
+    end
+    object tertiaryContainer: TRectangle
+      Fill.Color = xFF00497B
+      Position.X = 586.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 273.000000000000000000
+      Size.Height = 179.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object onTertiaryContainer: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'onTertiaryContainer'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFFD1E4FF
+      end
+      object tertiary: TRectangle
+        Fill.Color = xFF9DCAFF
+        Position.X = 32.000000000000000000
+        Position.Y = 41.000000000000000000
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object onTertiary: TText
+          Locked = True
+          Size.Width = 185.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'onTertiary'
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.FontColor = xFF003257
+        end
+      end
+      object tertiaryFixed: TRectangle
+        Fill.Color = xFFD1E4FF
+        Position.X = 32.000000000000000000
+        Position.Y = 82.000000000000000000
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object onTertiaryFixed: TText
+          Locked = True
+          Size.Width = 185.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'onTertiaryFixed'
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.FontColor = xFF001D35
+        end
+      end
+      object tertiaryFixedDim: TRectangle
+        Fill.Color = xFF9DCAFF
+        Position.X = 32.000000000000000000
+        Position.Y = 123.000000000000000000
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object onTertiaryFixedVariant: TText
+          Locked = True
+          Size.Width = 185.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'onTertiaryFixedVariant'
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.FontColor = xFF00497B
+        end
+      end
+    end
+    object errorContainer: TRectangle
+      Fill.Color = xFF1A1C1E
+      Position.X = 24.000000000000000000
+      Position.Y = 243.000000000000000000
+      Size.Width = 273.000000000000000000
+      Size.Height = 91.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object onErrorContainer: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'onErrorContainer'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFFD1E4FF
+      end
+      object error: TRectangle
+        Fill.Color = xFF9DCAFF
+        Position.X = 32.000000000000000000
+        Position.Y = 41.000000000000000000
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object onError: TText
+          Locked = True
+          Size.Width = 185.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'onError'
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.FontColor = xFF003257
+        end
+      end
+    end
+    object outline: TLine
+      LineType = Top
+      Position.X = 24.000000000000000000
+      Position.Y = 352.000000000000000000
+      Size.Width = 273.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object inverseSurface: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 337.000000000000000000
+      Position.Y = 299.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object inverseOnSurface: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'inverseOnSurface'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFF003257
+      end
+    end
+    object surface: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 337.000000000000000000
+      Position.Y = 258.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object onSurface: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'onSurface'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFF003257
+      end
+    end
+    object surfaceVariant: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 337.000000000000000000
+      Position.Y = 340.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object onSurfaceVariant: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'onSurfaceVariant'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFF003257
+      end
+    end
+    object outlineVariant: TLine
+      LineType = Top
+      Position.X = 24.000000000000000000
+      Position.Y = 377.000000000000000000
+      Size.Width = 273.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object surfaceContainerHighest: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 618.000000000000000000
+      Position.Y = 258.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+    object surfaceContainerHigh: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 618.000000000000000000
+      Position.Y = 299.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+    object surfaceContainer: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 618.000000000000000000
+      Position.Y = 340.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+    object surfaceContainerLow: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 618.000000000000000000
+      Position.Y = 381.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+    object surfaceContainerLowest: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 618.000000000000000000
+      Position.Y = 422.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+    object surfaceDim: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 618.000000000000000000
+      Position.Y = 470.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+    object surfaceBright: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 618.000000000000000000
+      Position.Y = 511.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+    object primaryFixedDim: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 32.000000000000000000
+      Position.Y = 187.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object onPrimaryFixedVariant: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'primaryFixedDim'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFF00497B
+      end
+    end
+    object primaryFixed: TRectangle
+      Fill.Color = xFFD1E4FF
+      Position.X = 32.000000000000000000
+      Position.Y = 146.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object onPrimaryFixed: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'primaryFixed'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFF001D35
+      end
+    end
+    object primary: TRectangle
+      Fill.Color = xFF9DCAFF
+      Position.X = 32.000000000000000000
+      Position.Y = 105.000000000000000000
+      Size.Width = 185.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object onPrimary: TText
+        Locked = True
+        Size.Width = 185.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'primary'
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.FontColor = xFF003257
+      end
+    end
+  end
+end

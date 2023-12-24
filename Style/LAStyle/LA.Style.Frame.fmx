@@ -1,0 +1,31 @@
+object TestFrame: TTestFrame
+  Size.Width = 346.000000000000000000
+  Size.Height = 241.000000000000000000
+  Size.PlatformDefault = False
+  object Rectangle1: TRectangle
+    Fill.Color = claerrorContainer
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 129.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object Text1: TText
+      Position.X = 8.000000000000000000
+      Position.Y = 23.000000000000000000
+      Size.Width = 105.000000000000000000
+      Size.Height = 34.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Frame Error'
+      TextSettings.Font.Size = 16.000000000000000000
+      TextSettings.FontColor = claerror
+    end
+  end
+  inline Frame21: TFrame2
+    Position.X = 8.000000000000000000
+    Position.Y = 89.000000000000000000
+    Size.Width = 332.000000000000000000
+    Size.Height = 147.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

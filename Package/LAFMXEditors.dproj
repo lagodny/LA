@@ -158,6 +158,7 @@
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="designIDE.dcp"/>
+        <DCCReference Include="dclFMXstd.dcp"/>
         <DCCReference Include="LAFMX.dcp"/>
         <DCCReference Include="..\Source\FMX\Property Editors\LA.FMX.Editors.pas"/>
         <DCCReference Include="..\Source\FMX\Property Editors\LA.FMX.Editors.Registration.pas"/>

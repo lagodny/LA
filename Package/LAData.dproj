@@ -247,6 +247,8 @@
         <DCCReference Include="..\Source\LA.Data.Lookup.pas"/>
         <DCCReference Include="..\Source\LA.Common.Consts.pas"/>
         <DCCReference Include="..\Source\LA.Data.Connection.Manager.pas"/>
+        <DCCReference Include="..\Source\LA.Keys.pas"/>
+        <DCCReference Include="..\Source\LA.System.Classes.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -46,12 +46,11 @@ object Form1: TForm1
           TextSettings.Font.Size = 13.000000000000000000
           Link.ID = '1'
           Link.Data = '1;45243.7047800347;13.11.2023 16:54:52;'
+          Link.NotifyConstantly = False
           Link.DataSource = LASensorUpdater2
           Link.Value = 45243.704780034700000000
           Link.Text = '13.11.2023 16:54:52'
-          Link.StatusCode = 0
           Link.Timestamp = 45243.704782280100000000
-          Link.Kind = skAnalog
         end
       end
       object RadiantCapsule1: TRadiantCapsule
@@ -71,12 +70,11 @@ object Form1: TForm1
           Text = '13.11.2023 16:54:52'
           Link.ID = '1'
           Link.Data = '1;45243.7047800347;13.11.2023 16:54:52;'
+          Link.NotifyConstantly = False
           Link.DataSource = LASensorUpdater2
           Link.Value = 45243.704780034700000000
           Link.Text = '13.11.2023 16:54:52'
-          Link.StatusCode = 0
           Link.Timestamp = 45243.704782280100000000
-          Link.Kind = skAnalog
         end
       end
       object Rectangle2: TRectangle
@@ -97,12 +95,11 @@ object Form1: TForm1
           Text = '13.11.2023 16:54:52'
           Link.ID = '1'
           Link.Data = '1;45243.7047800347;13.11.2023 16:54:52;'
+          Link.NotifyConstantly = False
           Link.DataSource = LASensorUpdater2
           Link.Value = 45243.704780034700000000
           Link.Text = '13.11.2023 16:54:52'
-          Link.StatusCode = 0
           Link.Timestamp = 45243.704782280100000000
-          Link.Kind = skAnalog
         end
       end
       object Rectangle3: TRectangle
@@ -124,12 +121,11 @@ object Form1: TForm1
           TextSettings.Font.Size = 14.000000000000000000
           Link.ID = '1'
           Link.Data = '1;45243.7047800347;13.11.2023 16:54:52;'
+          Link.NotifyConstantly = False
           Link.DataSource = LASensorUpdater2
           Link.Value = 45243.704780034700000000
           Link.Text = '13.11.2023 16:54:52'
-          Link.StatusCode = 0
           Link.Timestamp = 45243.704782280100000000
-          Link.Kind = skAnalog
         end
       end
       object Rectangle4: TRectangle
@@ -151,12 +147,11 @@ object Form1: TForm1
           Text = '13.11.2023 16:54:52'
           Link.ID = '1'
           Link.Data = '1;45243.7047800347;13.11.2023 16:54:52;'
+          Link.NotifyConstantly = False
           Link.DataSource = LASensorUpdater2
           Link.Value = 45243.704780034700000000
           Link.Text = '13.11.2023 16:54:52'
-          Link.StatusCode = 0
           Link.Timestamp = 45243.704782280100000000
-          Link.Kind = skAnalog
         end
       end
       object Rectangle5: TRectangle
@@ -179,12 +174,11 @@ object Form1: TForm1
           TextSettings.Font.StyleExt = {00070000000000000004000000}
           Link.ID = '1'
           Link.Data = '1;45243.7047800347;13.11.2023 16:54:52;'
+          Link.NotifyConstantly = False
           Link.DataSource = LASensorUpdater2
           Link.Value = 45243.704780034700000000
           Link.Text = '13.11.2023 16:54:52'
-          Link.StatusCode = 0
           Link.Timestamp = 45243.704782280100000000
-          Link.Kind = skAnalog
         end
       end
       object LAText2: TLAText
@@ -197,12 +191,11 @@ object Form1: TForm1
         TextSettings.Font.Size = 14.000000000000000000
         Link.ID = '1'
         Link.Data = '1;45252.7232987037;22.11.2023 17:21:33;'
+        Link.NotifyConstantly = False
         Link.DataSource = LASensorUpdater1
         Link.Value = 45252.723298703700000000
         Link.Text = '22.11.2023 17:21:33'
-        Link.StatusCode = 0
         Link.Timestamp = 45252.723278402780000000
-        Link.Kind = skAnalog
       end
       object LALabel1: TLALabel
         Position.X = 33.000000000000000000
@@ -216,12 +209,11 @@ object Form1: TForm1
         TabOrder = 1
         Link.ID = '1'
         Link.Data = '1;45252.7232987037;22.11.2023 17:21:33;'
+        Link.NotifyConstantly = False
         Link.DataSource = LASensorUpdater1
         Link.Value = 45252.723298703700000000
         Link.Text = '22.11.2023 17:21:33'
-        Link.StatusCode = 0
         Link.Timestamp = 45252.723278402780000000
-        Link.Kind = skAnalog
       end
       object LALabel2: TLALabel
         PopupMenu = PopupMenu1
@@ -235,9 +227,8 @@ object Form1: TForm1
         Text = 'LALabel2'
         TabOrder = 2
         Link.ID = '1'
+        Link.NotifyConstantly = False
         Link.DataSource = LASensorUpdater2
-        Link.StatusCode = 0
-        Link.Kind = skAnalog
       end
       object StyleBook1: TStyleBook
         Styles = <
@@ -416,9 +407,8 @@ object Form1: TForm1
         Text = 'LALabel3'
         TabOrder = 7
         Link.ID = '3'
+        Link.NotifyConstantly = False
         Link.DataSource = LASensorUpdater2
-        Link.StatusCode = 0
-        Link.Kind = skAnalog
         object LAGlyph2: TLAGlyph
           Position.X = 8.000000000000000000
           Position.Y = 1.000000000000000000
@@ -428,9 +418,8 @@ object Form1: TForm1
           ImageIndex = 0
           Images = SVGIconImageList1
           Link.ID = '3'
+          Link.NotifyConstantly = False
           Link.DataSource = LASensorUpdater2
-          Link.StatusCode = 0
-          Link.Kind = skAnalog
           ErrorImageIndex = 0
           MatchingTable.Strings = (
             '610=0'
@@ -467,9 +456,8 @@ object Form1: TForm1
         ImageIndex = 0
         Images = SVGIconImageList1
         Link.ID = '3'
+        Link.NotifyConstantly = False
         Link.DataSource = LASensorUpdater2
-        Link.StatusCode = 0
-        Link.Kind = skAnalog
         ErrorImageIndex = 0
         MatchingTable.Strings = (
           '610=0'
@@ -490,8 +478,7 @@ object Form1: TForm1
         Size.PlatformDefault = False
         ImageIndex = 16
         Images = SVGIconImageList1
-        Link.StatusCode = 0
-        Link.Kind = skAnalog
+        Link.NotifyConstantly = False
         ErrorImageIndex = 0
         MatchingTable.Strings = (
           '610=0'
@@ -533,9 +520,8 @@ object Form1: TForm1
           ImageIndex = 0
           Images = SVGIconImageList1
           Link.ID = '3'
+          Link.NotifyConstantly = False
           Link.DataSource = LASensorUpdater2
-          Link.StatusCode = 0
-          Link.Kind = skAnalog
           ErrorImageIndex = 0
           MatchingTable.Strings = (
             '610=0'
@@ -576,9 +562,8 @@ object Form1: TForm1
         ImageIndex = 0
         Images = SVGIconImageList1
         Link.ID = '3'
+        Link.NotifyConstantly = False
         Link.DataSource = LASensorUpdater2
-        Link.StatusCode = 0
-        Link.Kind = skAnalog
         ErrorImageIndex = 0
         MatchingTable.Strings = (
           '610=0'
@@ -629,8 +614,8 @@ object Form1: TForm1
         Size.Height = 322.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 12
-        Viewport.Width = 447.000000000000000000
-        Viewport.Height = 322.000000000000000000
+        Viewport.Width = 443.000000000000000000
+        Viewport.Height = 318.000000000000000000
       end
       object bGetLookup: TButton
         Position.X = 609.000000000000000000
@@ -720,12 +705,11 @@ object Form1: TForm1
       TextSettings.Font.Size = 14.000000000000000000
       Link.ID = '1'
       Link.Data = '1;45252.7232987037;22.11.2023 17:21:33;'
+      Link.NotifyConstantly = False
       Link.DataSource = LAHistoryViewer1
-      Link.Value = 45250.902777777780000000
+      Link.Value = 45252.723298703700000000
       Link.Text = '20.11.2023 21:40:00'
-      Link.StatusCode = 0
       Link.Timestamp = 45250.902777777780000000
-      Link.Kind = skAnalog
       Link.DisplayFormat = 'datedd.mm.yyyy hh:mm:ss'
     end
     object LAText9: TLAText
@@ -739,12 +723,11 @@ object Form1: TForm1
       OnClick = LAText9Click
       Link.ID = '4'
       Link.Data = '1;45252.7232987037;22.11.2023 17:21:33;'
+      Link.NotifyConstantly = False
       Link.DataSource = LAHistoryViewer1
       Link.Value = 293533.509620385000000000
       Link.Text = '293 534'
-      Link.StatusCode = 0
       Link.Timestamp = 45250.902777777780000000
-      Link.Kind = skAnalog
       Link.DisplayFormat = '# ##0'
     end
     object tbHistory: TTrackBar
@@ -778,7 +761,7 @@ object Form1: TForm1
   object LASensorUpdater1: TLASensorUpdater
     Connector = LAHttpConnector1
     Left = 144
-    Top = 16
+    Top = 24
   end
   object LAHttpConnector1: TLAHttpConnector
     Address = '192.168.126.1:89'

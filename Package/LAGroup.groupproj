@@ -48,6 +48,15 @@
         <Projects Include="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Test\TestUpdateConstantly\TestUpdateConstantly.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\Source\FMX\Tool\MaterialDesignThemeApply\MDTheme.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\Style\LAStyle\LAStyle.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -191,14 +200,41 @@
     <Target Name="SCS:Make">
         <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj" Targets="Make"/>
     </Target>
+    <Target Name="TestUpdateConstantly">
+        <MSBuild Projects="..\Test\TestUpdateConstantly\TestUpdateConstantly.dproj"/>
+    </Target>
+    <Target Name="TestUpdateConstantly:Clean">
+        <MSBuild Projects="..\Test\TestUpdateConstantly\TestUpdateConstantly.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestUpdateConstantly:Make">
+        <MSBuild Projects="..\Test\TestUpdateConstantly\TestUpdateConstantly.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MDTheme">
+        <MSBuild Projects="..\Source\FMX\Tool\MaterialDesignThemeApply\MDTheme.dproj"/>
+    </Target>
+    <Target Name="MDTheme:Clean">
+        <MSBuild Projects="..\Source\FMX\Tool\MaterialDesignThemeApply\MDTheme.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MDTheme:Make">
+        <MSBuild Projects="..\Source\FMX\Tool\MaterialDesignThemeApply\MDTheme.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="LAStyle">
+        <MSBuild Projects="..\Style\LAStyle\LAStyle.dproj"/>
+    </Target>
+    <Target Name="LAStyle:Clean">
+        <MSBuild Projects="..\Style\LAStyle\LAStyle.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LAStyle:Make">
+        <MSBuild Projects="..\Style\LAStyle\LAStyle.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LAFMXEditors;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;TestConnectionManager;TestChart;SCS"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LAFMXEditors;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;TestConnectionManager;TestChart;SCS;TestUpdateConstantly;MDTheme;LAStyle"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LAFMXEditors:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;TestConnectionManager:Clean;TestChart:Clean;SCS:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LAFMXEditors:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;TestConnectionManager:Clean;TestChart:Clean;SCS:Clean;TestUpdateConstantly:Clean;MDTheme:Clean;LAStyle:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LAFMXEditors:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;TestConnectionManager:Make;TestChart:Make;SCS:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LAFMXEditors:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;TestConnectionManager:Make;TestChart:Make;SCS:Make;TestUpdateConstantly:Make;MDTheme:Make;LAStyle:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

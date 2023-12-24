@@ -33,6 +33,7 @@
 requires
   rtl,
   designIDE,
+  dclFMXstd,
   LAFMX;
 
 contains

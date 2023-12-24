@@ -51,7 +51,7 @@ inherited HomeForm: THomeForm
         Link.Data = '10666;0;;'
         Link.NotifyConstantly = False
         Link.DataSource = DataController.Updater
-        Link.Timestamp = 45266.399496307870000000
+        Link.Timestamp = 45276.503353495370000000
         Link.Name = 'CUTEState'
         Link.Kind = skDiscret
         Link.DisplayFormat = '%s'
@@ -285,7 +285,7 @@ inherited HomeForm: THomeForm
         Link.Data = '10778;0;;'
         Link.NotifyConstantly = False
         Link.DataSource = DataController.Updater
-        Link.Timestamp = 45266.399496307870000000
+        Link.Timestamp = 45276.503353495370000000
         Link.Name = 'CUTEState'
         Link.Kind = skDiscret
         Link.DisplayFormat = '%s'

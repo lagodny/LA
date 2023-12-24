@@ -1,0 +1,60 @@
+object Frame2: TFrame2
+  Size.Width = 402.000000000000000000
+  Size.Height = 147.000000000000000000
+  Size.PlatformDefault = False
+  object Panel1: TPanel
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 161.000000000000000000
+    Size.Height = 120.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'primary'
+    TabOrder = 2
+    object Panel2: TPanel
+      Position.X = 24.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 112.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'onprimary'
+      TabOrder = 1
+      object Label1: TLabel
+        Position.X = 16.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 57.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'LabelOnSurface'
+        TextSettings.FontColor = claonBackground
+        Text = 'Label1'
+        TabOrder = 0
+      end
+    end
+    object Label2: TLabel
+      Position.X = 16.000000000000000000
+      Position.Y = 15.000000000000000000
+      StyleLookup = 'LabelOnPrimary'
+      Text = 'Label1'
+      TabOrder = 0
+    end
+  end
+  object Rectangle1: TRectangle
+    Fill.Color = claerrorContainer
+    Position.X = 177.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 129.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object Text2: TText
+      Position.X = 8.000000000000000000
+      Position.Y = 23.000000000000000000
+      Size.Width = 105.000000000000000000
+      Size.Height = 34.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Frame Error'
+      TextSettings.Font.Size = 16.000000000000000000
+      TextSettings.FontColor = claerror
+    end
+  end
+end
