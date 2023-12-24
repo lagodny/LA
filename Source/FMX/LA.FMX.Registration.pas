@@ -11,7 +11,8 @@ uses
   LA.FMX.Objects,
   LA.FMX.StdCtrls,
   LA.FMX.Chart, LA.FMX.Chart.LineSeries,
-  LA.FMX.PropLink;
+  LA.FMX.PropLink,
+  LA.FMX.Shapes;
 
 procedure Register;
 begin
@@ -20,7 +21,8 @@ begin
     TLAGlyph,
     TLALabel,
     TLAChart,
-    TLAPropLink, TLAColorKeyPropLink, TLAFloatKeyPropLink
+    TLAPropLink, TLAColorKeyPropLink, TLAFloatKeyPropLink,
+    TLAColorKeyLine
     ]);
 
 //  RegisterNoIcon([TLAPropLink, TLAColorKeyPropLink]);
