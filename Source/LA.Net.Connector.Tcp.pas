@@ -16,7 +16,7 @@ type
 
   TLATCPConnector = class(TLACustomConnector)
   private
-    FLock: TCriticalSection;
+//    FLock: TCriticalSection;
     FClient: TIdTCPClient;
     FIntercept: TLATCPIntercept;
 
@@ -38,8 +38,8 @@ type
     FClientOffsetFromUTC: TDateTime;
 
 
-    function LockClient(const aMessage: string = ''): TIdTCPClient;
-    procedure UnLockClient(const aMessage: string = '');
+//    function LockClient(const aMessage: string = ''): TIdTCPClient;
+//    procedure UnLockClient(const aMessage: string = '');
 
     function GenerateCryptKey(const aCharCount: Integer): RawByteString;
 
@@ -199,11 +199,11 @@ end;
 
 procedure TLATCPConnector.Connect;
 begin
-  LockClient('Connect');
+  Lock;
   try
     DoConnect;
   finally
-    UnLockClient('Connect');
+    UnLock;
   end;
 end;
 
@@ -211,7 +211,7 @@ constructor TLATCPConnector.Create(AOwner: TComponent);
 begin
   inherited;
 
-  FLock := TCriticalSection.Create;
+//  FLock := TCriticalSection.Create;
   FIntercept := TLATCPIntercept.Create(nil);
 
   FClient := TIdTCPClient.Create(nil);
@@ -231,17 +231,17 @@ destructor TLATCPConnector.Destroy;
 begin
   FClient.Free;
   FIntercept.Free;
-  FLock.Free;
+//  FLock.Free;
   inherited;
 end;
 
 procedure TLATCPConnector.Disconnect;
 begin
-  LockClient('Connect');
+  Lock;
   try
     DoDisconnect;
   finally
-    UnLockClient('Connect');
+    UnLock;
   end;
 end;
 
@@ -458,7 +458,7 @@ end;
 
 procedure TLATCPConnector.LockAndDoCommand(const aCommand: string);
 begin
-  LockClient('LockAndDoCommand: ' + aCommand);
+  Lock;
   try
     try
 	    DoConnect;
@@ -469,7 +469,7 @@ begin
           raise;
     end;
   finally
-    UnLockClient('LockAndDoCommand: ' + aCommand);
+    UnLock;
   end;
 end;
 
@@ -494,7 +494,7 @@ begin
   // Строка N<EOL>
 
   Result := '';
-  LockClient('LockAndGetStringsCommand: ' + aCommand);
+  Lock;
   try
     try
       DoConnect;
@@ -510,21 +510,21 @@ begin
           raise;
     end;
   finally
-    UnLockClient('LockAndGetStringsCommand: ' + aCommand);
+    UnLock;
   end;
 end;
 
-function TLATCPConnector.LockClient(const aMessage: string): TIdTCPClient;
-begin
-  //OPCLog.WriteToLogFmt('%d: LockClient %s', [GetCurrentThreadId, aMessage]);
-  FLock.Enter;
-  Result := FClient;
-  //OPCLog.WriteToLogFmt('%d: LockClient OK. %s', [GetCurrentThreadId, aMessage]);
-end;
+//function TLATCPConnector.LockClient(const aMessage: string): TIdTCPClient;
+//begin
+//  //OPCLog.WriteToLogFmt('%d: LockClient %s', [GetCurrentThreadId, aMessage]);
+//  FLock.Enter;
+//  Result := FClient;
+//  //OPCLog.WriteToLogFmt('%d: LockClient OK. %s', [GetCurrentThreadId, aMessage]);
+//end;
 
 function TLATCPConnector.LockDoCommandReadLn(const aCommand: string): string;
 begin
-  LockClient('LockDoCommandReadLn');
+  Lock;
   try
     try
 	    DoConnect;
@@ -536,13 +536,13 @@ begin
           raise;
     end;
   finally
-    UnLockClient('LockDoCommandReadLn');
+    UnLock;
   end;
 end;
 
 function TLATCPConnector.LockDoCommandReadLnFmt(const aCommand: string; const Args: array of TVarRec): string;
 begin
-  LockClient('LockDoCommandReadLnFmt');
+  Lock;
   try
     try
 	    DoConnect;
@@ -554,7 +554,7 @@ begin
           raise;
     end;
   finally
-    UnLockClient('LockDoCommandReadLnFmt');
+    UnLock;
   end;
 end;
 
@@ -861,19 +861,19 @@ end;
 //  end;
 //end;
 
-procedure TLATCPConnector.UnLockClient(const aMessage: string);
-begin
-  //OPCLog.WriteToLogFmt('%d: UnLockClient %s', [GetCurrentThreadId, aMessage]);
-  FLock.Leave;
-  //OPCLog.WriteToLogFmt('%d: UnLockClient OK. %s', [GetCurrentThreadId, aMessage]);
-end;
+//procedure TLATCPConnector.UnLockClient(const aMessage: string);
+//begin
+//  //OPCLog.WriteToLogFmt('%d: UnLockClient %s', [GetCurrentThreadId, aMessage]);
+//  FLock.Leave;
+//  //OPCLog.WriteToLogFmt('%d: UnLockClient OK. %s', [GetCurrentThreadId, aMessage]);
+//end;
 
 procedure TLATCPConnector.UpdateComressionLevel(const aLock: Boolean);
 begin
   if Connected then
   begin
     if aLock then
-      LockClient('UpdateComressionLevel');
+      Lock;
     try
       try
 	      DoCommandFmt('SetConnectionParams CompressionLevel=%d', [CompressionLevel]);
@@ -884,7 +884,7 @@ begin
       end;
     finally
       if aLock then
-        UnLockClient('UpdateComressionLevel');
+        UnLock;
     end;
   end;
 
@@ -906,7 +906,7 @@ begin
   if Connected then
   begin
     if aLock then
-      LockClient('UpdateEncrypted');
+      Lock;
 
     try
       try
@@ -928,7 +928,7 @@ begin
       end;
     finally
       if aLock then
-        UnLockClient('UpdateEncrypted');
+        UnLock;
     end;
   end;
   FIntercept.CryptKey := aCryptKey;
