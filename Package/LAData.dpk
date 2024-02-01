@@ -73,8 +73,7 @@ contains
   LA.Data.Lookup in '..\Source\LA.Data.Lookup.pas',
   LA.Common.Consts in '..\Source\LA.Common.Consts.pas',
   LA.Data.Connection.Manager in '..\Source\LA.Data.Connection.Manager.pas',
-  LA.Keys in '..\Source\LA.Keys.pas',
-  LA.System.Classes in '..\Source\LA.System.Classes.pas';
+  LA.Keys in '..\Source\LA.Keys.pas';
 
 end.
 

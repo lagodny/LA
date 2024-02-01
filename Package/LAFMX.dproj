@@ -197,6 +197,7 @@
         <DCCReference Include="..\Source\FMX\LA.FMX.PropLink.pas"/>
         <DCCReference Include="..\Source\FMX\LA.FMX.Shapes.pas"/>
         <DCCReference Include="..\Source\FMX\LA.FMX.UI.Consts.pas"/>
+        <DCCReference Include="..\Source\FMX\LA.FMX.PropReloader.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

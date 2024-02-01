@@ -22,8 +22,8 @@ begin
   RegisterPropertyEditor(TypeInfo(string), TLAColorKeyPropLink, 'PropertyName', TLAColorKeyPropLinkPropertyName);
   RegisterPropertyEditor(TypeInfo(string), TLAFloatKeyPropLink, 'PropertyName', TLAFloatKeyPropLinkPropertyName);
 
-  RegisterPropertyEditor(TypeInfo(TAlphaColor), TFmxObject, '', TLAAlphaColorProperty);
-  RegisterPropertyEditor(TypeInfo(TAlphaColor), TPersistent, '', TLAAlphaColorProperty);
+//  RegisterPropertyEditor(TypeInfo(TAlphaColor), TFmxObject, '', TLAAlphaColorProperty);
+//  RegisterPropertyEditor(TypeInfo(TAlphaColor), TPersistent, '', TLAAlphaColorProperty);
 end;
 
 end.

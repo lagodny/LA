@@ -46,6 +46,7 @@ contains
   LA.FMX.Chart.Series.Intf in '..\Source\FMX\LA.FMX.Chart.Series.Intf.pas',
   LA.FMX.PropLink in '..\Source\FMX\LA.FMX.PropLink.pas',
   LA.FMX.Shapes in '..\Source\FMX\LA.FMX.Shapes.pas',
-  LA.FMX.UI.Consts in '..\Source\FMX\LA.FMX.UI.Consts.pas';
+  LA.FMX.UI.Consts in '..\Source\FMX\LA.FMX.UI.Consts.pas',
+  LA.FMX.PropReloader in '..\Source\FMX\LA.FMX.PropReloader.pas';
 
 end.

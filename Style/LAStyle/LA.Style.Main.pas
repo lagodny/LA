@@ -8,7 +8,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls, FMX.Controls.Presentation, FMX.Ani, FMX.Objects,
   FMX.Styles,
   LA.System.Classes,
-  LA.FMX.UI.Consts, LA.Style.Frame;
+  LA.FMX.UI.Consts, LA.Style.Frame, System.ImageList, FMX.ImgList, FMX.SVGIconImageList;
 
 type
   TForm9 = class(TForm)
@@ -20,7 +20,6 @@ type
     Label2: TLabel;
     Rectangle1: TRectangle;
     Panel3: TPanel;
-    Button1: TButton;
     Panel4: TPanel;
     Panel5: TPanel;
     Panel6: TPanel;
@@ -28,6 +27,14 @@ type
     TestFrame1: TTestFrame;
     Text2: TText;
     Text3: TText;
+    SVGImages: TSVGIconImageList;
+    Button1: TButton;
+    StyleBook1: TStyleBook;
+    Button2: TButton;
+    ImageList1: TImageList;
+    Glyph1: TGlyph;
+    Glyph2: TGlyph;
+    Glyph3: TGlyph;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Panel4Click(Sender: TObject);
@@ -73,6 +80,7 @@ begin
   TStyleManager.SetStyleFromFile('LAStyle.style');
 
   TPropertyReloader.Reload;
+  SVGImages.RefreshAllIcons;
 end;
 
 procedure TForm9.Panel5Click(Sender: TObject);
@@ -81,6 +89,7 @@ begin
   TStyleManager.SetStyleFromFile('LAStyle.style');
 
   TPropertyReloader.Reload;
+  SVGImages.RefreshAllIcons;
 end;
 
 procedure TForm9.Panel6Click(Sender: TObject);

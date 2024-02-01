@@ -27,6 +27,7 @@ uses
 var
   // https://m3.material.io/styles/color/roles
   // https://developer.android.com/reference/kotlin/androidx/compose/material3/ColorScheme
+  // Source color = #264361 (Matherial theme builder)
   LAAlphaColors: array [0..48] of TIdentMapEntry = (
     (Value: Integer($FFF8F9FE); Name: 'clabackground'),         // The background color that appears behind scrollable content.
     (Value: Integer($FFBA1A1A); Name: 'claerror'),              // The error color is used to indicate errors in components, such as invalid text in a text field.
@@ -39,7 +40,7 @@ var
     (Value: Integer($FF410002); Name: 'claonErrorContainer'),   // The color (and state variants) that should be used for content on top of errorContainer.
     (Value: Integer($FFFFFFFE); Name: 'claonPrimary'),          // Color used for text and icons displayed on top of the primary color.
     (Value: Integer($FF001D35); Name: 'claonPrimaryContainer'), // The color (and state variants) that should be used for content on top of primaryContainer.
-    (Value: Integer($FF001D35); Name: 'claonPrimaryFixed'),
+    (Value: Integer($FF001D36); Name: 'claonPrimaryFixed'),
     (Value: Integer($FF174974); Name: 'claonPrimaryFixedVariant'),
     (Value: Integer($FFFFFFFD); Name: 'claonSecondary'),        // Color used for text and icons displayed on top of the secondary color.
     (Value: Integer($FF0F1C2B); Name: 'claonSecondaryContainer'),  // The color (and state variants) that should be used for content on top of secondaryContainer.
@@ -57,7 +58,7 @@ var
     (Value: Integer($FFD1E4FF); Name: 'claprimaryContainer'),   // The preferred tonal color of containers.
     (Value: Integer($FFD1E4FE); Name: 'claprimaryFixed'),
     (Value: Integer($FF9FCAFC); Name: 'claprimaryFixedDim'),
-    (Value: Integer($FF000000); Name: 'clascrim'),              // Color of a scrim that obscures content.
+    (Value: Integer($FF000100); Name: 'clascrim'),              // Color of a scrim that obscures content.
     (Value: Integer($FF535F70); Name: 'clasecondary'),          // The secondary color provides more ways to accent and distinguish your product.
     (Value: Integer($FFD6E4F7); Name: 'clasecondaryContainer'), // A tonal color to be used in containers.
     (Value: Integer($FFD6E4F8); Name: 'clasecondaryFixed'),
@@ -210,11 +211,11 @@ begin
 end;
 
 
-initialization
-  LARegisterAlphaColorIntegerConsts;
-
-finalization
-  LAUnRegisterAlphaColorIntegerConsts;
+//initialization
+//  LARegisterAlphaColorIntegerConsts;
+//
+//finalization
+//  LAUnRegisterAlphaColorIntegerConsts;
 
 
 end.
