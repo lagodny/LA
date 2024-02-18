@@ -3,9 +3,10 @@
 interface
 
 uses
+  LA.FMX.UI.Consts,
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, LA.Data.Source, LA.Data.Updater, LA.Data.Sensor.Updater, LA.Net.Connector,
-  LA.Net.Connector.Http, FMX.Objects, LA.FMX.Objects, FMX.Controls.Presentation, FMX.StdCtrls, LA.Net.Connector.Tcp, Radiant.Shapes, FMX.Edit,
+  LA.Net.Connector.Http, FMX.Objects, LA.FMX.Objects, FMX.Controls.Presentation, FMX.StdCtrls, LA.Net.Connector.Tcp, FMX.Edit,
   FMX.Layouts, LA.FMX.StdCtrls, Data.Bind.EngExt, Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Data.Bind.Components, LA.Data.Sensor,
   System.ImageList, FMX.ImgList, FMX.SVGIconImageList, FMX.SVGIconImage, FMX.Ani, FMX.Menus, FMX.Memo.Types, FMX.ScrollBox, FMX.Memo,
   LA.Data.History.Viewer;
@@ -20,8 +21,6 @@ type
     ScaledLayout1: TScaledLayout;
     Rectangle1: TRectangle;
     LAText1: TLAText;
-    RadiantCapsule1: TRadiantCapsule;
-    LAText3: TLAText;
     Rectangle2: TRectangle;
     LAText4: TLAText;
     Rectangle3: TRectangle;
@@ -51,7 +50,6 @@ type
     LAGlyph2: TLAGlyph;
     Glyph2: TGlyph;
     LAGlyph3: TLAGlyph;
-    RadiantRectangle1: TRadiantRectangle;
     Layout2: TLayout;
     LAGlyph4: TLAGlyph;
     FloatAnimation1: TFloatAnimation;

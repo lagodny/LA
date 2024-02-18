@@ -120,11 +120,10 @@ end;
 
 procedure LAGetAlphaColorValues(Proc: TGetStrProc);
 var
-  I: Integer;
-  c: Integer;
+  i: Integer;
 begin
-  for I := Low(LAAlphaColors) to High(LAAlphaColors) do
-    Proc(LAAlphaColors[I].Name.Substring(3));
+  for i := Low(LAAlphaColors) to High(LAAlphaColors) do
+    Proc(LAAlphaColors[i].Name.Substring(3));
 end;
 
 function LAAlphaColorToString(Value: TAlphaColor): string;
@@ -211,11 +210,11 @@ begin
 end;
 
 
-//initialization
-//  LARegisterAlphaColorIntegerConsts;
-//
-//finalization
-//  LAUnRegisterAlphaColorIntegerConsts;
+initialization
+  LARegisterAlphaColorIntegerConsts;
+
+finalization
+  LAUnRegisterAlphaColorIntegerConsts;
 
 
 end.

@@ -7,6 +7,7 @@ object Form3: TForm3
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   DesignerMasterStyle = 0
   object CheckBox1: TCheckBox
     Position.X = 25.000000000000000000
@@ -29,10 +30,12 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
+    TextSettings.Trimming = None
     Text = '26.11.2023 21:23:37'
     TabOrder = 6
     Link.ID = '1'
     Link.Data = '1;45256.8914048495;26.11.2023 21:23:37;'
+    Link.NotifyConstantly = False
     Link.DataSource = TCPSensorUpdater
     Link.Value = 45256.891404849500000000
     Link.Text = '26.11.2023 21:23:37'
@@ -47,10 +50,12 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
+    TextSettings.Trimming = None
     Text = ' 316 260'
     TabOrder = 10
     Link.ID = '4'
     Link.Data = '4;316260; 316 260;'
+    Link.NotifyConstantly = False
     Link.DataSource = HTTPSensorUpdater
     Link.Value = 316260.000000000000000000
     Link.Text = ' 316 260'
@@ -66,10 +71,12 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
+    TextSettings.Trimming = None
     Text = '26.11.2023 21:23:35'
     TabOrder = 11
     Link.ID = '1'
     Link.Data = '1;45256.8913794676;26.11.2023 21:23:35;'
+    Link.NotifyConstantly = False
     Link.DataSource = HTTPSensorUpdater
     Link.Value = 45256.891379467600000000
     Link.Text = '26.11.2023 21:23:35'
@@ -84,10 +91,12 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
+    TextSettings.Trimming = None
     Text = ' 316 260'
     TabOrder = 8
     Link.ID = '4'
     Link.Data = '4;316260; 316 260;'
+    Link.NotifyConstantly = False
     Link.DataSource = TCPSensorUpdater
     Link.Value = 316260.000000000000000000
     Link.Text = ' 316 260'
@@ -101,10 +110,12 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
+    TextSettings.Trimming = None
     Text = 'd:\_services\DC\Data\UploadFile\Logisticcom.scp-123'
     TabOrder = 9
     Link.ID = '29697'
     Link.Data = '29697;384;d:\_services\DC\Data\UploadFile\Logisticcom.scp-123;'
+    Link.NotifyConstantly = False
     Link.DataSource = HTTPSensorUpdater
     Link.Value = 384.000000000000000000
     Link.Text = 'd:\_services\DC\Data\UploadFile\Logisticcom.scp-123'
@@ -121,10 +132,12 @@ object Form3: TForm3
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
+    TextSettings.Trimming = None
     Text = 'd:\_services\DC\Data\UploadFile\Logisticcom.scp-123'
     TabOrder = 7
     Link.ID = '29697'
     Link.Data = '29697;384;d:\_services\DC\Data\UploadFile\Logisticcom.scp-123;'
+    Link.NotifyConstantly = False
     Link.DataSource = TCPSensorUpdater
     Link.Value = 384.000000000000000000
     Link.Text = 'd:\_services\DC\Data\UploadFile\Logisticcom.scp-123'
@@ -204,6 +217,8 @@ object Form3: TForm3
         Updater = HTTPSensorUpdater
       end>
     HistoryViewer = LAHistoryViewer1
+    UserName = #1051#1072#1075#1086#1076#1085#1099#1081
+    Password = '314'
     Left = 624
     Top = 344
   end

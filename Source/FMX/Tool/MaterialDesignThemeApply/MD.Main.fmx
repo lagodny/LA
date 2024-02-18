@@ -13,6 +13,7 @@ object Form8: TForm8
     Position.Y = 8.000000000000000000
     TabOrder = 0
     Text = 'Open...'
+    TextSettings.Trimming = None
     OnClick = Button1Click
   end
   object chDark: TCheckBox
@@ -53,11 +54,11 @@ object Form8: TForm8
         Size.PlatformDefault = False
         Text = 'primaryContainer'
         TextSettings.Font.Size = 14.000000000000000000
-        TextSettings.FontColor = xFFD1E4FF
+        TextSettings.FontColor = claprimaryContainer
       end
     end
     object secondaryContainer: TRectangle
-      Fill.Color = xFF3B4858
+      Fill.Color = claonSecondaryFixedVariant
       Position.X = 305.000000000000000000
       Position.Y = 56.000000000000000000
       Size.Width = 273.000000000000000000
@@ -71,10 +72,10 @@ object Form8: TForm8
         Size.PlatformDefault = False
         Text = 'secondaryContainer'
         TextSettings.Font.Size = 14.000000000000000000
-        TextSettings.FontColor = xFFD6E4F7
+        TextSettings.FontColor = clasecondaryContainer
       end
       object secondary: TRectangle
-        Fill.Color = xFFBAC8DB
+        Fill.Color = clasecondaryFixedDim
         Position.X = 32.000000000000000000
         Position.Y = 41.000000000000000000
         Size.Width = 209.000000000000000000
@@ -92,7 +93,7 @@ object Form8: TForm8
         end
       end
       object secondaryFixed: TRectangle
-        Fill.Color = xFFBAC8DB
+        Fill.Color = clasecondaryFixedDim
         Position.X = 32.000000000000000000
         Position.Y = 82.000000000000000000
         Size.Width = 209.000000000000000000
@@ -110,7 +111,7 @@ object Form8: TForm8
         end
       end
       object secondaryFixedDim: TRectangle
-        Fill.Color = xFFBAC8DB
+        Fill.Color = clasecondaryFixedDim
         Position.X = 32.000000000000000000
         Position.Y = 123.000000000000000000
         Size.Width = 209.000000000000000000
@@ -143,7 +144,7 @@ object Form8: TForm8
         Size.PlatformDefault = False
         Text = 'onTertiaryContainer'
         TextSettings.Font.Size = 14.000000000000000000
-        TextSettings.FontColor = xFFD1E4FF
+        TextSettings.FontColor = claprimaryContainer
       end
       object tertiary: TRectangle
         Fill.Color = xFF9DCAFF
@@ -164,7 +165,7 @@ object Form8: TForm8
         end
       end
       object tertiaryFixed: TRectangle
-        Fill.Color = xFFD1E4FF
+        Fill.Color = claprimaryContainer
         Position.X = 32.000000000000000000
         Position.Y = 82.000000000000000000
         Size.Width = 185.000000000000000000
@@ -178,7 +179,7 @@ object Form8: TForm8
           Size.PlatformDefault = False
           Text = 'onTertiaryFixed'
           TextSettings.Font.Size = 14.000000000000000000
-          TextSettings.FontColor = xFF001D35
+          TextSettings.FontColor = claonPrimaryContainer
         end
       end
       object tertiaryFixedDim: TRectangle
@@ -215,7 +216,7 @@ object Form8: TForm8
         Size.PlatformDefault = False
         Text = 'onErrorContainer'
         TextSettings.Font.Size = 14.000000000000000000
-        TextSettings.FontColor = xFFD1E4FF
+        TextSettings.FontColor = claprimaryContainer
       end
       object error: TRectangle
         Fill.Color = xFF9DCAFF
@@ -388,7 +389,7 @@ object Form8: TForm8
       end
     end
     object primaryFixed: TRectangle
-      Fill.Color = xFFD1E4FF
+      Fill.Color = claprimaryContainer
       Position.X = 32.000000000000000000
       Position.Y = 146.000000000000000000
       Size.Width = 185.000000000000000000
@@ -402,7 +403,7 @@ object Form8: TForm8
         Size.PlatformDefault = False
         Text = 'primaryFixed'
         TextSettings.Font.Size = 14.000000000000000000
-        TextSettings.FontColor = xFF001D35
+        TextSettings.FontColor = claonPrimaryContainer
       end
     end
     object primary: TRectangle

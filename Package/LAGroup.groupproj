@@ -12,6 +12,12 @@
         <Projects Include="..\..\..\Lib\mORMot\CrossPlatform\Packages\mORMotCrossplatform.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\..\dklang\Packages\dklang.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\dklang\Packages\dcldklang.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="LAData.dproj">
             <Dependencies/>
         </Projects>
@@ -91,6 +97,24 @@
     </Target>
     <Target Name="mORMotCrossplatform:Make">
         <MSBuild Projects="..\..\..\Lib\mORMot\CrossPlatform\Packages\mORMotCrossplatform.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dklang">
+        <MSBuild Projects="..\..\dklang\Packages\dklang.dproj"/>
+    </Target>
+    <Target Name="dklang:Clean">
+        <MSBuild Projects="..\..\dklang\Packages\dklang.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dklang:Make">
+        <MSBuild Projects="..\..\dklang\Packages\dklang.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dcldklang">
+        <MSBuild Projects="..\..\dklang\Packages\dcldklang.dproj"/>
+    </Target>
+    <Target Name="dcldklang:Clean">
+        <MSBuild Projects="..\..\dklang\Packages\dcldklang.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dcldklang:Make">
+        <MSBuild Projects="..\..\dklang\Packages\dcldklang.dproj" Targets="Make"/>
     </Target>
     <Target Name="LAData">
         <MSBuild Projects="LAData.dproj"/>
@@ -228,13 +252,13 @@
         <MSBuild Projects="..\Style\LAStyle\LAStyle.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;LAData;LADesigner;LAFMX;LAFMXEditors;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;TestConnectionManager;TestChart;SCS;TestUpdateConstantly;MDTheme;LAStyle"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;dklang;dcldklang;LAData;LADesigner;LAFMX;LAFMXEditors;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;TestConnectionManager;TestChart;SCS;TestUpdateConstantly;MDTheme;LAStyle"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LAFMXEditors:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;TestConnectionManager:Clean;TestChart:Clean;SCS:Clean;TestUpdateConstantly:Clean;MDTheme:Clean;LAStyle:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;dklang:Clean;dcldklang:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LAFMXEditors:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;TestConnectionManager:Clean;TestChart:Clean;SCS:Clean;TestUpdateConstantly:Clean;MDTheme:Clean;LAStyle:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LAFMXEditors:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;TestConnectionManager:Make;TestChart:Make;SCS:Make;TestUpdateConstantly:Make;MDTheme:Make;LAStyle:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;dklang:Make;dcldklang:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LAFMXEditors:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;TestConnectionManager:Make;TestChart:Make;SCS:Make;TestUpdateConstantly:Make;MDTheme:Make;LAStyle:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -7,7 +7,8 @@ uses
   System.Generics.Collections,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls, FMX.Controls.Presentation, FMX.Ani, FMX.Objects,
   FMX.Styles,
-  LA.System.Classes,
+  //LA.System.Classes,
+  LA.FMX.Prop.Utils,
   LA.FMX.UI.Consts, LA.Style.Frame, System.ImageList, FMX.ImgList, FMX.SVGIconImageList;
 
 type
@@ -52,6 +53,8 @@ implementation
 {$R *.fmx}
 
 uses
+  System.Diagnostics,
+  System.IOUtils,
   LA.Style.Second;
 
 procedure TForm9.Button1Click(Sender: TObject);
@@ -76,20 +79,36 @@ end;
 
 procedure TForm9.Panel4Click(Sender: TObject);
 begin
+//  InitLAColorsFromFile('LA_Test.json', True);
+//  TStyleManager.SetStyleFromFile('LAStyle.style');
+  {$IFDEF WINDOWS}
   InitLAColorsFromFile('LA_Test.json', True);
   TStyleManager.SetStyleFromFile('LAStyle.style');
+  {$ENDIF}
+  {$IFDEF ANDROID}
+  InitLAColorsFromFile(TPath.Combine(TPath.GetHomePath, 'LA_Test.json'), True);
+  TStyleManager.SetStyleFromFile(TPath.Combine(TPath.GetHomePath, 'LAStyle.style'));
+  {$ENDIF}
 
   TPropertyReloader.Reload;
+ // var s := TStopwatch.StartNew;
   SVGImages.RefreshAllIcons;
+//  ShowMessage(s.ElapsedMilliseconds.ToString);
 end;
 
 procedure TForm9.Panel5Click(Sender: TObject);
 begin
+  {$IFDEF WINDOWS}
   InitLAColorsFromFile('LA_Test.json', False);
   TStyleManager.SetStyleFromFile('LAStyle.style');
+  {$ENDIF}
+  {$IFDEF ANDROID}
+  InitLAColorsFromFile(TPath.Combine(TPath.GetHomePath, 'LA_Test.json'), False);
+  TStyleManager.SetStyleFromFile(TPath.Combine(TPath.GetHomePath, 'LAStyle.style'));
+  {$ENDIF}
 
   TPropertyReloader.Reload;
-  SVGImages.RefreshAllIcons;
+//  SVGImages.RefreshAllIcons;
 end;
 
 procedure TForm9.Panel6Click(Sender: TObject);

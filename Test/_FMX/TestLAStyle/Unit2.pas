@@ -3,6 +3,7 @@
 interface
 
 uses
+  LA.FMX.UI.Consts,
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls, LA.FMX.StdCtrls, FMX.Layouts,
   System.ImageList, FMX.ImgList, FMX.Objects, LA.FMX.Objects, FMX.Edit, Radiant.Shapes, FMX.SVGIconImageList, LA.Data.Sensor, FMX.Ani;

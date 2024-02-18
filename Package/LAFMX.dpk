@@ -34,7 +34,7 @@ requires
   fmx,
   LAData,
   dklang,
-  FMXTee928;
+  FMXTee929;
 
 contains
   LA.FMX.Objects in '..\Source\FMX\LA.FMX.Objects.pas',

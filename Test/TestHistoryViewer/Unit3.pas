@@ -30,6 +30,7 @@ type
     procedure TrackBar1Tracking(Sender: TObject);
     procedure CheckBox1Change(Sender: TObject);
     procedure CheckBox2Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -71,6 +72,12 @@ begin
     HTTPSensorUpdater.InitItems;
     TCPSensorUpdater.InitItems;
   end;
+end;
+
+procedure TForm3.FormCreate(Sender: TObject);
+begin
+  LAHTTPConnector1.Address := 'https://dc.tdc.org.ua';
+  LATCPConnector1.Address := 'tdc.org.ua:5152';
 end;
 
 procedure TForm3.TrackBar1Tracking(Sender: TObject);
