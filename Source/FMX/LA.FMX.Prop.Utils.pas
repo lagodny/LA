@@ -33,6 +33,7 @@ type
     procedure PropValueError;
     procedure ReadPropValue(aReader: TReader; const Instance: TPersistent; PropInfo: Pointer);
     procedure UpdateProperty(aReader: TReader; const AInstance: TPersistent; const aPropPath: string);
+    procedure UpdateCollection(aReader: TReader; const Collection: TCollection);
   public
     procedure Process(aRoot: TComponent);
     procedure ProcessApp;
@@ -40,6 +41,14 @@ type
     constructor Create(aComparer: TPropertyReloaderComparer);
 
     class procedure Reload(aComparer: TPropertyReloaderComparer = nil);
+  end;
+
+  TLAReader = class(TReader)
+
+  end;
+
+  TLAPersistent = class(TPersistent)
+
   end;
 
 implementation
@@ -329,7 +338,10 @@ var
     begin
       aComp := aOwner.Components[i];
       if (aComp is TFrame) and (aCompToProcess.IndexOf(aComp) < 0) then
-        AddSubFramesAndOwer(aComp);
+        AddSubFramesAndOwer(aComp)
+      else if (aComp is TDataModule) and (aCompToProcess.IndexOf(aComp) < 0) then
+        aCompToProcess.Add(aComp);
+
     end;
     if aCompToProcess.IndexOf(aOwner) < 0 then
       aCompToProcess.Add(aOwner);
@@ -369,6 +381,35 @@ end;
 procedure TPropertyReloader.PropValueError;
 begin
   ReadError(@SInvalidPropertyValue);
+end;
+
+procedure TPropertyReloader.UpdateCollection(aReader: TReader; const Collection: TCollection);
+var
+  i: Integer;
+  Item: TPersistent;
+begin
+  Collection.BeginUpdate;
+  try
+    //if not aReader.EndOfList then Collection.Clear;
+    i := 0;
+    while not aReader.EndOfList do
+    begin
+      if aReader.NextValue in [vaInt8, vaInt16, vaInt32] then aReader.ReadInteger;
+      //Item := Collection.Add;
+      Item := Collection.Items[i];
+      aReader.ReadListBegin;
+      while not aReader.EndOfList do
+      begin
+        //ReadProperty(Item);
+        UpdateProperty(aReader, Item, aReader.ReadStr);
+      end;
+      aReader.ReadListEnd;
+      Inc(i);
+    end;
+    aReader.ReadListEnd;
+  finally
+    Collection.EndUpdate;
+  end;
 end;
 
 procedure TPropertyReloader.ReadPropValue(aReader: TReader; const Instance: TPersistent; PropInfo: Pointer);
@@ -433,7 +474,6 @@ begin
     Exit;
   end;
 
-
   case PropType^.Kind of
     tkInteger:
       if aReader.NextValue = vaIdent then
@@ -462,7 +502,8 @@ begin
     tkUString:
       SetStrProp(Instance, PropInfo, aReader.ReadString);
     tkSet:
-      aReader.SkipValue; // SetOrdProp(Instance, PropInfo, aReader.ReadSet(PropType));
+      //aReader.SkipValue; // SetOrdProp(Instance, PropInfo, aReader.ReadSet(PropType));
+      SetOrdProp(Instance, PropInfo, TLAReader(aReader).ReadSet(PropType));
     tkClass:
       case aReader.NextValue of
         vaNil:
@@ -473,9 +514,11 @@ begin
         vaCollection:
           begin
             aReader.ReadValue;
-            aReader.ReadCollection(TCollection(GetOrdProp(Instance, PropInfo)));
+            //aReader.ReadCollection(TCollection(GetOrdProp(Instance, PropInfo)));
+            UpdateCollection(aReader, TCollection(GetOrdProp(Instance, PropInfo)));
           end
       else
+        //aReader.ReadIdent;
         aReader.SkipValue;  //SetObjectIdent(Instance, PropInfo, ReadIdent);
       end;
     tkMethod:
@@ -487,6 +530,7 @@ begin
       else
       begin
         aReader.SkipValue;
+        //aReader.ReadIdent;
 //        LMethod := aFindMethodInstance(Root, ReadIdent);
 //        if LMethod.Code <> nil then SetMethodProp(Instance, PropInfo, LMethod);
       end;
@@ -578,16 +622,25 @@ begin
         Inc(I);
       end;
       PropInfo := GetPropInfo(Instance.ClassInfo, PropName);
+//      PropInfo := GetPropInfo(Instance, PropName);
       if PropInfo <> nil then
         ReadPropValue(aReader, Instance, PropInfo)
       else
       begin
 //        { Cannot reliably recover from an error in a defined property }
 //        FCanHandleExcepts := False;
-//        Instance.DefineProperties(Self);
+        TLAPersistent(Instance).DefineProperties(aReader);
+
 //        FCanHandleExcepts := True;
         if PropName <> '' then
-          PropertyError(PropName);
+        begin
+          // попробуем еще раз
+          PropInfo := GetPropInfo(Instance.ClassInfo, PropName);
+          if PropInfo <> nil then
+            ReadPropValue(aReader, Instance, PropInfo)
+          else
+            PropertyError(PropName);
+        end;
       end;
     except
       raise;

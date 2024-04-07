@@ -9,7 +9,7 @@ uses
   FMX.Styles,
   //LA.System.Classes,
   LA.FMX.Prop.Utils,
-  LA.FMX.UI.Consts, LA.Style.Frame, System.ImageList, FMX.ImgList, FMX.SVGIconImageList;
+  LA.FMX.UI.Consts, LA.Style.Frame, System.ImageList, FMX.ImgList, FMX.SVGIconImageList, LA.FMX.Colors, FMX.ListBox;
 
 type
   TForm9 = class(TForm)
@@ -20,9 +20,8 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Rectangle1: TRectangle;
-    Panel3: TPanel;
-    Panel4: TPanel;
-    Panel5: TPanel;
+    PanelDark: TPanel;
+    PanelLight: TPanel;
     Panel6: TPanel;
     Text1: TText;
     TestFrame1: TTestFrame;
@@ -36,13 +35,17 @@ type
     Glyph1: TGlyph;
     Glyph2: TGlyph;
     Glyph3: TGlyph;
+    ComboBox1: TComboBox;
+    LAColorManager1: TLAColorManager;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Panel4Click(Sender: TObject);
-    procedure Panel5Click(Sender: TObject);
+    procedure PanelDarkClick(Sender: TObject);
+    procedure PanelLightClick(Sender: TObject);
     procedure Panel6Click(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
   protected
     FReloadResMode: Boolean;
+    function GetAppFilesPath: string;
   end;
 
 var
@@ -60,7 +63,7 @@ uses
 procedure TForm9.Button1Click(Sender: TObject);
 begin
 //  StyleBook := MainStyleBook;
-  InitLAColorsFromFile('LA_Test.json', True);
+  InitLAColorsFromFile('LA_Test.json', 'light');
 //  LAStyleBook.LoadFromFile('MainStyle.style');
 //  StyleBook.ResourceChanged(nil);
 //  StyleBook.LoadFromFile('LAStyle.style');
@@ -71,44 +74,82 @@ begin
 end;
 
 
+procedure TForm9.ComboBox1Change(Sender: TObject);
+begin
+  LAColorManager1.Scheme := ComboBox1.Text;
+  LAColorManager1.Apply;
+  TStyleManager.SetStyleFromFile(TPath.Combine(GetAppFilesPath, 'LAStyle.style'));
+//    TStyleManager.UpdateScenes;
+  SVGImages.RefreshAllIcons;
+
+
+//  InitLAColorsFromFile(TPath.Combine(GetAppFilesPath, 'LA_Test.json'), ComboBox1.Text);
+////  TStyleManager.SetStyleFromFile(TPath.Combine(GetAppFilesPath, 'LAStyle.style'));
+////  MainStyleBook.
+//
+//  TPropertyReloader.Reload;
+//
+//  TStyleManager.UpdateScenes;
+//  SVGImages.RefreshAllIcons;
+end;
+
 procedure TForm9.FormCreate(Sender: TObject);
 begin
   StyleBook := nil;
 //  TStyleManager.SetStyleFromFile('MainStyle.style');
 end;
 
-procedure TForm9.Panel4Click(Sender: TObject);
+function TForm9.GetAppFilesPath: string;
+begin
+  {$IFDEF WINDOWS}
+  Result := '';
+  {$ENDIF}
+  {$IFDEF ANDROID}
+  Result := TPath.GetHomePath;
+  {$ENDIF}
+  {$IFDEF IOS}
+  Result := TPath.GetDocumentsPath;
+  {$ENDIF}
+end;
+
+procedure TForm9.PanelDarkClick(Sender: TObject);
 begin
 //  InitLAColorsFromFile('LA_Test.json', True);
 //  TStyleManager.SetStyleFromFile('LAStyle.style');
-  {$IFDEF WINDOWS}
-  InitLAColorsFromFile('LA_Test.json', True);
-  TStyleManager.SetStyleFromFile('LAStyle.style');
-  {$ENDIF}
-  {$IFDEF ANDROID}
-  InitLAColorsFromFile(TPath.Combine(TPath.GetHomePath, 'LA_Test.json'), True);
-  TStyleManager.SetStyleFromFile(TPath.Combine(TPath.GetHomePath, 'LAStyle.style'));
-  {$ENDIF}
-
+//  {$IFDEF WINDOWS}
+//  InitLAColorsFromFile('LA_Test.json', True);
+//  TStyleManager.SetStyleFromFile('LAStyle.style');
+//  {$ENDIF}
+//  {$IFDEF ANDROID}
+//  InitLAColorsFromFile(TPath.Combine(TPath.GetHomePath, 'LA_Test.json'), True);
+//  TStyleManager.SetStyleFromFile(TPath.Combine(TPath.GetHomePath, 'LAStyle.style'));
+//  {$ENDIF}
+  InitLAColorsFromFile(TPath.Combine(GetAppFilesPath, 'LA_Test.json'), 'dark');
   TPropertyReloader.Reload;
+  TStyleManager.SetStyleFromFile(TPath.Combine(GetAppFilesPath, 'LAStyle.style'));
+//  TStyleManager.UpdateScenes;
+
  // var s := TStopwatch.StartNew;
   SVGImages.RefreshAllIcons;
 //  ShowMessage(s.ElapsedMilliseconds.ToString);
 end;
 
-procedure TForm9.Panel5Click(Sender: TObject);
+procedure TForm9.PanelLightClick(Sender: TObject);
 begin
-  {$IFDEF WINDOWS}
-  InitLAColorsFromFile('LA_Test.json', False);
-  TStyleManager.SetStyleFromFile('LAStyle.style');
-  {$ENDIF}
-  {$IFDEF ANDROID}
-  InitLAColorsFromFile(TPath.Combine(TPath.GetHomePath, 'LA_Test.json'), False);
-  TStyleManager.SetStyleFromFile(TPath.Combine(TPath.GetHomePath, 'LAStyle.style'));
-  {$ENDIF}
-
+//  {$IFDEF WINDOWS}
+//  InitLAColorsFromFile('LA_Test.json', False);
+//  TStyleManager.SetStyleFromFile('LAStyle.style');
+//  {$ENDIF}
+//  {$IFDEF ANDROID}
+//  InitLAColorsFromFile(TPath.Combine(TPath.GetHomePath, 'LA_Test.json'), False);
+//  TStyleManager.SetStyleFromFile(TPath.Combine(TPath.GetHomePath, 'LAStyle.style'));
+//  {$ENDIF}
+  InitLAColorsFromFile(TPath.Combine(GetAppFilesPath, 'LA_Test.json'), 'light');
   TPropertyReloader.Reload;
-//  SVGImages.RefreshAllIcons;
+  TStyleManager.SetStyleFromFile(TPath.Combine(GetAppFilesPath, 'LAStyle.style'));
+//  TStyleManager.UpdateScenes;
+
+  SVGImages.RefreshAllIcons;
 end;
 
 procedure TForm9.Panel6Click(Sender: TObject);

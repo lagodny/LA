@@ -1,0 +1,11 @@
+object BaseForm: TBaseForm
+  Left = 0
+  Top = 0
+  ClientHeight = 720
+  ClientWidth = 360
+  StyleLookup = '_background'
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop, iPhone, iPad]
+  DesignerMasterStyle = 0
+end

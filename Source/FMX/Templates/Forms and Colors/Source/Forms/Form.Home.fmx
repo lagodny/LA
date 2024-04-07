@@ -1,0 +1,371 @@
+inherited HomeForm: THomeForm
+  DesignerMasterStyle = 0
+  inherited loClient: TLayout
+    TabOrder = 0
+    inherited loTop: TLayout
+      inherited pNavigator: TPanel
+        inherited laTitle: TLabel
+          Text = 'Home'
+        end
+      end
+    end
+    inherited loContent: TLayout
+      inherited pContent: TPanel
+        object Label1: TLabel
+          Position.X = 24.000000000000000000
+          Position.Y = 101.000000000000000000
+          Size.Width = 65.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_labelCaption'
+          TextSettings.Trimming = None
+          Text = 'ARCIL'
+          TabOrder = 18
+        end
+        object Label2: TLabel
+          StyledSettings = [Family, Size, Style]
+          Position.X = 24.000000000000000000
+          Position.Y = 77.000000000000000000
+          Size.Width = 65.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_labelCaption'
+          TextSettings.FontColor = claonPrimaryFixedVariant
+          TextSettings.Trimming = None
+          Text = 'Ampak'
+          TabOrder = 19
+        end
+        object Label3: TLabel
+          Position.X = 24.000000000000000000
+          Position.Y = 125.000000000000000000
+          Size.Width = 65.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_labelCaption'
+          TextSettings.Trimming = None
+          Text = 'A3Flex'
+          TabOrder = 7
+        end
+        object Label4: TLabel
+          Position.X = 24.000000000000000000
+          Position.Y = 149.000000000000000000
+          Size.Width = 65.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_labelCaption'
+          TextSettings.Trimming = None
+          Text = 'TBA19'
+          TabOrder = 15
+        end
+        object Label5: TLabel
+          Position.X = 24.000000000000000000
+          Position.Y = 173.000000000000000000
+          Size.Width = 65.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_labelCaption'
+          TextSettings.Trimming = None
+          Text = 'Index1'
+          TabOrder = 12
+        end
+        object Label6: TLabel
+          Position.X = 24.000000000000000000
+          Position.Y = 197.000000000000000000
+          Size.Width = 65.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_labelCaption'
+          TextSettings.Trimming = None
+          Text = 'Index2'
+          TabOrder = 11
+        end
+        object Label7: TLabel
+          Position.X = 24.000000000000000000
+          Position.Y = 221.000000000000000000
+          Size.Width = 65.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_labelCaption'
+          TextSettings.Trimming = None
+          Text = 'PXM6'
+          TabOrder = 10
+        end
+        object Label8: TLabel
+          Position.X = 24.000000000000000000
+          Position.Y = 245.000000000000000000
+          Size.Width = 65.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_labelCaption'
+          TextSettings.Trimming = None
+          Text = 'Obram'
+          TabOrder = 9
+        end
+        object LALabel1: TLALabel
+          Position.X = 24.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 104.000000000000000000
+          Size.Height = 41.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          Text = '06.12.2023 09:55:36'
+          TabOrder = 17
+          Link.ID = '1'
+          Link.Data = '1;45266.4136120602;06.12.2023 09:55:36;'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Value = 45266.413612060200000000
+          Link.Text = '06.12.2023 09:55:36'
+          Link.Timestamp = 45266.413637731480000000
+          Link.Name = #1042#1088#1077#1084#1103' '#1085#1072' '#1089#1077#1088#1074#1077#1088#1077
+          Link.DisplayFormat = 'datedd.mm.yyyy hh:mm:ss'
+        end
+        object LALabel10: TLALabel
+          Position.X = 112.000000000000000000
+          Position.Y = 240.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          TabOrder = 2
+          Link.ID = '10778'
+          Link.Data = '10778;0;;'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Timestamp = 45350.495095289350000000
+          Link.Name = 'CUTEState'
+          Link.Kind = skDiscret
+          Link.DisplayFormat = '%s'
+        end
+        object LALabel2: TLALabel
+          Position.X = 112.000000000000000000
+          Position.Y = 72.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          TabOrder = 13
+          Link.ID = '10666'
+          Link.Data = '10666;0;;'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Timestamp = 45350.495095289350000000
+          Link.Name = 'CUTEState'
+          Link.Kind = skDiscret
+          Link.DisplayFormat = '%s'
+        end
+        object LALabel3: TLALabel
+          Position.X = 112.000000000000000000
+          Position.Y = 96.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          TabOrder = 8
+          Link.ID = '10940'
+          Link.Data = '10940;3;'#1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086';'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Value = 3.000000000000000000
+          Link.Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          Link.Timestamp = 45266.408422986110000000
+          Link.Name = 'CUTEState'
+          Link.Kind = skDiscret
+          Link.DisplayFormat = '%s'
+        end
+        object LALabel4: TLALabel
+          Position.X = 112.000000000000000000
+          Position.Y = 120.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          TabOrder = 0
+          Link.ID = '11484'
+          Link.Data = '11484;3;'#1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086';'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Value = 3.000000000000000000
+          Link.Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          Link.Timestamp = 45266.408422986110000000
+          Link.Name = 'CUTEState'
+          Link.Kind = skDiscret
+          Link.DisplayFormat = '%s'
+        end
+        object LALabel5: TLALabel
+          Position.X = 112.000000000000000000
+          Position.Y = 144.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          TabOrder = 5
+          Link.ID = '11486'
+          Link.Data = '11486;3;'#1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086';'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Value = 3.000000000000000000
+          Link.Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          Link.Timestamp = 45265.643235868050000000
+          Link.Name = 'CUTEState'
+          Link.Kind = skDiscret
+          Link.DisplayFormat = '%s'
+        end
+        object LALabel6: TLALabel
+          Position.X = 112.000000000000000000
+          Position.Y = 168.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          TabOrder = 4
+          Link.ID = '11552'
+          Link.Data = '11552;3;'#1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086';'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Value = 3.000000000000000000
+          Link.Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          Link.Timestamp = 45265.643633761570000000
+          Link.Name = 'CUTEState'
+          Link.Kind = skDiscret
+          Link.DisplayFormat = '%s'
+        end
+        object LALabel7: TLALabel
+          Position.X = 136.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 89.000000000000000000
+          Size.Height = 41.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          Text = ' 75 844'
+          TabOrder = 14
+          Link.ID = '4'
+          Link.Data = '4;75844; 75 844;'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Value = 75844.000000000000000000
+          Link.Text = ' 75 844'
+          Link.Timestamp = 45266.413637731480000000
+          Link.Name = #1042#1088#1077#1084#1103' '#1085#1072' '#1089#1077#1088#1074#1077#1088#1077
+          Link.DisplayFormat = 'datedd.mm.yyyy hh:mm:ss'
+        end
+        object LALabel8: TLALabel
+          Position.X = 112.000000000000000000
+          Position.Y = 192.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          TabOrder = 3
+          Link.ID = '11553'
+          Link.Data = '11553;3;'#1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086';'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Value = 3.000000000000000000
+          Link.Text = #1055#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1086
+          Link.Timestamp = 45265.751958217600000000
+          Link.Name = 'CUTEState'
+          Link.Kind = skDiscret
+          Link.DisplayFormat = '%s'
+        end
+        object LALabel9: TLALabel
+          Position.X = 112.000000000000000000
+          Position.Y = 216.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_LALabelstyle'
+          TextSettings.HorzAlign = Center
+          TextSettings.Trimming = None
+          Text = #1054#1089#1090#1072#1085#1086#1074
+          TabOrder = 1
+          Link.ID = '11554'
+          Link.Data = '11554;8;'#1054#1089#1090#1072#1085#1086#1074';'
+          Link.NotifyConstantly = False
+          Link.DataSource = DataController.Updater
+          Link.Value = 8.000000000000000000
+          Link.Text = #1054#1089#1090#1072#1085#1086#1074
+          Link.Timestamp = 45265.783146041660000000
+          Link.Name = 'CUTEState'
+          Link.Kind = skDiscret
+          Link.DisplayFormat = '%s'
+        end
+      end
+    end
+  end
+  inherited acMore: TActionList
+    inherited aBack: TAction
+      ImageIndex = 61
+    end
+  end
+  object lng: TDKLanguageController
+    IgnoreList.Strings = (
+      '*.StyleLookup'
+      '*.StyleName'
+      'Platform')
+    SectionName = 'HomeForm'
+    Left = 88
+    Top = 16
+    LangData = {
+      0800486F6D65466F726D00011D00000008006C6F436C69656E74000005006C6F
+      546F700000080073624472617765720101000000030000000400546578740006
+      0073624D6F72650101000000050000000400546578740007006C615469746C65
+      01010000000600000004005465787400060073624261636B000009006C6F436F
+      6E74656E740000060061634D6F726500000500614261636B0101000000080000
+      000400546578740008004C414C6162656C3101020000000A00000012004C696E
+      6B2E446973706C6179466F726D61740900000009004C696E6B2E4E616D650006
+      004C6162656C3201010000000B0000000400546578740008004C414C6162656C
+      3201020000000D00000012004C696E6B2E446973706C6179466F726D61740C00
+      000009004C696E6B2E4E616D650006004C6162656C3101010000000E00000004
+      00546578740008004C414C6162656C3301050000001000000009004C696E6B2E
+      446174611300000012004C696E6B2E446973706C6179466F726D617412000000
+      09004C696E6B2E4E616D651100000009004C696E6B2E546578740F0000000400
+      546578740006004C6162656C340101000000140000000400546578740008004C
+      414C6162656C3501050000001600000009004C696E6B2E446174611900000012
+      004C696E6B2E446973706C6179466F726D61741800000009004C696E6B2E4E61
+      6D651700000009004C696E6B2E54657874150000000400546578740006004C61
+      62656C3501010000001A0000000400546578740008004C414C6162656C360105
+      0000001C00000009004C696E6B2E446174611F00000012004C696E6B2E446973
+      706C6179466F726D61741E00000009004C696E6B2E4E616D651D00000009004C
+      696E6B2E546578741B0000000400546578740006004C6162656C330101000000
+      200000000400546578740008004C414C6162656C340105000000220000000900
+      4C696E6B2E446174612500000012004C696E6B2E446973706C6179466F726D61
+      742400000009004C696E6B2E4E616D652300000009004C696E6B2E5465787421
+      0000000400546578740008004C414C6162656C3701020000002700000012004C
+      696E6B2E446973706C6179466F726D61742600000009004C696E6B2E4E616D65
+      0006004C6162656C360101000000280000000400546578740008004C414C6162
+      656C3801050000002A00000009004C696E6B2E446174612D00000012004C696E
+      6B2E446973706C6179466F726D61742C00000009004C696E6B2E4E616D652B00
+      000009004C696E6B2E54657874290000000400546578740006004C6162656C37
+      01010000002E0000000400546578740008004C414C6162656C39010500000030
+      00000009004C696E6B2E446174613300000012004C696E6B2E446973706C6179
+      466F726D61743200000009004C696E6B2E4E616D653100000009004C696E6B2E
+      546578742F0000000400546578740006004C6162656C38010100000034000000
+      0400546578740009004C414C6162656C313001020000003600000012004C696E
+      6B2E446973706C6179466F726D61743500000009004C696E6B2E4E616D65000A
+      00704E6176696761746F720000080070436F6E74656E740000}
+  end
+end

@@ -7,11 +7,12 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.ActnList, FMX.Edit, FMX.SearchBox,
   FMX.MultiView, FMX.Platform,
   FMX.ListBox, FMX.Layouts, FMX.Objects, FMX.StdCtrls, FMX.Controls.Presentation,
-  SubjectStand, FrameStand,
+  SubjectStand, FrameStand, FormStand,
   Grijjy.ErrorReporting,
   NX.Horizon,
   DKLangStorage, DKLang,
-  App.Consts, App.Events, FormStand;
+  LA.FMX.UI.Consts,
+  App.Consts, App.Events;
 
 type
   TMainForm = class(TForm)

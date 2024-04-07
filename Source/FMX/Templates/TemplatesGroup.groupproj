@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{3ECAFD25-F12D-4349-92DF-11941C6C023E}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Forms and Colors\LAProjectTemplate_Forms_Colors.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\..\Style\LAStyle\LAStyle.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="LAProjectTemplate_Forms_Colors">
+        <MSBuild Projects="Forms and Colors\LAProjectTemplate_Forms_Colors.dproj"/>
+    </Target>
+    <Target Name="LAProjectTemplate_Forms_Colors:Clean">
+        <MSBuild Projects="Forms and Colors\LAProjectTemplate_Forms_Colors.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LAProjectTemplate_Forms_Colors:Make">
+        <MSBuild Projects="Forms and Colors\LAProjectTemplate_Forms_Colors.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="LAStyle">
+        <MSBuild Projects="..\..\..\Style\LAStyle\LAStyle.dproj"/>
+    </Target>
+    <Target Name="LAStyle:Clean">
+        <MSBuild Projects="..\..\..\Style\LAStyle\LAStyle.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LAStyle:Make">
+        <MSBuild Projects="..\..\..\Style\LAStyle\LAStyle.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="LAProjectTemplate_Forms_Colors;LAStyle"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="LAProjectTemplate_Forms_Colors:Clean;LAStyle:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="LAProjectTemplate_Forms_Colors:Make;LAStyle:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

@@ -8,6 +8,7 @@ implementation
 
 uses
   System.Classes,
+  LA.FMX.Colors,
   LA.FMX.Objects,
   LA.FMX.StdCtrls,
   LA.FMX.Chart, LA.FMX.Chart.LineSeries,
@@ -17,6 +18,7 @@ uses
 procedure Register;
 begin
   RegisterComponents('LA Controls', [
+    TLAColorManager,
     TLAText,
     TLAGlyph,
     TLALabel,

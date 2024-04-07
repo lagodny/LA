@@ -62,6 +62,15 @@ object Form10: TForm10
     Size.Height = 34.000000000000000000
     Size.PlatformDefault = False
     Stroke.Kind = None
+    OnClick = Rectangle2Click
+    object lClose: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 9.000000000000000000
+      StyleLookup = 'LabelOnPrimary'
+      TextSettings.Trimming = None
+      Text = 'Close'
+      TabOrder = 0
+    end
   end
   object Rectangle3: TRectangle
     Fill.Color = claprimaryContainer

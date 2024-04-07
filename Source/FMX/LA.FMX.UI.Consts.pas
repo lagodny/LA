@@ -13,8 +13,8 @@ function LAAlphaColorToIdent(Color: Integer; var Ident: string): Boolean;
 function LAIdentToAlphaColor(const Ident: string; var Color: Integer): Boolean;
 procedure LARegisterAlphaColorIntegerConsts;
 
-procedure InitLAColorsFromJSON(const aJSON: string; aDark: Boolean = false);
-procedure InitLAColorsFromFile(const aFileName: string; aDark: Boolean = false);
+procedure InitLAColorsFromJSON(const aJSON: string; aScheme: string);
+procedure InitLAColorsFromFile(const aFileName: string; aScheme: string);
 
 
 implementation
@@ -22,6 +22,7 @@ implementation
 uses
   System.UIConsts,
   System.SysUtils, System.IOUtils,
+  System.Variants,
   SynCrossPlatformJSON;
 
 var
@@ -80,22 +81,28 @@ var
     (Value: Integer($FFD6BEE5); Name: 'clatertiaryFixedDim')
   );
 
-procedure InitLAColorsFromJSON(const aJSON: string; aDark: Boolean = false);
+procedure InitLAColorsFromJSON(const aJSON: string; aScheme: string);
 var
-  v, schemes, theme: Variant;
+  v, theme: Variant;
   aName, aValueStr: string;
-  vd: TJSONVariantData;
+  schemes, vd: TJSONVariantData;
   function JSONColorToInt(const aStr: string): Integer;
   begin
     Result := StrToInt(StringReplace(aStr, '#', '$FF', []));
   end;
 begin
   v := JSONVariant(aJSON);
-  schemes := v.schemes;
-  if aDark then
-    theme := schemes.dark
-  else
-    theme := schemes.light;
+  if VarIsEmpty(v) then
+    Exit;
+
+  if VarIsNull(v.schemes) then
+    Exit;
+
+  schemes.Init(v.schemes);
+
+  theme := schemes.Value[aScheme];
+  if VarIsEmpty(theme) then
+    Exit;
 
   vd.Init(theme);
 
@@ -107,12 +114,12 @@ begin
   end;
 end;
 
-procedure InitLAColorsFromFile(const aFileName: string; aDark: Boolean = false);
+procedure InitLAColorsFromFile(const aFileName: string; aScheme: string);
 var
   aData: string;
 begin
   aData := TFile.ReadAllText(aFileName, TEncoding.UTF8);
-  InitLAColorsFromJSON(aData, aDark);
+  InitLAColorsFromJSON(aData, aScheme);
 end;
 
 

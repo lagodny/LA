@@ -15,7 +15,9 @@ type
     Label1: TLabel;
     Rectangle2: TRectangle;
     Rectangle3: TRectangle;
+    lClose: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Rectangle2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -34,6 +36,11 @@ uses LA.Style.Main;
 procedure TForm10.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := TCloseAction.caFree;
+end;
+
+procedure TForm10.Rectangle2Click(Sender: TObject);
+begin
+  Close;
 end;
 
 end.

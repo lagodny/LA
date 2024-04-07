@@ -1,0 +1,141 @@
+inherited SettingsForm: TSettingsForm
+  DesignerMasterStyle = 3
+  inherited loClient: TLayout
+    inherited loTop: TLayout
+      inherited pNavigator: TPanel
+        inherited laTitle: TLabel
+          Size.Width = 282.000000000000000000
+          Text = 'Settings'
+        end
+        inherited sbBack: TSpeedButton
+          Position.X = 8.000000000000000000
+          Visible = True
+        end
+        inherited sbDrawer: TSpeedButton
+          Visible = False
+        end
+        inherited sbMore: TSpeedButton
+          Visible = False
+        end
+      end
+    end
+    inherited loContent: TLayout
+      object lbSettings: TListBox
+        Align = Client
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 16.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 16.000000000000000000
+        Size.Width = 344.000000000000000000
+        Size.Height = 638.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        DisableFocusEffect = True
+        ItemHeight = 66.000000000000000000
+        DefaultItemStyles.ItemStyle = ''
+        DefaultItemStyles.GroupHeaderStyle = ''
+        DefaultItemStyles.GroupFooterStyle = ''
+        Viewport.Width = 344.000000000000000000
+        Viewport.Height = 638.000000000000000000
+        object lbiLanguage: TListBoxItem
+          Selectable = False
+          ItemData.Detail = 'Interface language'
+          Size.Width = 344.000000000000000000
+          Size.Height = 66.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_listboxitembottomdetail'
+          TabOrder = 6
+          Text = 'Language'
+          object cbLanguage: TComboBox
+            Align = Right
+            Margins.Right = 10.000000000000000000
+            Position.X = 206.000000000000000000
+            Position.Y = 17.000000000000000000
+            Size.Width = 128.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 37
+            OnChange = cbLanguageChange
+          end
+        end
+        object lbiConnection: TListBoxItem
+          Selectable = False
+          ItemData.Detail = 'Server address'
+          Position.Y = 66.000000000000000000
+          Size.Width = 344.000000000000000000
+          Size.Height = 66.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_listboxitembottomdetail'
+          TabOrder = 4
+          Text = 'Connection'
+          object eConnection: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Right
+            TabOrder = 50
+            TextSettings.FontColor = claonError
+            TextSettings.HorzAlign = Trailing
+            Position.X = 134.000000000000000000
+            Position.Y = 17.000000000000000000
+            Margins.Right = 10.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+        end
+        object lbScheme: TListBoxItem
+          Selectable = False
+          ItemData.Detail = 'Color scheme'
+          Position.Y = 132.000000000000000000
+          Size.Width = 344.000000000000000000
+          Size.Height = 66.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = '_listboxitembottomdetail'
+          TabOrder = 5
+          Text = 'Scheme'
+          object cbScheme: TComboBox
+            Align = Right
+            Items.Strings = (
+              'light'
+              'dark')
+            Margins.Right = 10.000000000000000000
+            Position.X = 206.000000000000000000
+            Position.Y = 17.000000000000000000
+            Size.Width = 128.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 37
+            OnChange = cbSchemeChange
+          end
+        end
+      end
+    end
+  end
+  inherited acMore: TActionList
+    inherited aBack: TAction
+      ImageIndex = 61
+    end
+  end
+  object lng: TDKLanguageController
+    IgnoreList.Strings = (
+      '*.StyleLookup'
+      '*.StyleName'
+      'Platform')
+    SectionName = 'SettingsFrame'
+    Left = 88
+    Top = 16
+    LangData = {
+      0C0053657474696E6773466F726D00011100000008006C6F436C69656E740000
+      05006C6F546F7000000800736244726177657201010000000300000004005465
+      787400060073624D6F72650101000000050000000400546578740007006C6154
+      69746C6501010000000600000004005465787400060073624261636B00000900
+      6C6F436F6E74656E740000060061634D6F726500000500614261636B01010000
+      0008000000040054657874000A006C6253657474696E677300000B006C62694C
+      616E677561676501020000000D0000000F004974656D446174612E4465746169
+      6C0B000000040054657874000A0063624C616E677561676500000D006C626943
+      6F6E6E656374696F6E01020000000E0000000F004974656D446174612E446574
+      61696C0F000000040054657874000B0065436F6E6E656374696F6E00000A0070
+      4E6176696761746F72000008006C62536368656D650102000000100000000F00
+      4974656D446174612E44657461696C1100000004005465787400080063625363
+      68656D6501010000001200000005004974656D7300}
+  end
+end

@@ -63,6 +63,9 @@
         <Projects Include="..\Style\LAStyle\LAStyle.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Source\FMX\Templates\Forms and Colors\LAProjectTemplate_Forms_Colors.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -251,14 +254,23 @@
     <Target Name="LAStyle:Make">
         <MSBuild Projects="..\Style\LAStyle\LAStyle.dproj" Targets="Make"/>
     </Target>
+    <Target Name="LAProjectTemplate_Forms_Colors">
+        <MSBuild Projects="..\Source\FMX\Templates\Forms and Colors\LAProjectTemplate_Forms_Colors.dproj"/>
+    </Target>
+    <Target Name="LAProjectTemplate_Forms_Colors:Clean">
+        <MSBuild Projects="..\Source\FMX\Templates\Forms and Colors\LAProjectTemplate_Forms_Colors.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LAProjectTemplate_Forms_Colors:Make">
+        <MSBuild Projects="..\Source\FMX\Templates\Forms and Colors\LAProjectTemplate_Forms_Colors.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;dklang;dcldklang;LAData;LADesigner;LAFMX;LAFMXEditors;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;TestConnectionManager;TestChart;SCS;TestUpdateConstantly;MDTheme;LAStyle"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;dklang;dcldklang;LAData;LADesigner;LAFMX;LAFMXEditors;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;TestConnectionManager;TestChart;SCS;TestUpdateConstantly;MDTheme;LAStyle;LAProjectTemplate_Forms_Colors"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;dklang:Clean;dcldklang:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LAFMXEditors:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;TestConnectionManager:Clean;TestChart:Clean;SCS:Clean;TestUpdateConstantly:Clean;MDTheme:Clean;LAStyle:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;dklang:Clean;dcldklang:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LAFMXEditors:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;TestConnectionManager:Clean;TestChart:Clean;SCS:Clean;TestUpdateConstantly:Clean;MDTheme:Clean;LAStyle:Clean;LAProjectTemplate_Forms_Colors:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;dklang:Make;dcldklang:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LAFMXEditors:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;TestConnectionManager:Make;TestChart:Make;SCS:Make;TestUpdateConstantly:Make;MDTheme:Make;LAStyle:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;dklang:Make;dcldklang:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LAFMXEditors:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;TestConnectionManager:Make;TestChart:Make;SCS:Make;TestUpdateConstantly:Make;MDTheme:Make;LAStyle:Make;LAProjectTemplate_Forms_Colors:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
