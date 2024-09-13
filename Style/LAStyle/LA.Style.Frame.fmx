@@ -3,7 +3,6 @@ object TestFrame: TTestFrame
   Size.Height = 241.000000000000000000
   Size.PlatformDefault = False
   object Rectangle1: TRectangle
-    Fill.Color = claerrorContainer
     Position.X = 8.000000000000000000
     Position.Y = 8.000000000000000000
     Size.Width = 129.000000000000000000
@@ -18,7 +17,6 @@ object TestFrame: TTestFrame
       Size.PlatformDefault = False
       Text = 'Frame Error'
       TextSettings.Font.Size = 16.000000000000000000
-      TextSettings.FontColor = claerror
     end
   end
   inline Frame21: TFrame2
