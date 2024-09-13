@@ -32,6 +32,7 @@ type
     FSignUp: IDCSignUp;
     FSession: IDCSession;
     FMonitoring: IMonitoring;
+    FPayment: IPayment;
 
     FEncrypt: Boolean;
     FCompressionLevel: Integer;
@@ -48,6 +49,7 @@ type
     function GetSignUp: IDCSignUp;
     function GetSession: IDCSession;
     function GetMonitoring: IMonitoring;
+    function GetPayment: IPayment;
   protected
     function GetEncrypt: Boolean; override;
     function GetCompressionLevel: Integer; override;
@@ -97,6 +99,7 @@ type
     property SignUp: IDCSignUp read GetSignUp;
     property Session: IDCSession read GetSession;
     property Monitoring: IMonitoring read GetMonitoring;
+    property Payment: IPayment read GetPayment;
   published
 //    property Https: Boolean read FHttps write SetHttps;
     property ProxyName: string read FProxyName write SetProxyName;
@@ -263,6 +266,7 @@ end;
 procedure TLAHttpConnector.DoServicesDisconnect;
 begin
   inherited;
+  FPayment := nil;
   FSignUp := nil;
   FMonitoring := nil;
   FSession := nil;
@@ -305,6 +309,13 @@ begin
   if not Assigned(FMonitoring) then
     FMonitoring := TServiceMonitoring.Create(FClient);
   Result := FMonitoring;
+end;
+
+function TLAHttpConnector.GetPayment: IPayment;
+begin
+  if not Assigned(FPayment) then
+    FPayment := TServicePayment.Create(FClient);
+  Result := FPayment;
 end;
 
 function TLAHttpConnector.GetReadTimeOut: Integer;

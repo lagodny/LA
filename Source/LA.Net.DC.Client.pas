@@ -240,6 +240,33 @@ type
     procedure ConfirmResetPassword(const Key: String);
   end;
 
+  /// service implemented by TServicePayment
+  // - you can access this service as such:
+  // !var aPayment: IPayment;
+  // !begin
+  // !   aPayment := TServicePayment.Create(aClient);
+  // !   // now you can use aPayment methods
+  // !...
+  IPayment = interface(IServiceAbstract)
+    ['{0C2340F8-89D1-4797-A3BC-5D2162812D14}']
+    function Help(): String;
+    function GetLiqPayUri(const Login: String; const Amount: Double): String;
+    function GetBalance(const Login: String): Double;
+    function GetMonthlyFee(const Login: String; const Moment: TDateTime): Double;
+  end;
+
+  /// implements IPayment from http://localhost:89/DC/Payment
+  // - this service will run in sicClientDriven mode
+  TServicePayment = class(TServiceClientAbstractClientDriven,IPayment)
+  public
+    constructor Create(aClient: TSQLRestClientURI); override;
+    function Help(): String;
+    function GetLiqPayUri(const Login: String; const Amount: Double): String;
+    function GetBalance(const Login: String): Double;
+    function GetMonthlyFee(const Login: String; const Moment: TDateTime): Double;
+  end;
+
+
 
 
 
@@ -1084,5 +1111,50 @@ var
 begin
   fClient.CallRemoteService(self, 'SetSessionInfo', 0, [Client], res); // raise EServiceException on error
 end;
+
+{ TServicePayment }
+
+constructor TServicePayment.Create(aClient: TSQLRestClientURI);
+begin
+  fServiceName := 'Payment';
+  fServiceURI := 'Payment';
+  fInstanceImplementation := sicClientDriven;
+  fContractExpected := 'Payment 1.0';
+  inherited Create(aClient);
+end;
+
+function TServicePayment.Help(): String;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'Help',1, // raise EServiceException on error
+    [],res);
+  Result := res[0];
+end;
+
+function TServicePayment.GetLiqPayUri(const Login: String; const Amount: Double): String;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'GetLiqPayUri',1, // raise EServiceException on error
+    [Login,Amount],res);
+  Result := res[0];
+end;
+
+function TServicePayment.GetMonthlyFee(const Login: String;
+  const Moment: TDateTime): Double;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'GetMonthlyFee',1, // raise EServiceException on error
+    [Login,DateTimeToIso8601(Moment)],res);
+  Result := res[0];
+end;
+
+function TServicePayment.GetBalance(const Login: String): Double;
+var res: TVariantDynArray;
+begin
+  fClient.CallRemoteService(self,'GetBalance',1, // raise EServiceException on error
+    [Login],res);
+  Result := res[0];
+end;
+
 
 end.
