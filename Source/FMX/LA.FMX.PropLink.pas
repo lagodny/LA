@@ -3,10 +3,11 @@
 interface
 
 uses
-  System.Classes, System.Rtti, System.SysUtils, System.UITypes,
+  System.Classes, System.Rtti, System.SysUtils,
+  System.UITypes, System.Types, System.TypInfo,
   System.Generics.Collections,
   FMX.Types, FMX.Utils,
-  FMX.Effects,
+  FMX.Effects, FMX.Graphics, FMX.Filter,
   //FMX.Ani,
   LA.Keys,
   LA.Data.Link.Sensor, LA.Data.Link.Sensor.Intf;
@@ -17,6 +18,7 @@ type
   /// наследование от TEffect позволяет
   /// - корректно привязывать компонент из ПАЛИТРЫ к нужному компоненту в ДИЗАЙНЕРЕ
   /// - а также копировать / вставлять компонент в СТРУКТУРЕ
+  [ComponentPlatforms(pidAllPlatforms)]
   TLAPropLink = class(TEffect, ILASensorLink)
 //  TLAPropLink = class(TFmxObject, ILASensorLink)
 //  TLAPropLink = class(TAnimation, ILASensorLink)
@@ -40,6 +42,17 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
+    // *** перекриваємо ці методи, щоб запобігти небажаним ефектам ***
+    /// <summary>Initiate a drawing layer with the effect applied, creating a reusable cache.</summary>
+    /// <returns>True when cache modification is required and False when the current cache could be drawn to the target without updating.</returns>
+    function BeginLayer(const ATarget: TCanvas; const ADestRect: TRectF; const AOpacity: Single;
+      const AHighSpeed: Boolean; var ACacheLayer: IFilterCacheLayer; out ACacheCanvas: TCanvas): Boolean; override;
+    /// <summary>Concludes the layer update rendering the result onto the target.</summary>
+    procedure EndLayer; override;
+
+    function GetRect(const ARect: TRectF): TRectF; override;
+
+
     procedure DoDataLinkChanged(Sender: TObject);
   published
     property Link: TLASensorLink read FLink  write SetLink implements ILASensorLink;
@@ -49,6 +62,7 @@ type
 
   /// общий предок для вычисления результирующих значений по таблице ключей
   ///  наследники должны вернуть коректный класс в функции GetKeyClass
+  [ComponentPlatforms(pidAllPlatforms)]
   TLACustomKeyPropLink = class(TLAPropLink)
   private
     FKeys: TLAKeys;
@@ -64,14 +78,16 @@ type
   end;
 
   /// для значений проставляются цвета
+  [ComponentPlatforms(pidAllPlatforms)]
   TLAColorKeyPropLink = class(TLACustomKeyPropLink)
   protected
     function GetKeyClass: TLAKeyClass; override;
     procedure ProcessUpdate; override;
   end;
 
-  /// для значений проставляются значения
+  /// для значений проставляются значения типа tkFloat або tkInteger
   ///  если Свойство компонента имеет тип Integer, то значение округляется
+  [ComponentPlatforms(pidAllPlatforms)]
   TLAFloatKeyPropLink = class(TLACustomKeyPropLink)
   protected
     function GetKeyClass: TLAKeyClass; override;
@@ -98,6 +114,14 @@ begin
     inherited;
 end;
 
+function TLAPropLink.BeginLayer(const ATarget: TCanvas; const ADestRect: TRectF;
+  const AOpacity: Single; const AHighSpeed: Boolean;
+  var ACacheLayer: IFilterCacheLayer; out ACacheCanvas: TCanvas): Boolean;
+begin
+  ACacheLayer := nil;
+  Result := False;
+end;
+
 constructor TLAPropLink.Create(AOwner: TComponent);
 begin
   inherited;
@@ -117,6 +141,11 @@ begin
     Exit;
 
   ProcessUpdate;
+end;
+
+procedure TLAPropLink.EndLayer;
+begin
+
 end;
 
 function TLAPropLink.FindProperty: Boolean;
@@ -196,6 +225,11 @@ begin
     else
       Result := True;
   end;
+end;
+
+function TLAPropLink.GetRect(const ARect: TRectF): TRectF;
+begin
+  Result := RectF(0, 0, 0, 0);
 end;
 
 procedure TLAPropLink.Notification(AComponent: TComponent; Operation: TOperation);
@@ -346,6 +380,7 @@ var
   P: TRttiProperty;
   Key1, Key2: TLAKey;
   r: Double;
+  aContext: TRttiContext;
 begin
   if FNeedFindProperty then
     FindProperty;
@@ -354,22 +389,28 @@ begin
   begin
     if FKeys.FindKeys(Link.Value, Key1, Key2) then
     begin
-      T := SharedContext.GetType(FInstance.ClassInfo);
-      if T <> nil then
-      begin
-        P := T.GetProperty(FPath);
-        if (P <> nil) then
+      aContext := TRttiContext.Create;
+      try
+        T := aContext.GetType(FInstance.ClassInfo);
+  //      T := SharedContext.GetType(FInstance.ClassInfo);
+        if T <> nil then
         begin
-          if (Key2.Key - Key1.Key) = 0 then
-            r := TLAFloatKey(Key1).Value
-          else
-            r := InterpolateSingle(TLAFloatKey(Key1).Value, TLAFloatKey(Key2).Value, (Link.Value - Key1.Key) / (Key2.Key - Key1.Key));
+          P := T.GetProperty(FPath);
+          if (P <> nil) then
+          begin
+            if (Key2.Key - Key1.Key) = 0 then
+              r := TLAFloatKey(Key1).Value
+            else
+              r := InterpolateSingle(TLAFloatKey(Key1).Value, TLAFloatKey(Key2).Value, (Link.Value - Key1.Key) / (Key2.Key - Key1.Key));
 
-          if (P.PropertyType.TypeKind = tkFloat) then
-            P.SetValue(FInstance, r)
-          else if (P.PropertyType.TypeKind = tkInteger) then
-            P.SetValue(FInstance, Round(r))
+            if (P.PropertyType.TypeKind = tkFloat) then
+              P.SetValue(FInstance, r)
+            else if (P.PropertyType.TypeKind = tkInteger) then
+              P.SetValue(FInstance, Round(r))
+          end;
         end;
+      finally
+        aContext.Free;
       end;
     end;
   end;

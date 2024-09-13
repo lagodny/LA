@@ -56,6 +56,7 @@ type
     FormStand1: TFormStand;
     LAColorManager1: TLAColorManager;
     Rectangle2: TRectangle;
+    StyleBook1: TStyleBook;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);

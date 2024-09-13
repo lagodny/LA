@@ -30,6 +30,8 @@ object DataController: TDataController
         Updater = Updater
       end>
     HistoryViewer = HisroryViewer
+    UserName = #1051#1072#1075#1086#1076#1085#1099#1081
+    Password = '314'
     Left = 432
     Top = 288
   end

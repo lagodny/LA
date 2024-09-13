@@ -8,6 +8,7 @@ uses
 
 type
   // компонент позволяет хранить информацию о цветах и переключать их в зависимости от указанной схемы
+  [ComponentPlatforms(pidAllPlatforms)]
   TLAColorManager = class(TComponent)
   private
     FData: TStrings;

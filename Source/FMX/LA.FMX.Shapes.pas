@@ -6,7 +6,7 @@ uses
   System.Classes, System.Types, System.UITypes,
   FMX.Types, FMX.Graphics, FMX.Objects, FMX.Utils,
   LA.Data.Types, LA.Keys,
-  La.Interval,
+  LA.Interval,
   LA.Data.Link.Sensor, LA.Data.Link.Sensor.Intf;
 
 type
@@ -14,6 +14,7 @@ type
 
   end;
 
+  [ComponentPlatforms(pidAllPlatforms)]
   TLAShapeSensorLinked = class(TLAShape, ILASensorLink)
   private
     FLink: TLASensorLink;
@@ -71,6 +72,7 @@ type
     property OnResize;
   end;
 
+  [ComponentPlatforms(pidAllPlatforms)]
   TLAColorKeyLine = class(TLAShapeSensorLinked)
   strict private
     const
