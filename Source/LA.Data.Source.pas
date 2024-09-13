@@ -324,7 +324,7 @@ end;
 
 procedure TLADataLink.Notify;
 begin
-  if NotifyConstantly or FIsNeedNotify or (SecondsBetween(Now, FLastNotifyTime) > 10) then
+  if NotifyConstantly or FIsNeedNotify then //or (SecondsBetween(Now, FLastNotifyTime) > 10) then
   begin
     if FIsNeedEncodeData then
       EncodeData;
