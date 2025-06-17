@@ -30,45 +30,6 @@
         <Projects Include="LAFMXEditors.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\Tests\LA.Test.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\_FMX\TestViewFMX\TestViewFMX.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\_FMX\TestLAStyle\TestLAStyle.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\TestHistoryViewer\TestHistoryViewer.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\TestConnectionManager\TestConnectionManager.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\TestChart\TestChart.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\TestUpdateConstantly\TestUpdateConstantly.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Source\FMX\Tool\MaterialDesignThemeApply\MDTheme.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Style\LAStyle\LAStyle.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Source\FMX\Templates\Forms and Colors\LAProjectTemplate_Forms_Colors.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\Test\_FMX\TestPropLink\TestPropLink.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -158,131 +119,14 @@
     <Target Name="LAFMXEditors:Make">
         <MSBuild Projects="LAFMXEditors.dproj" Targets="Make"/>
     </Target>
-    <Target Name="LA_Test">
-        <MSBuild Projects="..\Tests\LA.Test.dproj"/>
-    </Target>
-    <Target Name="LA_Test:Clean">
-        <MSBuild Projects="..\Tests\LA.Test.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="LA_Test:Make">
-        <MSBuild Projects="..\Tests\LA.Test.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestViewFMX">
-        <MSBuild Projects="..\Test\_FMX\TestViewFMX\TestViewFMX.dproj"/>
-    </Target>
-    <Target Name="TestViewFMX:Clean">
-        <MSBuild Projects="..\Test\_FMX\TestViewFMX\TestViewFMX.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestViewFMX:Make">
-        <MSBuild Projects="..\Test\_FMX\TestViewFMX\TestViewFMX.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestLAStyle">
-        <MSBuild Projects="..\Test\_FMX\TestLAStyle\TestLAStyle.dproj"/>
-    </Target>
-    <Target Name="TestLAStyle:Clean">
-        <MSBuild Projects="..\Test\_FMX\TestLAStyle\TestLAStyle.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestLAStyle:Make">
-        <MSBuild Projects="..\Test\_FMX\TestLAStyle\TestLAStyle.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestHistoryViewer">
-        <MSBuild Projects="..\Test\TestHistoryViewer\TestHistoryViewer.dproj"/>
-    </Target>
-    <Target Name="TestHistoryViewer:Clean">
-        <MSBuild Projects="..\Test\TestHistoryViewer\TestHistoryViewer.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestHistoryViewer:Make">
-        <MSBuild Projects="..\Test\TestHistoryViewer\TestHistoryViewer.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestGetSensorsInfo">
-        <MSBuild Projects="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj"/>
-    </Target>
-    <Target Name="TestGetSensorsInfo:Clean">
-        <MSBuild Projects="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestGetSensorsInfo:Make">
-        <MSBuild Projects="..\Test\TestGetSensorsInfo\TestGetSensorsInfo.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestConnectionManager">
-        <MSBuild Projects="..\Test\TestConnectionManager\TestConnectionManager.dproj"/>
-    </Target>
-    <Target Name="TestConnectionManager:Clean">
-        <MSBuild Projects="..\Test\TestConnectionManager\TestConnectionManager.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestConnectionManager:Make">
-        <MSBuild Projects="..\Test\TestConnectionManager\TestConnectionManager.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestChart">
-        <MSBuild Projects="..\Test\TestChart\TestChart.dproj"/>
-    </Target>
-    <Target Name="TestChart:Clean">
-        <MSBuild Projects="..\Test\TestChart\TestChart.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestChart:Make">
-        <MSBuild Projects="..\Test\TestChart\TestChart.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="SCS">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj"/>
-    </Target>
-    <Target Name="SCS:Clean">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="SCS:Make">
-        <MSBuild Projects="..\..\..\Projects\Monitoring\SCS\scs-mobile\SCS.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestUpdateConstantly">
-        <MSBuild Projects="..\Test\TestUpdateConstantly\TestUpdateConstantly.dproj"/>
-    </Target>
-    <Target Name="TestUpdateConstantly:Clean">
-        <MSBuild Projects="..\Test\TestUpdateConstantly\TestUpdateConstantly.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestUpdateConstantly:Make">
-        <MSBuild Projects="..\Test\TestUpdateConstantly\TestUpdateConstantly.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="MDTheme">
-        <MSBuild Projects="..\Source\FMX\Tool\MaterialDesignThemeApply\MDTheme.dproj"/>
-    </Target>
-    <Target Name="MDTheme:Clean">
-        <MSBuild Projects="..\Source\FMX\Tool\MaterialDesignThemeApply\MDTheme.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="MDTheme:Make">
-        <MSBuild Projects="..\Source\FMX\Tool\MaterialDesignThemeApply\MDTheme.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="LAStyle">
-        <MSBuild Projects="..\Style\LAStyle\LAStyle.dproj"/>
-    </Target>
-    <Target Name="LAStyle:Clean">
-        <MSBuild Projects="..\Style\LAStyle\LAStyle.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="LAStyle:Make">
-        <MSBuild Projects="..\Style\LAStyle\LAStyle.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="LAProjectTemplate_Forms_Colors">
-        <MSBuild Projects="..\Source\FMX\Templates\Forms and Colors\LAProjectTemplate_Forms_Colors.dproj"/>
-    </Target>
-    <Target Name="LAProjectTemplate_Forms_Colors:Clean">
-        <MSBuild Projects="..\Source\FMX\Templates\Forms and Colors\LAProjectTemplate_Forms_Colors.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="LAProjectTemplate_Forms_Colors:Make">
-        <MSBuild Projects="..\Source\FMX\Templates\Forms and Colors\LAProjectTemplate_Forms_Colors.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TestPropLink">
-        <MSBuild Projects="..\Test\_FMX\TestPropLink\TestPropLink.dproj"/>
-    </Target>
-    <Target Name="TestPropLink:Clean">
-        <MSBuild Projects="..\Test\_FMX\TestPropLink\TestPropLink.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TestPropLink:Make">
-        <MSBuild Projects="..\Test\_FMX\TestPropLink\TestPropLink.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;dklang;dcldklang;LAData;LADesigner;LAFMX;LAFMXEditors;LA_Test;TestViewFMX;TestLAStyle;TestHistoryViewer;TestGetSensorsInfo;TestConnectionManager;TestChart;SCS;TestUpdateConstantly;MDTheme;LAStyle;LAProjectTemplate_Forms_Colors;TestPropLink"/>
+        <CallTarget Targets="DCPcrypt;Fundamentals;mORMotCrossplatform;dklang;dcldklang;LAData;LADesigner;LAFMX;LAFMXEditors"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;dklang:Clean;dcldklang:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LAFMXEditors:Clean;LA_Test:Clean;TestViewFMX:Clean;TestLAStyle:Clean;TestHistoryViewer:Clean;TestGetSensorsInfo:Clean;TestConnectionManager:Clean;TestChart:Clean;SCS:Clean;TestUpdateConstantly:Clean;MDTheme:Clean;LAStyle:Clean;LAProjectTemplate_Forms_Colors:Clean;TestPropLink:Clean"/>
+        <CallTarget Targets="DCPcrypt:Clean;Fundamentals:Clean;mORMotCrossplatform:Clean;dklang:Clean;dcldklang:Clean;LAData:Clean;LADesigner:Clean;LAFMX:Clean;LAFMXEditors:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;dklang:Make;dcldklang:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LAFMXEditors:Make;LA_Test:Make;TestViewFMX:Make;TestLAStyle:Make;TestHistoryViewer:Make;TestGetSensorsInfo:Make;TestConnectionManager:Make;TestChart:Make;SCS:Make;TestUpdateConstantly:Make;MDTheme:Make;LAStyle:Make;LAProjectTemplate_Forms_Colors:Make;TestPropLink:Make"/>
+        <CallTarget Targets="DCPcrypt:Make;Fundamentals:Make;mORMotCrossplatform:Make;dklang:Make;dcldklang:Make;LAData:Make;LADesigner:Make;LAFMX:Make;LAFMXEditors:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
