@@ -191,7 +191,34 @@ begin
   if not Connected then
     DoConnect;
 
-  FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
+//  try
+  FAuthorized := FClient.SetUser(TSQLRestServerAuthenticationDefault, UserName, Password);
+  if not FAuthorized then
+  begin
+    TDCLog.WriteToLog('DoAuthorize - error');
+    if Assigned(OnAuthorizeError) then
+    begin
+      OnAuthorizeError(Self);
+      //raise Exception.Create('Authorization error!');
+      Exit;
+    end
+    else
+      raise Exception.Create('Authorization error!');
+  end;
+//  except
+//    on e: Exception do
+//    begin
+//      FAuthorized := False;
+//      TDCLog.WriteToLog('DoAuthorize - error');
+//      if Assigned(OnAuthorizeError) then
+//      begin
+//        OnAuthorizeError(Self);
+//        Exit;
+//      end
+//      else
+//        raise;
+//    end;
+//  end;
   FAuthorized := True;
 
   // можно получить хешированный пароль пользователя и хранить его, а не исходный (Client.Authentication.User.PasswordHashHexa)

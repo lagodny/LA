@@ -52,6 +52,7 @@ type
     FOnConnect: TNotifyEvent;
     FOnDisconnect: TNotifyEvent;
     FOnAuthorize: TNotifyEvent;
+    FOnAuthorizeError: TNotifyEvent;
     procedure SetAddress(const Value: string);
     procedure SetPassword(const Value: string);
     procedure SetUserName(const Value: string);
@@ -159,6 +160,9 @@ type
     property OnConnect: TNotifyEvent read FOnConnect write FOnConnect;
     property OnDisconnect: TNotifyEvent read FOnDisconnect write FOnDisconnect;
     property OnAuthorize: TNotifyEvent read FOnAuthorize write FOnAuthorize;
+
+    property OnAuthorizeError: TNotifyEvent read FOnAuthorizeError write FOnAuthorizeError;
+
   end;
 
 implementation
